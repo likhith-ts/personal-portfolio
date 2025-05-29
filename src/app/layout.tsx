@@ -1,14 +1,16 @@
 import "@/once-ui/styles/index.scss";
 import "@/once-ui/tokens/index.scss";
-
 import classNames from "classnames";
 
 import { Footer, Header, RouteGuard } from "@/components";
 import { baseURL, effects, style, font, home } from "@/app/resources";
 
-import { Background, Column, Flex, ThemeProvider, ToastProvider } from "@/once-ui/components";
-import { opacity, SpacingToken } from "@/once-ui/types";
+import { /*Background, */  Column, Flex, ThemeProvider, ToastProvider } from "@/once-ui/components";
+// import { opacity, SpacingToken } from "@/once-ui/types";
 import { Meta } from "@/once-ui/modules";
+import { BackgroundEffects } from "@/components/BackgroundEffects";
+import { LoadingScreen } from "@/components/LoadingScreen";
+
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -25,7 +27,9 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
+  
   return (
+    <>
     <Flex
       suppressHydrationWarning
       as="html"
@@ -46,37 +50,48 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         font.code.variable,
       )}
     >
+        
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  const theme = localStorage.getItem('theme') || 'system';
-                  const root = document.documentElement;
-                  if (theme === 'system') {
-                    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    root.setAttribute('data-theme', isDark ? 'dark' : 'light');
-                  } else {
-                    root.setAttribute('data-theme', theme);
-                  }
-                } catch (e) {
-                  document.documentElement.setAttribute('data-theme', 'dark');
-                }
-              })();
-            `,
+        __html: `
+          (function() {
+            try {
+          const theme = localStorage.getItem('theme') || 'system';
+          const root = document.documentElement;
+          if (theme === 'system') {
+            const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            root.setAttribute('data-theme', isDark ? 'dark' : 'light');
+          } else {
+            root.setAttribute('data-theme', theme);
+          }
+          } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          }
+          })();
+        `,
           }}
         />
       </head>
+      {/* Show LoadingScreen only on root path */}
+      <LoadingScreen />
       <ThemeProvider>
         <ToastProvider>
-          <Column style={{ minHeight: "100vh" }} as="body" fillWidth margin="0" padding="0">
-            <Background
+          <Column
+            suppressHydrationWarning
+            style={{ minHeight: "100vh" }}
+            as="body"
+            fillWidth
+            margin="0"
+            padding="0"
+          >
+            {/* <Background
               position="fixed"
               mask={{
                 x: effects.mask.x,
                 y: effects.mask.y,
                 radius: effects.mask.radius,
+                // cursor: isMaskEnabled
                 cursor: effects.mask.cursor
               }}
               gradient={{
@@ -111,7 +126,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                 angle: effects.lines.angle,
                 color: effects.lines.color,
               }}
-            />
+            /> */}
+            {/* custom component */}
+            <BackgroundEffects />
             <Flex fillWidth minHeight="16" hide="s"></Flex>
             <Header />
             <Flex
@@ -131,5 +148,6 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         </ToastProvider>
       </ThemeProvider>
     </Flex>
+    </>
   );
 }

@@ -3,9 +3,11 @@ import {
   Button,
   Column,
   Flex,
+  GlitchFx,
   Heading,
   Icon,
   IconButton,
+  LetterFx,
   SmartImage,
   Tag,
   Text,
@@ -89,7 +91,9 @@ export default function About() {
             flex={3}
             horizontal="center"
           >
-            <Avatar src={person.avatar} size="xl" />
+            <GlitchFx speed="fast" continuous={false} interval={2}>
+              <Avatar src={person.avatar} size="xl" />
+            </GlitchFx>
             <Flex gap="8" vertical="center">
               <Icon onBackground="accent-weak" name="globe" />
               {person.location}
@@ -146,32 +150,39 @@ export default function About() {
               variant="display-default-xs"
               onBackground="neutral-weak"
             >
-              {person.role}
+              <LetterFx
+                speed="medium"
+                trigger="instant"
+                // @ts-ignore
+                charset="X$@aHz0y#?*01+"
+              >
+                {person.role}
+              </LetterFx>
             </Text>
             {social.length > 0 && (
               <Flex className={styles.blockAlign} paddingTop="20" paddingBottom="8" gap="8" wrap horizontal="center" fitWidth data-border="rounded">
                 {social.map(
                   (item) =>
                     item.link && (
-                        <React.Fragment key={item.name}>
-                            <Button
-                                className="s-flex-hide"
-                                key={item.name}
-                                href={item.link}
-                                prefixIcon={item.icon}
-                                label={item.name}
-                                size="s"
-                                variant="secondary"
-                            />
-                            <IconButton
-                                className="s-flex-show"
-                                size="l"
-                                key={`${item.name}-icon`}
-                                href={item.link}
-                                icon={item.icon}
-                                variant="secondary"
-                            />
-                        </React.Fragment>
+                      <React.Fragment key={item.name}>
+                        <Button
+                          className="s-flex-hide"
+                          key={item.name}
+                          href={item.link}
+                          prefixIcon={item.icon}
+                          label={item.name}
+                          size="s"
+                          variant="secondary"
+                        />
+                        <IconButton
+                          className="s-flex-show"
+                          size="l"
+                          key={`${item.name}-icon`}
+                          href={item.link}
+                          icon={item.icon}
+                          variant="secondary"
+                        />
+                      </React.Fragment>
                     ),
                 )}
               </Flex>
@@ -179,7 +190,7 @@ export default function About() {
           </Column>
 
           {about.intro.display && (
-            <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
+            <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="l">
               {about.intro.description}
             </Column>
           )}
@@ -187,9 +198,10 @@ export default function About() {
           {about.work.display && (
             <>
               <Heading as="h2" id={about.work.title} variant="display-strong-s" marginBottom="m">
-                {about.work.title}
+                <Icon name="work" size="l" />
+                <Text> {about.work.title}</Text>
               </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
+              <Column fillWidth gap="l" marginBottom="48">
                 {about.work.experiences.map((experience, index) => (
                   <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
                     <Flex fillWidth horizontal="space-between" vertical="end" marginBottom="4">
@@ -249,9 +261,10 @@ export default function About() {
           {about.studies.display && (
             <>
               <Heading as="h2" id={about.studies.title} variant="display-strong-s" marginBottom="m">
-                {about.studies.title}
+              <Icon name="academicCap" size="l" />
+               <Text> {about.studies.title}</Text>
               </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
+              <Column fillWidth gap="l" marginBottom="48">
                 {about.studies.institutions.map((institution, index) => (
                   <Column key={`${institution.name}-${index}`} fillWidth gap="4">
                     <Text id={institution.name} variant="heading-strong-l">
@@ -259,6 +272,9 @@ export default function About() {
                     </Text>
                     <Text variant="heading-default-xs" onBackground="neutral-weak">
                       {institution.description}
+                    </Text>
+                    <Text variant="heading-default-xs" onBackground="neutral-weak">
+                      {institution.year}
                     </Text>
                   </Column>
                 ))}
@@ -272,9 +288,10 @@ export default function About() {
                 as="h2"
                 id={about.technical.title}
                 variant="display-strong-s"
-                marginBottom="40"
+                marginBottom="m"
               >
-                {about.technical.title}
+                <Icon name="tool" size="l" />
+                <Text> {about.technical.title}</Text>
               </Heading>
               <Column fillWidth gap="l">
                 {about.technical.skills.map((skill, index) => (

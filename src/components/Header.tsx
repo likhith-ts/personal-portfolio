@@ -7,7 +7,7 @@ import { Fade, Flex, Line, ToggleButton } from "@/once-ui/components";
 import styles from "@/components/Header.module.scss";
 
 import { routes, display } from "@/app/resources";
-import { person, about, blog, work, gallery } from "@/app/resources/content";
+import { person, about, blog, work, gallery, others } from "@/app/resources/content";
 import { ThemeToggle } from "./ThemeToggle";
 
 type TimeDisplayProps = {
@@ -25,8 +25,8 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" })
         timeZone,
         hour: "2-digit",
         minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
+        // second: "2-digit",
+        hour12: true,
       };
       const timeString = new Intl.DateTimeFormat(locale, options).format(now);
       setCurrentTime(timeString);
@@ -147,6 +147,44 @@ export const Header = () => {
                   />
                 </>
               )}
+              {routes["/others"] && (
+                <>
+                  <Line background="neutral-alpha-medium" vert maxHeight="24" />
+                  <ToggleButton
+                  className="s-flex-hide"
+                  prefixIcon="others"
+                  href="/others"
+                  label={others.label}
+                  selected={pathname.startsWith("/others")}
+                  // id="others-toggle"
+                  style={{ position: 'relative' }}
+                  onMouseOver={(e) => {
+                    const tooltip = document.createElement('div');
+                    tooltip.innerHTML = 'click for more!';
+                    tooltip.style.position = 'absolute';
+                    tooltip.style.top = '100%';
+                    tooltip.style.left = '50%';
+                    tooltip.style.transform = 'translateX(-50%)';
+                    tooltip.style.backgroundColor = 'rgba(0,0,0,0.8)';
+                    tooltip.style.color = 'white';
+                    tooltip.style.padding = '4px 8px';
+                    tooltip.style.borderRadius = '12px';
+                    tooltip.style.fontSize = '12px';
+                    e.currentTarget.appendChild(tooltip);
+                  }}
+                  onMouseOut={(e) => {
+                    const tooltip = e.currentTarget.querySelector('div');
+                    if (tooltip) tooltip.remove();
+                  }}
+                  />
+                  <ToggleButton
+                  className="s-flex-show"
+                  prefixIcon="others"
+                  href="/others"
+                  selected={pathname.startsWith("/others")}
+                  />
+                </>
+              )}
               {display.themeSwitcher && (
                 <>
                   <Line background="neutral-alpha-medium" vert maxHeight="24" />
@@ -164,7 +202,7 @@ export const Header = () => {
             textVariant="body-default-s"
             gap="20"
           >
-            <Flex hide="s">{display.time && <TimeDisplay timeZone={person.location} />}</Flex>
+            <Flex hide="s">{display.time && <TimeDisplay timeZone={person.timezone} />}</Flex>
           </Flex>
         </Flex>
       </Flex>

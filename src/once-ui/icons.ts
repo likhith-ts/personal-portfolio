@@ -26,7 +26,9 @@ import {
   HiMoon,
   HiSun,
   HiOutlineDocument,
+  HiAcademicCap,
 } from "react-icons/hi2";
+
 
 import {
   PiHouseDuotone,
@@ -34,9 +36,20 @@ import {
   PiGridFourDuotone,
   PiBookBookmarkDuotone,
   PiImageDuotone,
+  PiCertificate,
+  PiDotsNine ,
 } from "react-icons/pi";
 
 import { FaDiscord, FaGithub, FaLinkedin, FaX } from "react-icons/fa6";
+import { BiSolidLike } from "react-icons/bi";
+import { IoIosChatboxes } from "react-icons/io";
+import { SiLeetcode } from "react-icons/si";
+import { GiAchievement } from "react-icons/gi";
+import { MdWork } from "react-icons/md";
+import { FaTools } from "react-icons/fa";
+
+
+
 
 export const iconLibrary: Record<string, IconType> = {
   chevronUp: HiChevronUp,
@@ -73,6 +86,15 @@ export const iconLibrary: Record<string, IconType> = {
   moon: HiMoon,
   sun: HiSun,
   document: HiOutlineDocument,
+  like:BiSolidLike,
+  chat: IoIosChatboxes,
+  leetcode: SiLeetcode,
+  certificate: PiCertificate,
+  others: PiDotsNine ,
+  academicCap: HiAcademicCap,
+  achievement: GiAchievement,
+  work: MdWork,
+  tool: FaTools,
 };
 
 export type IconLibrary = typeof iconLibrary;

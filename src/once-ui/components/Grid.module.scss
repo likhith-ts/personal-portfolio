@@ -1,0 +1,76 @@
+.autoColumns {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(0, 1fr)) !important;
+  width: 100%;
+}
+
+.autoFit {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--min-column-width, 300px), 1fr)) !important;
+  width: 100%;
+  gap: inherit;
+}
+
+.start {
+  justify-items: start;
+}
+
+.center {
+  justify-items: center;
+}
+
+.end {
+  justify-items: end;
+}
+
+/* For equal-width columns and centered layout */
+.compact {
+  display: grid !important;
+  width: 100%;
+}
+
+.columns2 {
+  grid-template-columns: repeat(2, 1fr);
+  display: grid;
+}
+
+.columns3 {
+  grid-template-columns: repeat(3, 1fr);
+  display: grid;
+}
+
+.columns4 {
+  grid-template-columns: repeat(4, 1fr);
+  display: grid;
+}
+
+/* Container for actual content to enable centering */
+.compactWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsive layouts */
+@media (max-width: 768px) {
+  .columns4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .columns3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .columns4, .columns3, .columns2 {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .autoFit {
+    --min-column-width: 150px;
+  }
+}

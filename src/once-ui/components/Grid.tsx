@@ -2,6 +2,7 @@
 
 import React, { CSSProperties, forwardRef } from "react";
 import classNames from "classnames";
+import styles from "./Grid.module.scss";
 
 import {
   GridProps,
@@ -21,7 +22,13 @@ interface ComponentProps
     StyleProps,
     CommonProps,
     DisplayProps,
-    ConditionalProps {}
+    ConditionalProps {
+  autoFit?: boolean;
+  autoColumns?: boolean;
+  compact?: boolean;
+  itemsAlignment?: "start" | "center" | "end";
+  minColumnWidth?: number;
+}
 
 const Grid = forwardRef<HTMLDivElement, ComponentProps>(
   (
@@ -100,6 +107,11 @@ const Grid = forwardRef<HTMLDivElement, ComponentProps>(
       cursor,
       zIndex,
       shadow,
+      autoFit,
+      autoColumns,
+      compact,
+      itemsAlignment,
+      minColumnWidth,
       className,
       style,
       children,
@@ -171,10 +183,17 @@ const Grid = forwardRef<HTMLDivElement, ComponentProps>(
       fitHeight && "fit-height",
       fill && "fill",
       (fillWidth || maxWidth) && "fill-width",
-      (fillHeight || maxHeight) && "fill-height",
-      columns && `columns-${columns}`,
-      tabletColumns && `tablet-columns-${tabletColumns}`,
-      mobileColumns && `mobile-columns-${mobileColumns}`,
+      (fillHeight || maxHeight) && "fill-height",      !autoFit && !autoColumns && !compact && columns && `columns-${columns}`,
+      !autoFit && !autoColumns && !compact && tabletColumns && `tablet-columns-${tabletColumns}`,
+      !autoFit && !autoColumns && !compact && mobileColumns && `mobile-columns-${mobileColumns}`,
+      autoFit && styles.autoFit,
+      autoColumns && styles.autoColumns,
+      compact && [
+        styles.compact,
+        columns && styles[`columns${columns}`],
+        itemsAlignment && styles[itemsAlignment]
+      ],
+      !compact && itemsAlignment && styles[itemsAlignment],
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
@@ -246,12 +265,22 @@ const Grid = forwardRef<HTMLDivElement, ComponentProps>(
       height: parseDimension(height, "height"),
       aspectRatio: aspectRatio,
       textAlign: align,
+      ...(autoFit && minColumnWidth && { "--min-column-width": `${minColumnWidth}px` }),
       ...style,
-    };
+    } as CSSProperties;    // Wrap children in centering container when using compact mode
+    const wrappedChildren = compact
+      ? React.Children.map(children, (child) =>
+          child ? (
+            <div className={styles.compactWrapper}>
+              {child}
+            </div>
+          ) : null
+        )
+      : children;
 
     return (
       <Component ref={ref} className={classes} style={combinedStyle} {...rest}>
-        {children}
+        {wrappedChildren}
       </Component>
     );
   },

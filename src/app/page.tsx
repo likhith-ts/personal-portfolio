@@ -1,8 +1,5 @@
-import React from "react";
-
 import { Heading, Flex, Text, Button, Avatar, RevealFx, Column, Badge, Row } from "@/once-ui/components";
 import { Projects } from "@/components/work/Projects";
-
 import { baseURL, routes } from "@/app/resources";
 import { home, about, person, newsletter } from "@/app/resources/content";
 import { Mailchimp } from "@/components";
@@ -20,6 +17,7 @@ export async function generateMetadata() {
 
 export default function Home() {
   return (
+    <>
     <Column maxWidth="m" gap="xl" horizontal="center">
       <Schema
         as="webPage"
@@ -32,17 +30,16 @@ export default function Home() {
           name: person.name,
           url: `${baseURL}${about.path}`,
           image: `${baseURL}${person.avatar}`,
-        }}
-      />
+        }} />
       <Column fillWidth paddingY="24" gap="m">
         <Column maxWidth="s">
-          {home.featured && (
-          <RevealFx fillWidth horizontal="start" paddingTop="16" paddingBottom="32" paddingLeft="12">
-            <Badge background="brand-alpha-weak" paddingX="12" paddingY="4" onBackground="neutral-strong" textVariant="label-default-s" arrow={false}
-              href={home.featured.href}>
-              <Row paddingY="2">{home.featured.title}</Row>
-            </Badge>
-          </RevealFx>
+          {home.featured.display && (
+            <RevealFx fillWidth horizontal="start" paddingTop="16" paddingBottom="32" paddingLeft="12">
+              <Badge background="brand-alpha-weak" paddingX="12" paddingY="4" onBackground="neutral-strong" textVariant="label-default-s" arrow={false}
+                href={home.featured.href}>
+                <Row paddingY="2">{home.featured.title}</Row>
+              </Badge>
+            </RevealFx>
           )}
           <RevealFx translateY="4" fillWidth horizontal="start" paddingBottom="16">
             <Heading wrap="balance" variant="display-strong-l">
@@ -68,8 +65,7 @@ export default function Home() {
                   <Avatar
                     style={{ marginLeft: "-0.75rem", marginRight: "0.25rem" }}
                     src={person.avatar}
-                    size="m"
-                  />
+                    size="m" />
                 )}
                 {about.title}
               </Flex>
@@ -92,8 +88,46 @@ export default function Home() {
           </Flex>
         </Flex>
       )}
+      {/* <Row maxWidth={24}>
+<Card radius="l-4" direction="column" border="neutral-alpha-medium">
+  <Row fillWidth paddingX="20" paddingY="12" gap="8" vertical="center">
+    <Avatar size="xs" src="/images/avatar.jpg"/>
+    <Text variant="label-default-s">Lorant One</Text>
+  </Row>
+  <Media
+    border="neutral-alpha-weak"
+    sizes="400px"
+    fillWidth
+    aspectRatio="4 / 3"
+    radius="l"
+    alt="Proxima b"
+    src="https://youtu.be/ye0fsgO0NyA?si=eyJKboM_iTR7mX39"
+  />
+  <Column fillWidth paddingX="20" paddingY="24" gap="8">
+    <Text variant="body-default-xl">Proxima b</Text>
+    <Text onBackground="neutral-weak" variant="body-default-s">
+      A planet so cruel on the surface, but once you explore what's underneath, you'll question
+      everything you know. Yet, you vibe with it.
+    </Text>
+  </Column>
+  <Line background="neutral-alpha-medium" />
+  <Row
+    paddingX="20" paddingY="12" gap="8" vertical="center"
+    textVariant="label-default-s" onBackground="neutral-medium"
+  >
+    <Icon name="like" size="s" onBackground="neutral-strong" />
+    34
+    <Icon name="chat" size="s" onBackground="neutral-strong" marginLeft="24" />
+    5
+  </Row>
+</Card>
+</Row> */}
       <Projects range={[2]} />
       {newsletter.display && <Mailchimp newsletter={newsletter} />}
-    </Column>
+    </Column></>
+
+    
   );
 }
+
+
