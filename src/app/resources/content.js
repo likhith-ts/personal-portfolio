@@ -2,6 +2,8 @@
 // import { Certificate } from "crypto";
 // import { link } from "fs";
 
+import { title } from "process";
+
 const person = {
   firstName: "Likhith",
   lastName: "Usurupati",
@@ -61,7 +63,7 @@ const home = {
   headline: <>Building Scalable AI-Powered Applications Across the Stack</>,
   featured: {
     display: true,
-    title: <>Recent project: <strong className="ml-4">Credit Card...</strong></>,
+    title: <>Recent project: <strong className="ml-4">Credit Card</strong></>,
     href: "work/credit-card",
   },
   subline: (
@@ -339,32 +341,44 @@ const others = {
     },],
     contributions:[
       {
+        title: "Melanoma Detection Project",
         project: "Melanoma",
+        avatars: [
+          {src: "https://avatars.githubusercontent.com/u/181699041?v=4"},
+          {src: "/images/avatar.jpg"},
+        ],
         owner: "jyothi-alt",
         icon: "github",
-        // link: "https://github.com/jyothi-alt/MELANOMA",
-        link: "https://once-ui.com",
-        description: "A web app for skin cancer detection using deep learning.",
-        count: "2",
+        link: "https://github.com/jyothi-alt/MELANOMA",
+        description: "A flask web app for skin cancer detection using deep learning. ",
       },
+      
       {
-        project: "Melanoma",
-        owner: "jyothi-alt",
+        title: "Contributed to AIcan Automate Pvt. Ltd.",
+        project: "AIcan Automate",
+        avatars: [
+          {src: "https://avatars.githubusercontent.com/u/181699041?v=4"},
+          {src: "/images/avatar.jpg"},
+        ],
+        owner: "likhith-ts",
         icon: "github",
-        // link: "https://github.com/jyothi-alt/MELANOMA",
-        link: "https://once-ui.com",
-        description: "A web app for skin cancer detection using deep learning.",
-        count: "2",
+        link: "https://github.com/likhith-ts/AIcan-Automate",
+        description: "A web app for automating tasks using AI.",
       },
-      // {
-      //   project: "Melanoma",
-      //   owner: "jyothi-alt",
-      //   icon: "github",
-      //   // link: "https://github.com/jyothi-alt/MELANOMA",
-      //   link: "https://once-ui.com",
-      //   description: "A web app for skin cancer detection using deep learning.",
-      //   count: "2",
-      // },
+      
+      {
+        title: "Contributed to Credit Card Fraud Detection Project",
+        project: "Credit Card Fraud Detection",
+        avatars: [
+          {src: "https://avatars.githubusercontent.com/u/181699041?v=4"},
+          {src: "/images/avatar.jpg"},
+        ],
+        owner: "likhith-ts",
+        icon: "github",
+        link: "https://github.com/likhith-ts/Credit-Card-Fraud-Detection",
+        description: "A web app for detecting credit card fraud using machine learning.",
+      },
+     
     ],
 };
 

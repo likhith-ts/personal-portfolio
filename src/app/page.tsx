@@ -35,7 +35,7 @@ export default function Home() {
         <Column maxWidth="s">
           {home.featured.display && (
             <RevealFx fillWidth horizontal="start" paddingTop="16" paddingBottom="32" paddingLeft="12">
-              <Badge background="brand-alpha-weak" paddingX="12" paddingY="4" onBackground="neutral-strong" textVariant="label-default-s" arrow={false}
+              <Badge background="brand-alpha-weak" paddingX="12" paddingY="4" onBackground="neutral-strong" textVariant="label-default-s" arrow={true}
                 href={home.featured.href}>
                 <Row paddingY="2">{home.featured.title}</Row>
               </Badge>

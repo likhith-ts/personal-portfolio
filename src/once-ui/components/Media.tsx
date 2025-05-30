@@ -148,6 +148,7 @@ const Media: React.FC<MediaProps> = ({
         )}
         {!loading && isYouTube && (
           <iframe
+            title={`YouTube video: ${alt}`}
             width="100%"
             height="100%"
             src={getYouTubeEmbedUrl(src)}

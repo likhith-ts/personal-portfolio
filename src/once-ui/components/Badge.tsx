@@ -13,20 +13,22 @@ interface BadgeProps extends React.ComponentProps<typeof Flex> {
   children?: React.ReactNode;
   href?: string;
   effect?: boolean;
+  id?: string;
 }
 
 const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
   (
-    { title, icon, arrow = true, children, href, effect = true, ...rest },
+    { title, icon, arrow = true, children, href, id = 'badge', effect = true, ...rest },
     ref
   ) => {
     const content = (
       <Flex
-        id="badge"
+        // make sure to use the correct reference for the id
+        id={id}
         paddingX="20"
         paddingY="12"
         fitWidth
-        className={effect ? styles.animation : undefined}
+        className={`${effect ? styles.animation : undefined}, cursor-interactive`}
         vertical="center"
         radius="full"
         background="neutral-weak"
@@ -48,7 +50,8 @@ const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
           </Text>
         )}
         {children}
-        {arrow && <Arrow trigger="#badge" />}
+        {/* If arrow is true, show the arrow icon */}
+        {arrow && <Arrow trigger={id ? "#" + id : "badge"} />}
       </Flex>
     );
 

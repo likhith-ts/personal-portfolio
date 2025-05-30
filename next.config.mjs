@@ -20,7 +20,7 @@ const nextConfig = {
     unoptimized: true,
     remotePatterns: [
       // new URL('https://green-wall.leoku.dev/api/og/share/likhith-ts?start=2025&theme=Midnight'),
-      new URL('https://repository-images.githubusercontent.com/786079491/**'),
+      new URL('https://avatars.githubusercontent.com/u/'),
     ],
   },
   experimental: {

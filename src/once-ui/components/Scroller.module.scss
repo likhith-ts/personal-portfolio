@@ -3,11 +3,13 @@
 }
 
 .scroller {
-    scrollbar-width: none;
+    -ms-overflow-style: none;  /* IE and Edge */
+    overflow: -moz-scrollbars-none; /* Firefox */
     isolation: isolate;
   
     &::-webkit-scrollbar {
-        display: none;
+        display: none;         /* Chrome, Safari and Opera */
+        width: 0 !important;   /* Additional Safari support */
     }
 }
   

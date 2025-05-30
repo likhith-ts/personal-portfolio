@@ -1,0 +1,65 @@
+.container {
+    isolation: isolate;
+    position: relative;
+    overflow: hidden;
+}
+
+.scroller {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    isolation: isolate;
+    scroll-behavior: smooth;
+    transition: transform 0.5s ease;
+  
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    &.autoScroll {
+        &.row {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: inherit;
+        }
+
+        &.column {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            gap: inherit;
+        }
+    }
+}
+  
+.row {
+    overflow-x: auto;
+}
+  
+.column {
+    overflow-y: auto;
+}
+
+.scrollButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    .container:hover & {
+        opacity: 1;
+    }
+}
+
+.scrollButtonPrev {
+    left: var(--static-space-4);
+}
+
+.scrollButtonNext {
+    right: var(--static-space-4);
+}
+
+.clonedItem {
+    flex: 0 0 auto;
+}
