@@ -103,7 +103,7 @@ export default function page() {
                                             alt={cert.name}
                                             aspectRatio="16/9"
                                             radius="l"
-                                            objectFit="contain"
+                                            objectFit="fill"
                                             className={styles.certification__image}
                                         />
                                         <Column gap="s" fillWidth>
@@ -134,7 +134,7 @@ export default function page() {
                                             alt={cert.name}
                                             aspectRatio="16/9"
                                             radius="l"
-                                            objectFit="contain"
+                                            objectFit="fill"
                                             className={styles.certification__image}
                                         />
                                         <Column gap="s" fillWidth>

@@ -285,7 +285,7 @@
   min-width: 320px;
   box-sizing: border-box;
   position: relative;
-  overflow: hidden;
+  overflow: visible; // Allow glow to extend beyond card
   flex-shrink: 0;
   
   @media (max-width: 768px) {
@@ -300,34 +300,12 @@
     min-width: 240px;
   }
   
-  // Shine effect for certificate marquee cards
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.15) 50%,
-      transparent 100%
-    );
-    animation: certificateShine 4s infinite;
-    pointer-events: none;
-    z-index: 1;
-  }
-  
+  // Enhanced hover effects
   &:hover {
     transform: translateY(-4px) scale(1.02);
     box-shadow: var(--shadow-xl);
-    
-    &::before {
-      animation-duration: 2s; // Faster shine on hover
-    }
   }
-
+  
   @media (max-width: 480px) {
     &:hover {
       transform: translateY(-2px) scale(1.01);
@@ -423,34 +401,11 @@
   max-width: 100%;
   box-sizing: border-box;
   position: relative;
-  overflow: hidden;
-  
-  // Shine effect for certificates
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.15) 50%,
-      transparent 100%
-    );
-    animation: certificateShine 4s infinite;
-    pointer-events: none;
-    z-index: 1;
-  }
+  overflow: visible; // Allow glow to extend beyond card
   
   &:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-xl);
-    
-    &::before {
-      animation-duration: 2s; // Faster shine on hover
-    }
   }
 
   @media (max-width: 480px) {
@@ -473,9 +428,9 @@
   }
 }
 
-// Gradient border glow animation for certificate images
-@keyframes gradientBorderGlow {
-  0%, 100% {
+// Border glow animation for certificate images
+@keyframes borderGlow {
+  0% {
     background-position: 0% 50%;
   }
   25% {
@@ -485,49 +440,118 @@
     background-position: 100% 100%;
   }
   75% {
-    background-position: 50% 100%;
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 
-// Certificate image styling for better desktop presentation
+// Radiance glow animation for hover effect
+@keyframes radianceGlow {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.05) rotate(1deg);
+    opacity: 0.8;
+  }
+}
+
+// Glacier glow animation for ambient effect
+@keyframes glacierGlow {
+  0% {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 215, 0, 0.12) 0%,
+      rgba(131, 56, 236, 0.08) 30%,
+      rgba(58, 134, 255, 0.06) 60%,
+      transparent 80%
+    );
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 215, 0, 0.18) 0%,
+      rgba(131, 56, 236, 0.12) 30%,
+      rgba(58, 134, 255, 0.10) 60%,
+      transparent 80%
+    );
+    transform: scale(1.1) rotate(2deg);
+  }
+}
+
+// Certificate image styling with gradient border glow
 .certification__image {
   position: relative;
-  overflow: hidden;
   border-radius: var(--border-radius-md);
+  overflow: visible; // Allow glow to extend beyond image
   
-  // Add gradient border glow wrapper
-  &::after {
+  // Gradient border glow effect
+  &::before {
     content: '';
     position: absolute;
     inset: -3px;
-    padding: 3px;
     background: linear-gradient(
       45deg,
-      #ff006e,
-      #8338ec,
-      #3a86ff,
-      #06ffa5,
-      #ffbe0b,
-      #fb5607,
-      #ff006e
+      #ffd700, // Gold
+      #ffaa00, // Orange-gold  
+      #ff6b35, // Orange-red
+      #ff006e, // Pink
+      #8338ec, // Purple
+      #3a86ff, // Blue
+      #06ffa5, // Cyan
+      #ffd700  // Back to gold for seamless loop
     );
-    background-size: 400% 400%;
+    background-size: 300% 300%;
     border-radius: inherit;
-    animation: gradientBorderGlow 6s ease-in-out infinite;
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: xor;
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    pointer-events: none;
+    animation: borderGlow 4s linear infinite;
     z-index: -1;
+    filter: blur(2px);
+    opacity: 0.8;
   }
   
-  // Enhanced glow on hover
+  // Radiance effect layer
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 215, 0, 0.3) 0%,
+      rgba(255, 105, 180, 0.2) 30%,
+      rgba(138, 43, 226, 0.15) 60%,
+      transparent 80%
+    );
+    border-radius: inherit;
+    animation: radianceGlow 3s ease-in-out infinite alternate;
+    z-index: -2;
+    filter: blur(4px);
+    opacity: 0.6;
+    transition: all var(--transition-medium);
+  }
+  
+  &:hover::before {
+    animation-duration: 2s; // Faster on hover
+    filter: blur(1px) brightness(1.3);
+    opacity: 1.0;
+    inset: -5px; // Larger glow on hover
+  }
+  
   &:hover::after {
-    animation-duration: 3s;
-    inset: -4px;
-    padding: 4px;
-    filter: brightness(1.3) blur(0.5px);
+    animation-duration: 1.5s; // Faster radiance on hover
+    filter: blur(6px) brightness(1.4);
+    opacity: 0.9;
+    inset: -10px; // Much larger radiance on hover
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 215, 0, 0.4) 0%,
+      rgba(255, 105, 180, 0.3) 30%,
+      rgba(138, 43, 226, 0.25) 60%,
+      transparent 70%
+    );
   }
   
   // Desktop: Larger images for better visibility
@@ -545,19 +569,9 @@
     min-height: 200px;
   }
   
-  // Mobile: Keep compact and subtle glow
+  // Mobile: Keep compact
   @media (max-width: 767px) {
     min-height: 160px;
-    
-    &::after {
-      inset: -2px;
-      padding: 2px;
-    }
-    
-    &:hover::after {
-      inset: -2px;
-      padding: 2px;
-    }
   }
 }
 
