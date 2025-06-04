@@ -5,6 +5,7 @@
   margin: 0 auto;
   padding: 0 var(--static-space-24);
   overflow-x: hidden;
+  box-sizing: border-box;
 
   @media (max-width: 767px) {
     padding: 0 var(--static-space-16);
@@ -16,7 +17,7 @@
 }
 
 .section {
-  margin: var(--static-space-96) auto;
+  margin: 120px auto; // Increased spacing between sections
   position: relative;
 
   &:first-child {
@@ -24,30 +25,30 @@
   }
 
   &:last-child {
-    margin-bottom: var(--static-space-96);
+    margin-bottom: 120px; // Increased bottom spacing
   }
 
   @media (max-width: 767px) {
-    margin: var(--static-space-64) auto;
+    margin: var(--static-space-80) auto; // Increased mobile spacing
 
     &:first-child {
       margin-top: var(--static-space-32);
     }
 
     &:last-child {
-      margin-bottom: var(--static-space-64);
+      margin-bottom: var(--static-space-80);
     }
   }
 
   @media (max-width: 480px) {
-    margin: var(--static-space-48) auto;
+    margin: var(--static-space-64) auto; // Increased small mobile spacing
 
     &:first-child {
       margin-top: var(--static-space-24);
     }
 
     &:last-child {
-      margin-bottom: var(--static-space-48);
+      margin-bottom: var(--static-space-64);
     }
   }
 }
@@ -99,42 +100,134 @@
 }
 
 .achievements {
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 auto;
+  overflow: hidden;
 }
 
-.achievements__grid {
+.achievements__marquee {
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.marquee__container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--static-space-16);
+  overflow: hidden;
+  padding: var(--static-space-16) 0;
+  position: relative;
   
-  @media (max-width: 480px) {
-    gap: var(--static-space-12);
+  @media (max-width: 768px) {
+    padding: var(--static-space-12) 0;
   }
   
-  .achievement__badge {
-    transition: all var(--transition-micro);
-    
-    &:hover {
-      transform: translateY(-2px);
-    }
+  @media (max-width: 480px) {
+    padding: var(--static-space-8) 0;
+  }
 
-    @media (max-width: 480px) {
-      font-size: var(--font-size-xs);
-      padding: var(--static-space-8) var(--static-space-12);
+  // Pause on hover
+  &:hover .marquee__track {
+    animation-play-state: paused;
+  }
+}
+
+.marquee__track {
+  display: flex;
+  gap: 1.5rem;
+  animation: marqueeScroll 30s linear infinite;
+  flex-shrink: 0;
+  width: fit-content;
+  
+  @media (max-width: 768px) {
+    gap: 1rem;
+    animation-duration: 25s;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 0.75rem;
+    animation-duration: 20s;
+  }
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.achievement__badge {
+  transition: all var(--transition-micro);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  
+  // Shine effect
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      transparent 100%
+    );
+    animation: shine 3s infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  // Enhanced hover effects
+  &:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(var(--brand-background-strong), 0.3);
+    
+    &::before {
+      animation-duration: 1.5s; // Faster shine on hover
     }
+  }
+  
+  &:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  @media (max-width: 480px) {
+    font-size: var(--font-size-xs);
+    padding: var(--static-space-8) var(--static-space-12);
+  }
+}
+
+// Shine animation keyframes
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
   }
 }
 
 .certifications {
-  max-width: 1000px;
+  max-width: 100%;
+  width: 100%;
   margin: 0 auto;
 }
 
 .certifications__grid {
   display: grid;
   gap: var(--static-space-24);
+  width: 100%;
   
   // Mobile: Always 1 column
   grid-template-columns: 1fr;
@@ -161,11 +254,15 @@
   // Tablet: 2 columns for 2+ certificates
   @media (min-width: 481px) and (max-width: 767px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--static-space-20);
   }
   
   // Desktop: 2 columns for exactly 2 certificates
   @media (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--static-space-24);
+    max-width: 800px;
+    margin: 0 auto;
   }
 }
 
@@ -173,11 +270,23 @@
   // Tablet: 2 columns for 2+ certificates
   @media (min-width: 481px) and (max-width: 767px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--static-space-20);
   }
   
   // Desktop: 3 columns for 3+ certificates
-  @media (min-width: 768px) {
+  @media (min-width: 768px) and (max-width: 1199px) {
     grid-template-columns: repeat(3, 1fr);
+    gap: var(--static-space-20);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  // Large desktop: 3 columns with more space
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--static-space-24);
+    max-width: 1000px;
+    margin: 0 auto;
   }
 }
 
@@ -185,16 +294,23 @@
   // Tablet: 2 columns for 2+ certificates
   @media (min-width: 481px) and (max-width: 767px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--static-space-20);
   }
   
   // Desktop: 3 columns for 3+ certificates
   @media (min-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
+    gap: var(--static-space-20);
+    max-width: 1000px;
+    margin: 0 auto;
   }
 }
 
 .certification__card {
   transition: all var(--transition-medium);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   
   &:hover {
     transform: translateY(-4px);
@@ -205,6 +321,29 @@
     &:hover {
       transform: translateY(-2px);
     }
+  }
+}
+
+// Certificate image styling for better desktop presentation
+.certification__image {
+  // Desktop: Larger images for better visibility
+  @media (min-width: 1024px) {
+    min-height: 240px; // Increased from default
+  }
+  
+  // Large desktop: Even larger for premium presentation
+  @media (min-width: 1200px) {
+    min-height: 280px;
+  }
+  
+  // Tablet: Moderate size
+  @media (min-width: 768px) and (max-width: 1023px) {
+    min-height: 200px;
+  }
+  
+  // Mobile: Keep compact
+  @media (max-width: 767px) {
+    min-height: 160px;
   }
 }
 

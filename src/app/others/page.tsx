@@ -36,50 +36,68 @@ export default function page() {
             <RevealFx delay={0.2} translateY={0.5}>
                 <section className={`${styles.section} ${styles.achievements}`}>
                     <div className={styles.section__header}>
-                        <Heading 
-                            variant="display-strong-l" 
+                        <Heading
+                            variant="display-strong-l"
                             className={styles.section__title}
                         >
-                            <Icon name="achievement" size='l' />
+                            <Icon name="achievement" size='xl' />
                             <Text>Achievements</Text>
-                        <hr className={styles.section__divider} />
+                            <hr className={styles.section__divider} />
                         </Heading>
-                    </div>
-                    
-                    <div className={styles.achievements__grid}>
-                        {others.achievements.map((achievement, index) => (
-                            <Badge 
-                                key={index}
-                                icon="achievement"
-                                paddingLeft="16" 
-                                paddingRight="20"
-                                paddingY="12" 
-                                onBackground="brand-medium"
-                                background="brand-medium"
-                                arrow={true}
-                                id={`badge-${index}`}
-                                // className={styles.achievement__badge}
-                            >
-                                {achievement}
-                            </Badge>
-                        ))}
+                    </div>                    <div className={styles.achievements__marquee}>
+                        <div className={styles.marquee__container}>
+                            <div className={styles.marquee__track}>
+                                {others.achievements.map((achievement, index) => (
+                                    <Badge
+                                        key={`first-${index}`}
+                                        icon="achievement"
+                                        paddingLeft="16"
+                                        paddingRight="20"
+                                        paddingY="12"
+                                        onBackground="brand-medium"
+                                        background="brand-medium"
+                                        arrow={true}                                        id={`badge-${index}`}
+                                        className={styles.achievement__badge}
+                                    >
+                                        {achievement}
+                                    </Badge>
+                                ))}
+                                {/* Duplicate for seamless loop */}
+                                {others.achievements.map((achievement, index) => (
+                                    <Badge
+                                        key={`second-${index}`}
+                                        icon="achievement"
+                                        paddingLeft="16"
+                                        paddingRight="20"
+                                        paddingY="12"
+                                        onBackground="brand-medium"
+                                        background="brand-medium"
+                                        arrow={true}                                        id={`badge-duplicate-${index}`}
+                                        className={styles.achievement__badge}
+                                    >
+                                        {achievement}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </section>
             </RevealFx>
 
             {/* Certifications Section */}
             <RevealFx delay={0.4} translateY={0.5}>
-                <section className={`${styles.section} ${styles.certifications}`}>                    <div className={styles.section__header}>
-                        <Heading 
-                            variant="display-strong-l" 
+                <section className={`${styles.section} ${styles.certifications}`}>
+                    <div className={styles.section__header}>
+                        <Heading
+                            variant="display-strong-l"
                             className={styles.section__title}
                         >
-                            <Icon name="certificate" size='l' />
+                            <Icon name="certificate" size='xl' />
                             <Text>Certifications</Text>
-                        <hr className={styles.section__divider} />
+                            <hr className={styles.section__divider} />
                         </Heading>
                     </div>
-                    
+
                     <div className={getCertificationGridClass()}>
                         {others.certifications.map((cert, index) => (
                             <Card
@@ -87,7 +105,7 @@ export default function page() {
                                 href={cert.url || undefined}
                                 direction="column"
                                 fillWidth
-                                padding="xl"
+                                padding="l"
                                 gap="l"
                                 radius="xl"
                                 border="neutral-alpha-medium"
@@ -99,6 +117,7 @@ export default function page() {
                                     aspectRatio="16/9"
                                     radius="l"
                                     objectFit="contain"
+                                    className={styles.certification__image}
                                 />
                                 <Column gap="s" fillWidth>
                                     <Text variant="heading-strong-m" align="center">
@@ -116,17 +135,18 @@ export default function page() {
 
             {/* Contributions Section */}
             <RevealFx delay={0.6} translateY={0.5}>
-                <section className={`${styles.section} ${styles.contributions}`}>                    <div className={styles.section__header}>
-                        <Heading 
-                            variant="display-strong-l" 
+                <section className={`${styles.section} ${styles.contributions}`}>
+                    <div className={styles.section__header}>
+                        <Heading
+                            variant="display-strong-l"
                             className={styles.section__title}
                         >
-                            <Icon name="github" size='l' />
+                            <Icon name="github" size='xl' />
                             <Text>Contributions</Text>
-                        <hr className={styles.section__divider} />
+                            <hr className={styles.section__divider} />
                         </Heading>
                     </div>
-                    
+
                     <div className={styles.contributions__container}>
                         <ContributionCarousel contributions={others.contributions} />
                     </div>

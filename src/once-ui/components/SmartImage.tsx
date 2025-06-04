@@ -151,6 +151,7 @@ const SmartImage: React.FC<SmartImageProps> = ({
             width="100%"
             height="100%"
             src={getYouTubeEmbedUrl(src)}
+            title={alt || "YouTube video"}
             frameBorder="0"
             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
