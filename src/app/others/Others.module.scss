@@ -222,6 +222,117 @@
   max-width: 100%;
   width: 100%;
   margin: 0 auto;
+  overflow: hidden;
+}
+
+.certifications__marquee {
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.certifications__marquee_container {
+  display: flex;
+  overflow: hidden;
+  padding: var(--static-space-16) 0;
+  width: 100%;
+  
+  @media (max-width: 768px) {
+    padding: var(--static-space-12) 0;
+  }
+  
+  @media (max-width: 480px) {
+    padding: var(--static-space-8) 0;
+  }
+
+  // Pause on hover
+  &:hover .certifications__marquee_track {
+    animation-play-state: paused;
+  }
+}
+
+.certifications__marquee_track {
+  display: flex;
+  gap: 2rem;
+  animation: certificateMarqueeScroll 40s linear infinite;
+  flex-shrink: 0;
+  width: max-content;
+  
+  @media (max-width: 768px) {
+    gap: 1.5rem;
+    animation-duration: 35s;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 1rem;
+    animation-duration: 30s;
+  }
+}
+
+@keyframes certificateMarqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.certification__card_marquee {
+  transition: all var(--transition-medium);
+  width: 320px; // Fixed width for marquee
+  max-width: 320px;
+  min-width: 320px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  
+  @media (max-width: 768px) {
+    width: 280px;
+    max-width: 280px;
+    min-width: 280px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 240px;
+    max-width: 240px;
+    min-width: 240px;
+  }
+  
+  // Shine effect for certificate marquee cards
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.15) 50%,
+      transparent 100%
+    );
+    animation: certificateShine 4s infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  &:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+    
+    &::before {
+      animation-duration: 2s; // Faster shine on hover
+    }
+  }
+
+  @media (max-width: 480px) {
+    &:hover {
+      transform: translateY(-2px) scale(1.01);
+    }
+  }
 }
 
 .certifications__grid {
@@ -311,16 +422,54 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  
+  // Shine effect for certificates
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.15) 50%,
+      transparent 100%
+    );
+    animation: certificateShine 4s infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
   
   &:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-xl);
+    
+    &::before {
+      animation-duration: 2s; // Faster shine on hover
+    }
   }
 
   @media (max-width: 480px) {
     &:hover {
       transform: translateY(-2px);
     }
+  }
+}
+
+// Certificate shine animation keyframes
+@keyframes certificateShine {
+  0% {
+    left: -100%;
+  }
+  30% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
   }
 }
 

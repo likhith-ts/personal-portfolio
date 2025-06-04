@@ -2,7 +2,7 @@ import { Meta } from '@/once-ui/modules';
 import React from 'react'
 import { others } from '../resources/content';
 import { baseURL } from '../resources';
-import { Badge, Card, Flex, Column, Heading, Text, Grid, RevealFx, Icon, SmartImage } from '@/once-ui/components';
+import { Badge, Card, Column, Heading, Text, RevealFx, Icon, SmartImage } from '@/once-ui/components';
 import { ContributionCarousel } from '@/components';
 import styles from './Others.module.scss';
 
@@ -17,19 +17,6 @@ export async function generateMetadata() {
 }
 
 export default function page() {
-    // Get grid class based on certificate count
-    const getCertificationGridClass = () => {
-        const certCount = others.certifications.length;
-        if (certCount === 1) {
-            return styles.certifications__grid;
-        } else if (certCount === 2) {
-            return `${styles.certifications__grid} ${styles['certifications__grid--two']}`;
-        } else if (certCount >= 3) {
-            return `${styles.certifications__grid} ${styles['certifications__grid--three']}`;
-        }
-        return styles.certifications__grid;
-    };
-
     return (
         <div className={styles.page}>
             {/* Achievements Section */}
@@ -96,39 +83,72 @@ export default function page() {
                             <Text>Certifications</Text>
                             <hr className={styles.section__divider} />
                         </Heading>
-                    </div>
-
-                    <div className={getCertificationGridClass()}>
-                        {others.certifications.map((cert, index) => (
-                            <Card
-                                key={index}
-                                href={cert.url || undefined}
-                                direction="column"
-                                fillWidth
-                                padding="l"
-                                gap="l"
-                                radius="xl"
-                                border="neutral-alpha-medium"
-                                className={styles.certification__card}
-                            >
-                                <SmartImage
-                                    src={cert.image || `${baseURL}/og?title=${encodeURIComponent(cert.name)}`}
-                                    alt={cert.name}
-                                    aspectRatio="16/9"
-                                    radius="l"
-                                    objectFit="contain"
-                                    className={styles.certification__image}
-                                />
-                                <Column gap="s" fillWidth>
-                                    <Text variant="heading-strong-m" align="center">
-                                        🏆 {cert.name}
-                                    </Text>
-                                    <Text variant="body-default-m" onBackground="neutral-weak" align="center">
-                                        {cert.issuer}
-                                    </Text>
-                                </Column>
-                            </Card>
-                        ))}
+                    </div>                    <div className={styles.certifications__marquee}>
+                        <div className={styles.certifications__marquee_container}>
+                            <div className={styles.certifications__marquee_track}>
+                                {others.certifications.map((cert, index) => (
+                                    <Card
+                                        key={`first-cert-${index}`}
+                                        href={cert.url || undefined}
+                                        direction="column"
+                                        fillWidth={false}
+                                        padding="l"
+                                        gap="l"
+                                        radius="xl"
+                                        border="neutral-alpha-medium"
+                                        className={styles.certification__card_marquee}
+                                    >
+                                        <SmartImage
+                                            src={cert.image || `${baseURL}/og?title=${encodeURIComponent(cert.name)}`}
+                                            alt={cert.name}
+                                            aspectRatio="16/9"
+                                            radius="l"
+                                            objectFit="contain"
+                                            className={styles.certification__image}
+                                        />
+                                        <Column gap="s" fillWidth>
+                                            <Text variant="heading-strong-m" align="center">
+                                                🏆 {cert.name}
+                                            </Text>
+                                            <Text variant="body-default-m" onBackground="neutral-weak" align="center">
+                                                {cert.issuer}
+                                            </Text>
+                                        </Column>
+                                    </Card>
+                                ))}
+                                {/* Duplicate for seamless loop */}
+                                {others.certifications.map((cert, index) => (
+                                    <Card
+                                        key={`second-cert-${index}`}
+                                        href={cert.url || undefined}
+                                        direction="column"
+                                        fillWidth={false}
+                                        padding="l"
+                                        gap="l"
+                                        radius="xl"
+                                        border="neutral-alpha-medium"
+                                        className={styles.certification__card_marquee}
+                                    >
+                                        <SmartImage
+                                            src={cert.image || `${baseURL}/og?title=${encodeURIComponent(cert.name)}`}
+                                            alt={cert.name}
+                                            aspectRatio="16/9"
+                                            radius="l"
+                                            objectFit="contain"
+                                            className={styles.certification__image}
+                                        />
+                                        <Column gap="s" fillWidth>
+                                            <Text variant="heading-strong-m" align="center">
+                                                🏆 {cert.name}
+                                            </Text>
+                                            <Text variant="body-default-m" onBackground="neutral-weak" align="center">
+                                                {cert.issuer}
+                                            </Text>
+                                        </Column>
+                                    </Card>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </section>
             </RevealFx>
