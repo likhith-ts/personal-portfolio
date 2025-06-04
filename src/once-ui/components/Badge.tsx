@@ -28,7 +28,7 @@ const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
         paddingX="20"
         paddingY="12"
         fitWidth
-        className={`${effect ? styles.animation : undefined}, cursor-interactive`}
+        className={`${effect ? styles.animation : undefined} cursor-interactive`}
         vertical="center"
         radius="full"
         background="neutral-weak"
@@ -51,7 +51,7 @@ const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
         )}
         {children}
         {/* If arrow is true, show the arrow icon */}
-        {arrow && <Arrow trigger={id ? "#" + id : "badge"} />}
+        {arrow && <Arrow trigger={"#" + id} />}
       </Flex>
     );
 

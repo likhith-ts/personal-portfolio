@@ -10,7 +10,8 @@ import { /*Background, */  Column, Flex, ThemeProvider, ToastProvider } from "@/
 import { Meta } from "@/once-ui/modules";
 import { BackgroundEffects } from "@/components/BackgroundEffects";
 import { LoadingScreen } from "@/components/LoadingScreen";
-
+import { SmoothCursor } from "@/components/ui/smooth-cursor";
+// import './globals.css';
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -77,6 +78,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <LoadingScreen />
       <ThemeProvider>
         <ToastProvider>
+
           <Column
             suppressHydrationWarning
             style={{ minHeight: "100vh" }}
@@ -139,7 +141,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               horizontal="center"
               flex={1}
             >
+
               <Flex horizontal="center" fillWidth minHeight="0">
+                <SmoothCursor />
                 <RouteGuard>{children}</RouteGuard>
               </Flex>
             </Flex>

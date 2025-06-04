@@ -1,6 +1,7 @@
 .animation {
     position: relative;
     overflow: hidden;
+    transition: transform 0.2s ease;
 
     &::before {
         content: '';
@@ -20,6 +21,8 @@
     }
 
     &:hover {
+        transform: scale(1.05);
+        
         &::before {
             animation: shineHover 3s ease-in-out infinite;
         }

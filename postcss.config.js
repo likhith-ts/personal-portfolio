@@ -2,6 +2,7 @@ module.exports = {
   plugins: [
     [
       "@csstools/postcss-global-data",
+      // "@tailwindcss/postcss",
       {
         files: ["src/once-ui/styles/breakpoints.scss"],
       },

@@ -47,7 +47,7 @@ blockquote {
     border-radius: var(--radius-m);
     background: var(--brand-alpha-weak);
     overflow: hidden;
-    text-wrap: balance;
+    -webkit-backdrop-filter: blur(var(--static-space-2));
     backdrop-filter: blur(var(--static-space-2));
     border: 1px dashed var(--brand-alpha-medium);
     max-width: var(--responsive-width-xs);
@@ -63,6 +63,7 @@ blockquote {
 }
 
 img {
+    -webkit-user-select: none;
     user-select: none;
 }
 

@@ -2,8 +2,6 @@
 // import { Certificate } from "crypto";
 // import { link } from "fs";
 
-import { title } from "process";
-
 const person = {
   firstName: "Likhith",
   lastName: "Usurupati",
@@ -19,7 +17,7 @@ const person = {
 };
 
 const newsletter = {
-  display: false,
+  display: true,
   title: <>Subscribe to {person.firstName}'s Newsletter</>,
   description: (
     <>
@@ -320,25 +318,34 @@ const others = {
   ],
   certifications: [
     {
-      name: "AWS Certified Solutions Architect",
-      issuer: "Amazon Web Services",
+      url: "https://www.hackerrank.com/certificates/iframe/8af49cac48c1",
+      name: "Hackerrank Basic Python",
+      issuer: "Hackerrank",
       year: 2020,
+      image: "/images/certificates/hackerrank-basic-python.png",
     },
     {
+      url: "https://www.udemy.com/certificate/UC-c25adfb3-e41a-426b-98cb-439f5cd92173/",
       name: "Certified Kubernetes Administrator",
-      issuer: "Cloud Native Computing Foundation",
+      issuer: "Udemy & Academind by maximilian schwarzmüller",
       year: 2021,
+      image: "https://udemy-certificate.s3.amazonaws.com/image/UC-c25adfb3-e41a-426b-98cb-439f5cd92173.jpg",
     },
     {
-      name: "Google Cloud Professional Data Engineer",
-      issuer: "Google Cloud",
+      url: "https://www.udemy.com/certificate/UC-b86f74b7-9c63-45ff-abea-79eec763189c/",
+      name: "Flutter & Dart - The Complete Guide",
+      issuer: "Udemy & Academind by maximilian schwarzmüller",
       year: 2022,
+      image: "https://udemy-certificate.s3.amazonaws.com/image/UC-b86f74b7-9c63-45ff-abea-79eec763189c.jpg",
     },
-    {
-      name: "Certified Ethical Hacker",
-      issuer: "EC-Council",
-      year: 2023,
-    },],
+    // {
+    //   url: "https://www.hackerrank.com/certificates/iframe/8af49cac48c1",
+    //   name: "Certified Ethical Hacker",
+    //   issuer: "EC-Council",
+    //   year: 2023,
+    //   image: "/images/certificates/hackerrank-basic-python.png",
+    // },
+  ],
     contributions:[
       {
         title: "Melanoma Detection Project",
@@ -366,6 +373,19 @@ const others = {
         description: "A web app for automating tasks using AI.",
       },
       
+      {
+        title: "Contributed to Credit Card Fraud Detection Project",
+        project: "Credit Card Fraud Detection",
+        avatars: [
+          {src: "https://avatars.githubusercontent.com/u/181699041?v=4"},
+          {src: "/images/avatar.jpg"},
+        ],
+        owner: "likhith-ts",
+        icon: "github",
+        link: "https://github.com/likhith-ts/Credit-Card-Fraud-Detection",
+        description: "A web app for detecting credit card fraud using machine learning.",
+      },
+
       {
         title: "Contributed to Credit Card Fraud Detection Project",
         project: "Credit Card Fraud Detection",
