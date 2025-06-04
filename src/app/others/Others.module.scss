@@ -473,8 +473,63 @@
   }
 }
 
+// Gradient border glow animation for certificate images
+@keyframes gradientBorderGlow {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 50% 100%;
+  }
+}
+
 // Certificate image styling for better desktop presentation
 .certification__image {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius-md);
+  
+  // Add gradient border glow wrapper
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    padding: 3px;
+    background: linear-gradient(
+      45deg,
+      #ff006e,
+      #8338ec,
+      #3a86ff,
+      #06ffa5,
+      #ffbe0b,
+      #fb5607,
+      #ff006e
+    );
+    background-size: 400% 400%;
+    border-radius: inherit;
+    animation: gradientBorderGlow 6s ease-in-out infinite;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  // Enhanced glow on hover
+  &:hover::after {
+    animation-duration: 3s;
+    inset: -4px;
+    padding: 4px;
+    filter: brightness(1.3) blur(0.5px);
+  }
+  
   // Desktop: Larger images for better visibility
   @media (min-width: 1024px) {
     min-height: 240px; // Increased from default
@@ -490,9 +545,19 @@
     min-height: 200px;
   }
   
-  // Mobile: Keep compact
+  // Mobile: Keep compact and subtle glow
   @media (max-width: 767px) {
     min-height: 160px;
+    
+    &::after {
+      inset: -2px;
+      padding: 2px;
+    }
+    
+    &:hover::after {
+      inset: -2px;
+      padding: 2px;
+    }
   }
 }
 
