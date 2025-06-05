@@ -224,6 +224,7 @@ export function SmoothCursor({
   const [isClicking, setIsClicking] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [shouldShowCursor, setShouldShowCursor] = useState(false);
+  const [isMouseInViewport, setIsMouseInViewport] = useState(true);
   const lastMousePos = useRef<Position>({ x: 0, y: 0 });
   const velocity = useRef<Position>({ x: 0, y: 0 });
   const lastUpdateTime = useRef(Date.now());
@@ -438,24 +439,104 @@ export function SmoothCursor({
       }
     };
 
+    // Handle mouse movement with viewport detection
     const handleMouseMove = (e: MouseEvent) => {
-      // Show cursor again when mouse moves (for hybrid devices)
-      if (disableOnTouch && !shouldShowCursor && !isTouchDevice) {
-        setShouldShowCursor(true);
+      if (enabled && !(disableOnTouch && isTouchDevice)) {
+        // Always show cursor on mouse movement
+        setIsMouseInViewport(true);
+        if (!shouldShowCursor) {
+          setShouldShowCursor(true);
+        }
+        throttledMouseMove(e);
       }
-      throttledMouseMove(e);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("touchstart", handleTouchStart);
+    // The most reliable method: Use both mouseleave on html element and coordinate checking
+    const handleDocumentMouseLeave = (e: MouseEvent) => {
+      // Check if mouse is truly leaving the document
+      const { clientX, clientY } = e;
+      const isLeavingDocument = 
+        clientX <= 0 || 
+        clientX >= window.innerWidth || 
+        clientY <= 0 || 
+        clientY >= window.innerHeight ||
+        !e.relatedTarget; // No related target means mouse left the document
+      
+      if (isLeavingDocument) {
+        setIsMouseInViewport(false);
+      }
+    };
+
+    // Handle mouse entering the document
+    const handleDocumentMouseEnter = (e: MouseEvent) => {
+      if (enabled && !(disableOnTouch && isTouchDevice)) {
+        setIsMouseInViewport(true);
+        setShouldShowCursor(true);
+      }
+    };
+
+    // Handle when window loses focus
+    const handleWindowBlur = () => {
+      setIsMouseInViewport(false);
+    };
+
+    // Handle visibility change when tab becomes inactive
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setIsMouseInViewport(false);
+      }
+    };
+
+    // Ultimate fallback: Monitor if mouse is actually over the document
+    const handleGlobalMouseOver = (e: MouseEvent) => {
+      if (enabled && !(disableOnTouch && isTouchDevice)) {
+        setIsMouseInViewport(true);
+        if (!shouldShowCursor) {
+          setShouldShowCursor(true);
+        }
+      }
+    };
+
+    const handleGlobalMouseOut = (e: MouseEvent) => {
+      // Only hide if mouse is truly leaving the document
+      if (!e.relatedTarget || e.relatedTarget === null) {
+        setIsMouseInViewport(false);
+      }
+    };
+
+    // Apply event listeners to document.documentElement (html tag) for better detection
+    const htmlElement = document.documentElement;
+    
+    // Primary mouse movement detection
+    document.addEventListener("mousemove", handleMouseMove);
+    
+    // Mouse leave/enter detection on html element
+    htmlElement.addEventListener("mouseleave", handleDocumentMouseLeave);
+    htmlElement.addEventListener("mouseenter", handleDocumentMouseEnter);
+    
+    // Global mouse over/out as fallback
+    document.addEventListener("mouseover", handleGlobalMouseOver);
+    document.addEventListener("mouseout", handleGlobalMouseOut);
+    
+    // Other event listeners
+    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("touchstart", handleTouchStart);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("blur", handleWindowBlur);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("mousemove", handleMouseMove);
+      htmlElement.removeEventListener("mouseleave", handleDocumentMouseLeave);
+      htmlElement.removeEventListener("mouseenter", handleDocumentMouseEnter);
+      document.removeEventListener("mouseover", handleGlobalMouseOver);
+      document.removeEventListener("mouseout", handleGlobalMouseOut);
+      document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("blur", handleWindowBlur);
+      
       if (document.head.contains(style)) {
         document.head.removeChild(style);
       }
@@ -497,6 +578,8 @@ export function SmoothCursor({
         zIndex: 100,
         pointerEvents: "none",
         willChange: "transform",
+        opacity: isMouseInViewport ? 1 : 0,
+        transition: "opacity 0.2s ease-out",
       }}
       initial={{ scale: 0 }}
       animate={{ 
