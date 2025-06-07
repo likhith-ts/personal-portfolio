@@ -27,6 +27,7 @@ export default function page() {
                             variant="display-strong-l"
                             className={styles.section__title}
                         >
+                            <hr className={styles.section__divider} />
                             <Icon name="achievement" size='xl' />
                             <Text>Achievements</Text>
                             <hr className={styles.section__divider} />
@@ -79,11 +80,13 @@ export default function page() {
                             variant="display-strong-l"
                             className={styles.section__title}
                         >
+                            <hr className={styles.section__divider} />
                             <Icon name="certificate" size='xl' />
                             <Text>Certifications</Text>
                             <hr className={styles.section__divider} />
                         </Heading>
-                    </div>                    <div className={styles.certifications__marquee}>
+                    </div>                    
+                    <div className={styles.certifications__marquee}>
                         <div className={styles.certifications__marquee_container}>
                             <div className={styles.certifications__marquee_track}>
                                 {others.certifications.map((cert, index) => (
@@ -99,6 +102,7 @@ export default function page() {
                                         className={styles.certification__card_marquee}
                                     >
                                         <SmartImage
+                                            isLoading={cert.image ? false : true}
                                             src={cert.image || `${baseURL}/og?title=${encodeURIComponent(cert.name)}`}
                                             alt={cert.name}
                                             aspectRatio="16/9"
@@ -130,6 +134,7 @@ export default function page() {
                                         className={styles.certification__card_marquee}
                                     >
                                         <SmartImage
+                                            isLoading={cert.image ? false : true}
                                             src={cert.image || `${baseURL}/og?title=${encodeURIComponent(cert.name)}`}
                                             alt={cert.name}
                                             aspectRatio="16/9"
@@ -161,6 +166,7 @@ export default function page() {
                             variant="display-strong-l"
                             className={styles.section__title}
                         >
+                            <hr className={styles.section__divider} />
                             <Icon name="github" size='xl' />
                             <Text>Contributions</Text>
                             <hr className={styles.section__divider} />

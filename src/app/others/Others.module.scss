@@ -1,9 +1,9 @@
 // Others.module.scss
 .page {
   width: 100%;
-  max-width: 1200px;
+  // max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--static-space-24);
+  padding: 0 0;
   overflow-x: hidden;
   box-sizing: border-box;
 
@@ -496,14 +496,22 @@
     inset: -8px; // Expanded glow range
     background: linear-gradient(
       45deg,
-      #ffd700, // Gold
-      #ffaa00, // Orange-gold  
-      #ff6b35, // Orange-red
-      #ff006e, // Pink
-      #8338ec, // Purple
-      #3a86ff, // Blue
+      // #ffd700, // Gold
+      // #ffaa00, // Orange-gold  
+      // #ff6b35, // Orange-red
+      // #ff006e, // Pink
+      // #8338ec, // Purple
+      // #3a86ff, // Blue
       #06ffa5, // Cyan
-      #ffd700  // Back to gold for seamless loop
+      #20fdf0, // Teal
+      #41fbe0, // Light cyan
+      #62f9d0, // Mint
+      #83f7c0, // Light mint
+      #a4f5b0, // Pale mint
+      #c5f3a0, // Very light mint
+      #e6f190, // Lightest mint
+      #06ffa5, // Back to Cyan for seamless loop
+      // #ffd700  // Back to gold for seamless loop
     );
     background-size: 400% 400%; // Larger gradient size for smoother transitions
     border-radius: calc(var(--border-radius-xl) * 2); // Enhanced curved radius
@@ -580,7 +588,7 @@
 
 .contributions {
   width: 100%;
-  max-width: 1200px;
+  // max-width: 1200px;
   margin: 0 auto;
   overflow: hidden;
 }

@@ -18,4 +18,5 @@ export {
   blog,
   work,
   gallery,
+  others,
 } from "@/app/resources/content";
