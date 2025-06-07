@@ -53,6 +53,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     >
         
       <head>
+         {/* Add preconnect for performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <script
           dangerouslySetInnerHTML={{
         __html: `

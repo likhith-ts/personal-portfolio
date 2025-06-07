@@ -19,7 +19,21 @@ export async function generateMetadata() {
 export default function Home() {
   return (
     <>
-      <Column maxWidth="l" gap="xl" horizontal="center">
+      {/* Neural Network Hero Background */}
+      <div id="hero-background"
+        style={{
+          position: "absolute",
+          top: "-5%",
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: -1,
+          opacity: 0.8,
+        }}
+      >
+        <HeroNeuralNetwork glowIntensity={1} />
+      </div>
+      <Column maxWidth="m" gap="xl" horizontal="center">
         <Schema
           as="webPage"
           baseURL={baseURL}
@@ -33,21 +47,7 @@ export default function Home() {
             image: `${baseURL}${person.avatar}`,
           }} />
         <Column fillWidth paddingY="24" gap="m">
-          {/* Neural Network Hero Background */}
-          <div
-            style={{
-              position: "absolute",
-              top: -60,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              zIndex: -1,
-              opacity: 0.6,
-            }}
-          >
-            <HeroNeuralNetwork />
-          </div>
-          <Column maxWidth="s">
+          <Column maxWidth="l">
             {home.featured.display && (
               <RevealFx fillWidth horizontal="start" paddingTop="16" paddingBottom="32" paddingLeft="12">
                 <Badge background="brand-alpha-weak" paddingX="12" paddingY="4" onBackground="neutral-strong" textVariant="label-default-s" arrow={true}
@@ -57,7 +57,7 @@ export default function Home() {
               </RevealFx>
             )}
             <RevealFx translateY="4" fillWidth horizontal="start" paddingBottom="16">
-              <Heading wrap="balance" variant="display-strong-l">
+              <Heading wrap="balance" variant="display-strong-l"> 
                 {home.headline}
               </Heading>
             </RevealFx>

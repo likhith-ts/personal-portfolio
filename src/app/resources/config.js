@@ -1,5 +1,5 @@
 // IMPORTANT: Replace with your own domain address - it's used for SEO in meta tags and schema
-const baseURL = "https://demo.magic-portfolio.com";
+const baseURL = "https://www.likhithusurupati.dev";
 
 const routes = {
   "/": true,
@@ -61,7 +61,7 @@ const effects = {
     radius: 100,
   },
   gradient: {
-    display: true,
+    display: false,
     opacity: 100,
     x: 50,
     y: 60,
@@ -80,7 +80,7 @@ const effects = {
   grid: {
     display: true,
     opacity: 100,
-    color: "neutral-alpha-medium",
+    color: "brand-alpha-medium",
     width: "0.25rem",
     height: "0.25rem",
   },

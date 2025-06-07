@@ -3,6 +3,7 @@
 import type React from "react"
 import { useEffect, useRef, useState, useCallback } from "react"
 
+
 interface HeroNeuralNetworkProps {
   className?: string
   nodeColor?: string
@@ -49,10 +50,10 @@ interface Signal {
 
 const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
   className = "",
-  nodeColor = "#60a5fa",
-  signalColor = "#3b82f6",
-  particleColor = "#93c5fd",
-  connectionColor = "#1e40af",
+  nodeColor,
+  signalColor,
+  particleColor,
+  connectionColor,
   glowIntensity = 0.8,
   animationSpeed = 1,
 }) => {
@@ -63,6 +64,55 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
   const [connections, setConnections] = useState<Connection[]>([])
   const [signals, setSignals] = useState<Signal[]>([])
   const [isInitialized, setIsInitialized] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(true)
+
+  // Theme detection
+  useEffect(() => {
+    const checkTheme = () => {
+      const htmlElement = document.documentElement
+      const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      const dataTheme = htmlElement.getAttribute('data-theme')
+      
+      // Check if explicitly set to light/dark or use system preference
+      const isDark = dataTheme === 'dark' || (dataTheme === 'system' && isSystemDark) || (!dataTheme && isSystemDark)
+      setIsDarkMode(isDark)
+    }
+
+    checkTheme()
+    
+    // Watch for theme changes
+    const observer = new MutationObserver(checkTheme)
+    observer.observe(document.documentElement, { 
+      attributes: true, 
+      attributeFilter: ['data-theme', 'class'] 
+    })
+    
+    // Watch for system theme changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    mediaQuery.addEventListener('change', checkTheme)
+    
+    return () => {
+      observer.disconnect()
+      mediaQuery.removeEventListener('change', checkTheme)
+    }
+  }, [])
+
+  // Color scheme based on theme
+  const colors = isDarkMode ? {
+    // Dark mode colors (current ones that look good)
+    node: nodeColor || "#60a5fa",
+    signal: signalColor || "#3b82f6", 
+    particle: particleColor || "#93c5fd",
+    connection: connectionColor || "#1e40af",
+    activeNodeCenter: "#ffffff"
+  } : {
+    // Light mode colors (vibrant and visible on light backgrounds)
+    node: nodeColor || "#1d4ed8",
+    signal: signalColor || "#2563eb",
+    particle: particleColor || "#3b82f6", 
+    connection: connectionColor || "#1e40af",
+    activeNodeCenter: "#1e40af"
+  }
 
   // Define neural network structure
   const networkLayers = [4, 8, 6, 3] // Input, Hidden1, Hidden2, Output
@@ -302,20 +352,19 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
         className="absolute inset-0 w-full h-full"
         viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
         preserveAspectRatio="xMidYMid slice"
-      >
-        <defs>
+      >        <defs>
           {/* Node gradient */}
           <radialGradient id="nodeGradient" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor={nodeColor} stopOpacity="1" />
-            <stop offset="70%" stopColor={nodeColor} stopOpacity="0.8" />
-            <stop offset="100%" stopColor={nodeColor} stopOpacity="0.3" />
+            <stop offset="0%" stopColor={colors.node} stopOpacity="1" />
+            <stop offset="70%" stopColor={colors.node} stopOpacity="0.8" />
+            <stop offset="100%" stopColor={colors.node} stopOpacity="0.3" />
           </radialGradient>
 
           {/* Active node gradient */}
           <radialGradient id="activeNodeGradient" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-            <stop offset="30%" stopColor={nodeColor} stopOpacity="1" />
-            <stop offset="100%" stopColor={nodeColor} stopOpacity="0.5" />
+            <stop offset="0%" stopColor={colors.activeNodeCenter} stopOpacity="1" />
+            <stop offset="30%" stopColor={colors.node} stopOpacity="1" />
+            <stop offset="100%" stopColor={colors.node} stopOpacity="0.5" />
           </radialGradient>
 
           {/* Glow filter */}
@@ -326,9 +375,9 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
 
           {/* Connection gradient */}
           <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={connectionColor} stopOpacity="0.1" />
-            <stop offset="50%" stopColor={connectionColor} stopOpacity="0.4" />
-            <stop offset="100%" stopColor={connectionColor} stopOpacity="0.1" />
+            <stop offset="0%" stopColor={colors.connection} stopOpacity="0.1" />
+            <stop offset="50%" stopColor={colors.connection} stopOpacity="0.4" />
+            <stop offset="100%" stopColor={colors.connection} stopOpacity="0.1" />
           </linearGradient>
         </defs>
 
@@ -347,7 +396,7 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
                 y1={fromNode.y}
                 x2={toNode.x}
                 y2={toNode.y}
-                stroke={connection.active ? signalColor : connectionColor}
+                stroke={connection.active ? colors.signal : colors.connection}
                 strokeWidth={connection.active ? 2 : 1}
                 strokeOpacity={connection.active ? 0.8 : connection.opacity}
                 style={{
@@ -378,7 +427,7 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
                 cx={x}
                 cy={y}
                 r={3}
-                fill={particleColor}
+                fill={colors.particle}
                 opacity={signal.intensity * (1 - signal.progress * 0.5)}
                 filter="url(#glow)"
               />
@@ -402,8 +451,8 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
               }}
             />
           ))}
-        </g>
-
+        </g>        
+        
         {/* Layer labels */}
         <g className="labels">
           {networkLayers.map((layerSize, index) => {
@@ -414,9 +463,9 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
               <text
                 key={index}
                 x={x}
-                y={50}
+                y={100}
                 textAnchor="middle"
-                fill="rgba(255, 255, 255, 0.6)"
+                fill={isDarkMode ? "rgba(255, 255, 255, 0.8)" : "rgba(0, 0, 0, 0.9)"}
                 fontSize="12"
                 fontFamily="monospace"
               >
