@@ -69,13 +69,17 @@
 .carousel__container {
   display: flex;
   gap: var(--static-space-16);
-  touch-action: pan-y pinch-zoom;
+  touch-action: pan-x pinch-zoom;
   align-items: stretch;
   backface-visibility: hidden;
   transform-style: preserve-3d;
   
   @media (max-width: 768px) {
     gap: var(--static-space-12);
+  }
+  
+  @media (max-width: 480px) {
+    gap: var(--static-space-8);
   }
 }
 
@@ -112,10 +116,8 @@
   &--in-view {
     opacity: 0.8;
     transform: scale(0.95);
-  }
-
-  // Active slide takes precedence over in-view
-  &--active &--in-view {
+  }  // Active slide takes precedence over in-view
+  &--active.carousel__slide--in-view {
     opacity: 1;
     transform: scale(1);
   }
@@ -131,25 +133,54 @@
   @media (min-width: 1200px) {
     width: 360px;
   }
-  
-  @media (max-width: 768px) {
+    @media (max-width: 768px) {
     width: 280px;
+    transform: scale(0.9);
     
     &:hover {
-      transform: scale(1.05);
+      transform: scale(1.02);
+    }
+      &--active {
+      transform: scale(1);
+    }
+    
+    &--in-view {
+      transform: scale(0.95);
+    }
+    
+    &--active.carousel__slide--in-view {
+      transform: scale(1);
     }
   }
 
   @media (max-width: 480px) {
-    width: calc(100vw - 80px);
-    max-width: 300px;
+    width: calc(100vw - 60px);
+    max-width: 280px;
+    transform: scale(0.95);
+    
+    &:hover {
+      transform: scale(1);
+    }
+    
+    &--active {
+      transform: scale(1);
+    }
+    
+    &--in-view {
+      transform: scale(0.98);
+    }
+    
+    &--active.carousel__slide--in-view {
+      transform: scale(1);
+    }
   }
 }
 
 .contribution__card {
   width: 100%;
   max-width: 400px;
-  min-height: 420px;
+  min-height: 460px; // Increased for uniform sizing
+  height: 460px; // Fixed height for consistency
   display: flex;
   flex-direction: column;
   background: rgba(255, 255, 255, 0.05);
@@ -167,6 +198,18 @@
   backdrop-filter: blur(12px);
   transform: translateZ(0); // Force hardware acceleration
   will-change: transform, background-color, border-color, box-shadow;
+
+  @media (max-width: 768px) {
+    min-height: 420px;
+    height: 420px;
+    max-width: 100%;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 380px;
+    height: 380px;
+    max-width: 100%;
+  }
 
   &::before {
     content: '';
@@ -269,14 +312,18 @@
   line-height: 1.3;
   font-weight: 700;
   letter-spacing: -0.02em;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
   overflow: hidden;
   position: relative;
   margin: 0;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  cursor: default;
+  
+  // Ensure consistent height for uniform cards
+  min-height: 2.6em; // Approximately 2 lines
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .contribution__project_badge {
@@ -397,33 +444,13 @@
   line-height: 1.6;
   letter-spacing: 0.01em;
   color: var(--neutral-on-background-medium);
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
   position: relative;
   margin: 0;
-    &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 1.5em;
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgba(255, 255, 255, 0.05) 100%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
-  
-  &:hover::after {
-    opacity: 1;
-  }
+  cursor: default;
+    // Ensure consistent height for uniform cards
+  min-height: 4.8em; // Approximately 3 lines
+  display: flex;
+  align-items: flex-start;
 }
 
 .contribution__footer {
@@ -602,69 +629,38 @@
   }
 }
 
-// Tooltip overlay for truncated text
-.text__tooltip {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.8);
+// Floating UI Tooltip styles
+.floating__tooltip {
+  background: rgba(0, 0, 0, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: var(--radius-l);
-  padding: var(--static-space-16);
-  max-width: 320px;
-  min-width: 240px;
+  border-radius: var(--radius-m);
+  padding: var(--static-space-12) var(--static-space-16);
+  color: var(--neutral-on-background-strong);
+  font-size: var(--font-size-s);
+  line-height: 1.4;
+  max-width: 300px;
+  word-wrap: break-word;
   z-index: 1000;
   box-shadow: 
-    0 20px 48px rgba(0, 0, 0, 0.3),
-    0 8px 24px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  pointer-events: none;
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.2);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   
-  &--visible {
-    opacity: 1;
-    visibility: visible;
-  }
-  
-  .tooltip__text {
-    font-size: var(--font-size-s);
-    line-height: 1.5;
-    color: var(--neutral-on-background-strong);
-    text-align: left;
-    margin: 0;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-  }
-  
-  .tooltip__title {
-    font-size: var(--font-size-m);
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--neutral-on-background-strong);
-    text-align: left;
-    margin: 0;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-  }
-
   @media (max-width: 480px) {
-    max-width: 280px;
-    min-width: 200px;
-    padding: var(--static-space-12);
-    
-    .tooltip__text {
-      font-size: var(--font-size-xs);
-    }
-    
-    .tooltip__title {
-      font-size: var(--font-size-s);
-    }
+    max-width: 250px;
+    font-size: var(--font-size-xs);
+    padding: var(--static-space-8) var(--static-space-12);
   }
+}
+
+.floating__tooltip_arrow {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 // Responsive adjustments

@@ -4,6 +4,7 @@ import React from 'react';
 import { Card, Flex, Column, Text, Button, Icon, Avatar } from '@/once-ui/components';
 import styles from './ContributionCarousel.module.scss';
 import useEmblaCarousel from 'embla-carousel-react';
+import { useFloating, autoUpdate, offset, flip, shift, arrow } from '@floating-ui/react';
 
 interface ContributionItem {
   title: string;
@@ -17,125 +18,148 @@ interface ContributionItem {
 
 interface ContributionCarouselProps {
   contributions: ContributionItem[];
+  autoScroll?: boolean; // Optional prop to enable/disable autoscroll (default: false for stability)
 }
 
+// Utility function to truncate text to a specific word count
+const truncateText = (text: string, maxWords: number): { truncated: string; isTruncated: boolean } => {
+  const words = text.split(' ');
+  if (words.length <= maxWords) {
+    return { truncated: text, isTruncated: false };
+  }
+  return { 
+    truncated: words.slice(0, maxWords).join(' ') + '...', 
+    isTruncated: true 
+  };
+};
+
+// Constants for uniform text lengths
+const MAX_TITLE_WORDS = 6;
+const MAX_DESCRIPTION_WORDS = 15;
+
 export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({ 
-  contributions 
-}) => {  // Ensure we have enough slides for smooth infinite looping
+  contributions,
+  autoScroll = false // Default to false to prevent visual glitches
+}) => {// Smart infinite loop: Only duplicate if we have few items, otherwise use Embla's built-in loop
   const enhancedContributions = React.useMemo(() => {
-    if (contributions.length <= 2) {
-      // For very few slides, duplicate them to ensure smooth infinite scrolling
-      return [...contributions, ...contributions, ...contributions];
+    // If we have very few items (1-3), we need duplicates for smooth infinite scroll
+    // If we have enough items (4+), Embla's built-in loop works fine
+    if (contributions.length <= 3) {
+      // For 1-3 items, create enough duplicates to fill the viewport and provide smooth scrolling
+      const duplicatesNeeded = Math.max(6, contributions.length * 3);
+      const sets = Math.ceil(duplicatesNeeded / contributions.length);
+      return Array(sets).fill(contributions).flat();
     }
+    // For 4+ items, use original array - Embla's loop will handle it smoothly
     return contributions;
   }, [contributions]);
+
+  const shouldUseManualLoop = contributions.length <= 3;
+
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
+    loop: !shouldUseManualLoop, // Use Embla's loop for 4+ items, manual for fewer
     align: 'center',
     skipSnaps: false,
     dragFree: false,
-    containScroll: 'trimSnaps',
-    startIndex: 0,
+    containScroll: shouldUseManualLoop ? false : 'trimSnaps',
+    startIndex: shouldUseManualLoop ? Math.floor(enhancedContributions.length / 2) : 0,
     slidesToScroll: 1,
     watchDrag: true,
-    duration: 20, // Even smoother transition duration
-    inViewThreshold: 0.5, // More responsive detection of slides in view
+    dragThreshold: 10,
+    duration: 25,
+    inViewThreshold: 0.7,
   });
     const [prevBtnDisabled, setPrevBtnDisabled] = React.useState(false);
   const [nextBtnDisabled, setNextBtnDisabled] = React.useState(false);  const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [slidesInView, setSlidesInView] = React.useState<number[]>([]);
   const [hoveredCard, setHoveredCard] = React.useState<number | null>(null);
-  const [tooltipType, setTooltipType] = React.useState<'title' | 'description' | null>(null);
-  const [tooltipPosition, setTooltipPosition] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [isAutoPlaying, setIsAutoPlaying] = React.useState(true);
+  const [isAutoPlaying, setIsAutoPlaying] = React.useState(autoScroll); // Initialize based on autoScroll prop
+  
+  // Floating UI tooltip state
+  const [tooltipContent, setTooltipContent] = React.useState<string | null>(null);
+  const [tooltipOpen, setTooltipOpen] = React.useState(false);
   const tooltipTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const autoPlayTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const arrowRef = React.useRef(null);
 
+  // Floating UI setup
+  const { refs, floatingStyles, context } = useFloating({
+    open: tooltipOpen,
+    onOpenChange: setTooltipOpen,
+    middleware: [
+      offset(8),
+      flip(),
+      shift({ padding: 8 }),
+      arrow({ element: arrowRef })
+    ],
+    whileElementsMounted: autoUpdate,
+  });
   // Handle mouse movement for tooltip positioning
-  const handleMouseMove = React.useCallback((e: React.MouseEvent) => {
-    setTooltipPosition({ x: e.clientX, y: e.clientY });
-  }, []);
-
-  // Check if text is truncated
-  const isTextTruncated = React.useCallback((element: HTMLElement | null): boolean => {
-    if (!element) return false;
-    return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
-  }, []);
-  // Handle title hover
-  const handleTitleHover = React.useCallback((index: number, isEntering: boolean, event?: React.MouseEvent) => {
+  const showTooltip = React.useCallback((content: string, element: HTMLElement) => {
     if (tooltipTimeoutRef.current) {
       clearTimeout(tooltipTimeoutRef.current);
-      tooltipTimeoutRef.current = null;
     }
-
-    if (isEntering) {
-      const titleElement = event?.currentTarget.querySelector('.' + styles.contribution__title);
-      if (isTextTruncated(titleElement as HTMLElement)) {
-        tooltipTimeoutRef.current = setTimeout(() => {
-          setHoveredCard(index);
-          setTooltipType('title');
-          if (event) setTooltipPosition({ x: event.clientX, y: event.clientY });
-        }, 300);
-      }
-    } else {
-      tooltipTimeoutRef.current = setTimeout(() => {
-        if (tooltipType === 'title') {
-          setTooltipType(null);
-        }
-      }, 100);
-    }
-  }, [isTextTruncated, tooltipType, styles.contribution__title]);
-
-  // Handle description hover
-  const handleDescriptionHover = React.useCallback((index: number, isEntering: boolean, event?: React.MouseEvent) => {
+    
+    tooltipTimeoutRef.current = setTimeout(() => {
+      setTooltipContent(content);
+      refs.setReference(element);
+      setTooltipOpen(true);
+    }, 300);
+  }, [refs]);
+  const hideTooltip = React.useCallback(() => {
     if (tooltipTimeoutRef.current) {
       clearTimeout(tooltipTimeoutRef.current);
-      tooltipTimeoutRef.current = null;
     }
-
-    if (isEntering) {
-      const descElement = event?.currentTarget.querySelector('.' + styles.contribution__description);
-      if (isTextTruncated(descElement as HTMLElement)) {
-        tooltipTimeoutRef.current = setTimeout(() => {
-          setHoveredCard(index);
-          setTooltipType('description');
-          if (event) setTooltipPosition({ x: event.clientX, y: event.clientY });
-        }, 300);
-      }
-    } else {
-      tooltipTimeoutRef.current = setTimeout(() => {
-        if (tooltipType === 'description') {
-          setTooltipType(null);
-        }
-      }, 100);
-    }
-  }, [isTextTruncated, tooltipType, styles.contribution__description]);
-
-  const scrollPrev = React.useCallback(() => {
+    
+    tooltipTimeoutRef.current = setTimeout(() => {
+      setTooltipOpen(false);
+      setTooltipContent(null);
+    }, 100);
+  }, []);  const scrollPrev = React.useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
   }, [emblaApi]);
 
   const scrollNext = React.useCallback(() => {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
+  // Seamless infinite loop handler - only for small item counts
+  const handleInfiniteLoop = React.useCallback(() => {
+    if (!emblaApi || !shouldUseManualLoop) return;
+    
+    const currentIndex = emblaApi.selectedScrollSnap();
+    const originalLength = contributions.length;
+    const totalSlides = enhancedContributions.length;
+    
+    // Calculate the safe zone (middle portion of duplicated slides)
+    const safeZoneStart = Math.floor(totalSlides * 0.25);
+    const safeZoneEnd = Math.floor(totalSlides * 0.75);
+    
+    // If we're outside the safe zone, jump to equivalent position in safe zone
+    if (currentIndex < safeZoneStart) {
+      const equivalentIndex = currentIndex + originalLength;
+      emblaApi.scrollTo(equivalentIndex, false); // false = no animation
+    } else if (currentIndex > safeZoneEnd) {
+      const equivalentIndex = currentIndex - originalLength;
+      emblaApi.scrollTo(equivalentIndex, false); // false = no animation
+    }
+  }, [emblaApi, shouldUseManualLoop, contributions.length, enhancedContributions.length]);
   const scrollTo = React.useCallback((index: number) => {
     if (emblaApi) emblaApi.scrollTo(index);
   }, [emblaApi]);  // Auto-play functionality
   const startAutoPlay = React.useCallback(() => {
-    if (!emblaApi || !isAutoPlaying) return;
+    if (!emblaApi || !isAutoPlaying || !autoScroll) return; // Only start if autoScroll is enabled
     
     if (autoPlayTimeoutRef.current) {
       clearTimeout(autoPlayTimeoutRef.current);
     }
     
     autoPlayTimeoutRef.current = setTimeout(() => {
-      if (emblaApi && isAutoPlaying) {
-        // Use the built-in scrollNext which handles looping automatically
+      if (emblaApi && isAutoPlaying && autoScroll) { // Check autoScroll again
         emblaApi.scrollNext();
         startAutoPlay(); // Continue the loop
       }
-    }, 4000); // Auto-advance every 4 seconds (slightly faster)
-  }, [emblaApi, isAutoPlaying]);
+    }, 4000); // Auto-advance every 4 seconds
+  }, [emblaApi, isAutoPlaying, autoScroll]);
 
   const stopAutoPlay = React.useCallback(() => {
     if (autoPlayTimeoutRef.current) {
@@ -143,16 +167,17 @@ export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({
       autoPlayTimeoutRef.current = null;
     }
   }, []);
-
   const pauseAutoPlay = React.useCallback(() => {
+    if (!autoScroll) return; // No-op if autoScroll is disabled
     setIsAutoPlaying(false);
     stopAutoPlay();
-  }, [stopAutoPlay]);
+  }, [stopAutoPlay, autoScroll]);
 
   const resumeAutoPlay = React.useCallback(() => {
+    if (!autoScroll) return; // No-op if autoScroll is disabled
     setIsAutoPlaying(true);
     startAutoPlay();
-  }, [startAutoPlay]);  const onInit = React.useCallback((emblaApi: any) => {
+  }, [startAutoPlay, autoScroll]);const onInit = React.useCallback((emblaApi: any) => {
     const newIndex = emblaApi.selectedScrollSnap();
     setSelectedIndex(newIndex);
     
@@ -163,9 +188,7 @@ export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({
     // For infinite loop, buttons should never be disabled
     setPrevBtnDisabled(false);
     setNextBtnDisabled(false);
-  }, []);
-
-  const onSelect = React.useCallback((emblaApi: any) => {
+  }, []);  const onSelect = React.useCallback((emblaApi: any) => {
     const newIndex = emblaApi.selectedScrollSnap();
     setSelectedIndex(newIndex);
     
@@ -177,30 +200,37 @@ export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({
     setPrevBtnDisabled(false);
     setNextBtnDisabled(false);
     
-    // Restart auto-play after manual navigation
-    if (isAutoPlaying) {
+    // Handle seamless infinite loop only for small item counts
+    if (shouldUseManualLoop) {
+      setTimeout(handleInfiniteLoop, 50);
+    }
+      // Restart auto-play after manual navigation
+    if (autoScroll && isAutoPlaying) {
       stopAutoPlay();
       startAutoPlay();
     }
-  }, [isAutoPlaying, startAutoPlay, stopAutoPlay]);  React.useEffect(() => {
+  }, [autoScroll, isAutoPlaying, startAutoPlay, stopAutoPlay, shouldUseManualLoop, handleInfiniteLoop]);React.useEffect(() => {
     if (!emblaApi) return;
 
     onInit(emblaApi);
     emblaApi.on('reInit', onInit);
     emblaApi.on('select', onSelect);
-    
-    // Handle user interactions to pause auto-play
+      // Handle user interactions to pause auto-play (only if autoScroll is enabled)
     const handleUserInteraction = () => {
-      pauseAutoPlay();
-      setTimeout(resumeAutoPlay, 5000); // Resume after 5 seconds of inactivity
+      if (autoScroll) {
+        pauseAutoPlay();
+        setTimeout(resumeAutoPlay, 5000); // Resume after 5 seconds of inactivity
+      }
     };
     
     emblaApi.on('pointerDown', handleUserInteraction);
     emblaApi.on('pointerUp', handleUserInteraction);
     
-    // Start auto-play when carousel is ready
+    // Start auto-play when carousel is ready (only if autoScroll is enabled)
     const startTimer = setTimeout(() => {
-      startAutoPlay();
+      if (autoScroll) {
+        startAutoPlay();
+      }
     }, 1000); // Delay start to ensure carousel is fully initialized
     
     // Handle window resize with throttling for better performance
@@ -214,19 +244,16 @@ export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({
       }, 250); // Throttle resize events
     };
     
-    window.addEventListener('resize', handleResize);
-    
-    return () => {
+    window.addEventListener('resize', handleResize);    return () => {
       emblaApi.off('reInit', onInit);
       emblaApi.off('select', onSelect);
       emblaApi.off('pointerDown', handleUserInteraction);
       emblaApi.off('pointerUp', handleUserInteraction);
       window.removeEventListener('resize', handleResize);
-      clearTimeout(startTimer);
-      clearTimeout(resizeTimeout);
+      clearTimeout(startTimer);      clearTimeout(resizeTimeout);
       stopAutoPlay();
     };
-  }, [emblaApi, onInit, onSelect, startAutoPlay, stopAutoPlay, pauseAutoPlay, resumeAutoPlay]);
+  }, [emblaApi, onInit, onSelect, handleInfiniteLoop, shouldUseManualLoop, startAutoPlay, stopAutoPlay, pauseAutoPlay, resumeAutoPlay, autoScroll]);
   // Cleanup timeouts on unmount
   React.useEffect(() => {
     return () => {
@@ -240,10 +267,13 @@ export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({
   }, []);
   return (
     <div className={styles.carousel} role="region" aria-label="Contributions carousel">      <div className={styles.carousel__viewport} ref={emblaRef}>
-        <div className={styles.carousel__container}>
-          {enhancedContributions.map((contribution, index) => {
+        <div className={styles.carousel__container}>          {enhancedContributions.map((contribution, index) => {
             const isActive = index === selectedIndex;
             const isInView = slidesInView.includes(index);
+            
+            // Get truncated text
+            const titleData = truncateText(contribution.title, MAX_TITLE_WORDS);
+            const descriptionData = truncateText(contribution.description, MAX_DESCRIPTION_WORDS);
             
             return (
               <div 
@@ -259,33 +289,31 @@ export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({
                 border="neutral-alpha-medium"
                 className={`${styles.contribution__card} ${
                   hoveredCard === index ? styles['contribution__card--hovered'] : ''
-                }`}
-                onMouseEnter={() => {
+                }`}                onMouseEnter={() => {
                   setHoveredCard(index);
-                  pauseAutoPlay();
+                  if (autoScroll) pauseAutoPlay();
                 }}
                 onMouseLeave={() => {
                   setHoveredCard(null);
-                  setTooltipType(null);
-                  resumeAutoPlay();
+                  hideTooltip();
+                  if (autoScroll) resumeAutoPlay();
                 }}
-                onMouseMove={handleMouseMove}
-              >
-                {/* Card Header with Gradient Background */}
+              >                {/* Card Header with Gradient Background */}
                 <div className={styles.contribution__header}>
                   <div className={styles.contribution__header_content}>
-                    <div 
-                      onMouseEnter={(e) => handleTitleHover(index, true, e)}
-                      onMouseLeave={() => handleTitleHover(index, false)}
-                      className={styles.contribution__title_wrapper}
-                    >
+                    <div className={styles.contribution__title_wrapper}>
                       <Text 
                         variant="heading-strong-s" 
                         align="center"
                         wrap="balance"
-                        className={styles.contribution__title}
+                        className={styles.contribution__title}                        onMouseEnter={(e) => {
+                          if (titleData.isTruncated) {
+                            showTooltip(contribution.title, e.currentTarget as HTMLElement);
+                          }
+                        }}
+                        onMouseLeave={hideTooltip}
                       >
-                        {contribution.title}
+                        {titleData.truncated}
                       </Text>
                     </div>
                     
@@ -306,7 +334,7 @@ export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({
                       Contributors
                     </Text>
                     <div className={styles.contribution__avatars} role="group" aria-label="Contributors">
-                      {contribution.avatars.slice(0, 4).map((avatar, avatarIndex) => (
+                      {contribution.avatars.slice(0, 4).map((avatar: { src: string }, avatarIndex: number) => (
                         <div key={avatarIndex} className={styles.contribution__avatar_wrapper}>
                           <Avatar 
                             size="s" 
@@ -325,28 +353,25 @@ export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({
                       )}
                     </div>
                   </div>
-                )}
-
-                {/* Description Section */}
+                )}                {/* Description Section */}
                 <div className={styles.contribution__body}>
-                  <div 
-                    onMouseEnter={(e) => handleDescriptionHover(index, true, e)}
-                    onMouseLeave={() => handleDescriptionHover(index, false)}
-                    className={styles.contribution__description_wrapper}
-                  >
+                  <div className={styles.contribution__description_wrapper}>
                     <Text 
                       variant="body-default-s" 
                       align="left"
                       onBackground="neutral-weak"
                       wrap="pretty"
-                      className={styles.contribution__description}
+                      className={styles.contribution__description}                      onMouseEnter={(e) => {
+                        if (descriptionData.isTruncated) {
+                          showTooltip(contribution.description, e.currentTarget as HTMLElement);
+                        }
+                      }}
+                      onMouseLeave={hideTooltip}
                     >
-                      {contribution.description}
+                      {descriptionData.truncated}
                     </Text>
                   </div>
-                </div>
-
-                {/* Footer Actions */}
+                </div>                {/* Footer Actions */}
                 <div className={styles.contribution__footer}>
                   <Button 
                     href={contribution.link} 
@@ -375,48 +400,40 @@ export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({
                     </Flex>
                   </Button>
                 </div>
-
-                {/* Tooltip overlay */}
-                {hoveredCard === index && tooltipType && (
-                  <div 
-                    className={`${styles.text__tooltip} ${styles['text__tooltip--visible']}`}
-                    style={{
-                      left: tooltipPosition.x,
-                      top: tooltipPosition.y,
-                      transform: 'translate(-50%, calc(-100% - 12px))'
-                    }}
-                  >
-                    {tooltipType === 'title' ? (
-                      <p className={styles.tooltip__title}>{contribution.title}</p>
-                    ) : (
-                      <p className={styles.tooltip__text}>{contribution.description}</p>
-                    )}
-                  </div>
-                )}              </Card>
+              </Card>
             </div>
             );
           })}
         </div>
-      </div>      {/* Controls - Vertical Stack: Dots first, then Buttons */}
+      </div>{/* Controls - Vertical Stack: Dots first, then Buttons */}
       <div className={styles.carousel__controls} role="group" aria-label="Carousel navigation">        <div className={styles.carousel__dots} role="group" aria-label="Slide navigation">
           {contributions.map((_, index) => {
-            // Calculate the active dot based on the original contributions array
-            const isDuplicatedScenario = enhancedContributions.length > contributions.length;
-            const activeDotIndex = isDuplicatedScenario 
-              ? selectedIndex % contributions.length
-              : selectedIndex;
+            // Calculate active dot based on scenario
+            let activeDotIndex;
+            if (shouldUseManualLoop) {
+              // For manual loop, map back to original index
+              activeDotIndex = selectedIndex % contributions.length;
+            } else {
+              // For Embla's built-in loop, use direct index
+              activeDotIndex = selectedIndex;
+            }
             
             return (
               <button
                 key={index}
                 className={`${styles.carousel__dot} ${
                   activeDotIndex === index ? styles['carousel__dot--selected'] : ''
-                }`}
-                onClick={() => {
-                  pauseAutoPlay();
-                  scrollTo(index);
-                  // Resume auto-play after a delay
-                  setTimeout(resumeAutoPlay, 3000);
+                }`}                onClick={() => {
+                  if (autoScroll) pauseAutoPlay();
+                  if (shouldUseManualLoop) {
+                    // Navigate to equivalent position in the safe zone
+                    const safeIndex = Math.floor(enhancedContributions.length / 2) + index;
+                    scrollTo(safeIndex);
+                  } else {
+                    // Direct navigation for built-in loop
+                    scrollTo(index);
+                  }
+                  if (autoScroll) setTimeout(resumeAutoPlay, 3000);
                 }}
                 aria-label={`Go to slide ${index + 1}${activeDotIndex === index ? ' (current)' : ''}`}
                 type="button"
@@ -427,10 +444,10 @@ export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({
           <div className={styles.carousel__buttons}>
           <button
             className={styles.carousel__button}            onClick={() => {
-              pauseAutoPlay();
+              if (autoScroll) pauseAutoPlay();
               scrollPrev();
               // Resume auto-play after a delay
-              setTimeout(resumeAutoPlay, 3000);
+              if (autoScroll) setTimeout(resumeAutoPlay, 3000);
             }}
             disabled={prevBtnDisabled}
             aria-label="Previous slide"
@@ -440,19 +457,30 @@ export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({
           </button>
           <button
             className={styles.carousel__button}            onClick={() => {
-              pauseAutoPlay();
+              if (autoScroll) pauseAutoPlay();
               scrollNext();
               // Resume auto-play after a delay
-              setTimeout(resumeAutoPlay, 3000);
+              if (autoScroll) setTimeout(resumeAutoPlay, 3000);
             }}
             disabled={nextBtnDisabled}
             aria-label="Next slide"
             type="button"
           >
-            <Icon name="chevronRight" size="m" />
-          </button>
+            <Icon name="chevronRight" size="m" />          </button>
         </div>
       </div>
+
+      {/* Floating UI Tooltip */}
+      {tooltipOpen && tooltipContent && (
+        <div
+          ref={refs.setFloating}
+          style={floatingStyles}
+          className={styles.floating__tooltip}
+        >
+          <div ref={arrowRef} className={styles.floating__tooltip_arrow} />
+          {tooltipContent}
+        </div>
+      )}
     </div>
   );
 };

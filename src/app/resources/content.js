@@ -339,7 +339,7 @@ const others = {
   ],
     contributions:[
       {
-        title: "Melanoma Detection Project",
+        title: "1Melanoma Detection Project",
         project: "Melanoma",
         avatars: [
           {src: "https://avatars.githubusercontent.com/u/181699041?v=4"},
@@ -352,7 +352,7 @@ const others = {
       },
       
       {
-        title: "Contributed to AIcan Automate Pvt. Ltd.",
+        title: "2Contributed to AIcan Automate Pvt. Ltd.",
         project: "AIcan Automate",
         avatars: [
           {src: "https://avatars.githubusercontent.com/u/181699041?v=4"},
@@ -365,7 +365,7 @@ const others = {
       },
       
       {
-        title: "Contributed to Credit Card Fraud Detection Project",
+        title: "3Contributed to Credit Card Fraud Detection Project",
         project: "Credit Card Fraud Detection",
         avatars: [
           {src: "https://avatars.githubusercontent.com/u/181699041?v=4"},
@@ -378,7 +378,7 @@ const others = {
       },
 
       {
-        title: "Contributed to Credit Card Fraud Detection Project",
+        title: "4Contributed to Credit Card Fraud Detection Project",
         project: "Credit Card Fraud Detection",
         avatars: [
           {src: "https://avatars.githubusercontent.com/u/181699041?v=4"},
