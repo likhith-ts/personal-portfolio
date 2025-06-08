@@ -134,22 +134,6 @@ const about = {
           // },
         ],
       },
-      // {
-      //   company: "Creativ3",
-      //   timeframe: "2018 - 2022",
-      //   role: "Lead Designer",
-      //   achievements: [
-      //     <>
-      //       Developed a design system that unified the brand across multiple platforms, improving
-      //       design consistency by 40%.
-      //     </>,
-      //     <>
-      //       Led a cross-functional team to launch a new product line, contributing to a 15% increase
-      //       in overall company revenue.
-      //     </>,
-      //   ],
-      //   images: [],
-      // },
     ],
   },
   studies: {
@@ -339,7 +323,7 @@ const others = {
   ],
     contributions:[
       {
-        title: "1Melanoma Detection Project",
+        title: "Melanoma Detection Project",
         project: "Melanoma",
         avatars: [
           {src: "https://avatars.githubusercontent.com/u/181699041?v=4"},
@@ -348,48 +332,10 @@ const others = {
         owner: "jyothi-alt",
         icon: "github",
         link: "https://github.com/jyothi-alt/MELANOMA",
+        ownerLink: "https://github.com/jyothi-alt",
         description: "A flask web app for skin cancer detection using deep learning. ",
       },
       
-      {
-        title: "2Contributed to AIcan Automate Pvt. Ltd.",
-        project: "AIcan Automate",
-        avatars: [
-          {src: "https://avatars.githubusercontent.com/u/181699041?v=4"},
-          {src: "/images/avatar.jpg"},
-        ],
-        owner: "likhith-ts",
-        icon: "github",
-        link: "https://github.com/likhith-ts/AIcan-Automate",
-        description: "A web app for automating tasks using AI.",
-      },
-      
-      {
-        title: "3Contributed to Credit Card Fraud Detection Project",
-        project: "Credit Card Fraud Detection",
-        avatars: [
-          {src: "https://avatars.githubusercontent.com/u/181699041?v=4"},
-          {src: "/images/avatar.jpg"},
-        ],
-        owner: "likhith-ts",
-        icon: "github",
-        link: "https://github.com/likhith-ts/Credit-Card-Fraud-Detection",
-        description: "A web app for detecting credit card fraud using machine learning.",
-      },
-
-      {
-        title: "4Contributed to Credit Card Fraud Detection Project",
-        project: "Credit Card Fraud Detection",
-        avatars: [
-          {src: "https://avatars.githubusercontent.com/u/181699041?v=4"},
-          {src: "/images/avatar.jpg"},
-        ],
-        owner: "likhith-ts",
-        icon: "github",
-        link: "https://github.com/likhith-ts/Credit-Card-Fraud-Detection",
-        description: "A web app for detecting credit card fraud using machine learning.",
-      },
-     
     ],
 };
 

@@ -5,13 +5,15 @@ import { usePathname } from "next/navigation";
 import { routes, protectedRoutes } from "@/app/resources";
 import { Flex, Spinner, Button, Heading, Column, PasswordInput } from "@/once-ui/components";
 import NotFound from "@/app/not-found";
+import { useRenderControl } from "./RenderController";
 
 interface RouteGuardProps {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
   const pathname = usePathname();
+  const { isWelcomeComplete, shouldShowWelcome } = useRenderControl();
   const [isRouteEnabled, setIsRouteEnabled] = useState(false);
   const [isPasswordRequired, setIsPasswordRequired] = useState(false);
   const [password, setPassword] = useState("");
@@ -75,8 +77,12 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
       setError("Incorrect password");
     }
   };
-
   if (loading) {
+    // Don't show loading spinner if welcome screen should be showing and isn't complete
+    if (shouldShowWelcome && !isWelcomeComplete) {
+      return null;
+    }
+
     return (
       <Flex fillWidth paddingY="128" horizontal="center">
         <Spinner />
@@ -85,8 +91,8 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
   }
 
   if (!isRouteEnabled) {
-		return <NotFound />;
-	}
+    return <NotFound />;
+  }
 
   if (isPasswordRequired && !isAuthenticated) {
     return (

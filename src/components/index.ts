@@ -6,3 +6,5 @@ export { ContributionCard } from "@/components/ContributionCard";
 export { ContributionCarousel } from "@/components/ContributionCarousel";
 export { HeadingLink } from "@/components/HeadingLink";
 export { RouteGuard } from "@/components/RouteGuard";
+export { RenderController } from "@/components/RenderController";
+export { MainContentWrapper } from "@/components/MainContentWrapper";
