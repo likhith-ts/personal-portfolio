@@ -2,14 +2,14 @@ import "@/once-ui/styles/index.scss";
 import "@/once-ui/tokens/index.scss";
 import classNames from "classnames";
 
-import { Footer, Header, RouteGuard } from "@/components";
+import { Footer, Header, RouteGuard, DebugControls } from "@/components";
 import { baseURL, effects, style, font, home } from "@/app/resources";
 
 import { /*Background, */  Column, Flex, ThemeProvider, ToastProvider } from "@/once-ui/components";
 // import { opacity, SpacingToken } from "@/once-ui/types";
 import { Meta } from "@/once-ui/modules";
 import { BackgroundEffects } from "@/components/BackgroundEffects";
-import { WelcomeLoadingScreen } from "@/components/WelcomeScreen";
+import { WelcomeLoadingScreen } from "@/components/SimpleEnhancedWelcomeScreen";
 import { RenderController } from "@/components/RenderController";
 import { MainContentWrapper } from "@/components/MainContentWrapper";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
@@ -89,10 +89,11 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                 margin="0"
                 padding="0"
               >
+                <SmoothCursor />
                 <MainContentWrapper>
-                  <SmoothCursor />
+                  <DebugControls />
                   <BackgroundEffects />
-                  <Flex fillWidth minHeight="16" hide="s"></Flex>
+                  <Flex fillWidth minHeight="16" hide="s" />
                   <Header />
                   <Flex
                     zIndex={0}

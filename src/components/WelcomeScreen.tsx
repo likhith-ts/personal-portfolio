@@ -22,9 +22,6 @@ export function WelcomeLoadingScreen() {
     // Prevent body scroll when welcome screen is showing
     document.body.style.overflow = 'hidden';
 
-    // Mark as visited
-    localStorage.setItem('hasVisitedBefore', 'true');
-
     // Start fade out animation after 2 seconds
     const fadeTimer = setTimeout(() => {
       console.log('WelcomeScreen: Starting fade out');
@@ -35,6 +32,8 @@ export function WelcomeLoadingScreen() {
     const completeTimer = setTimeout(() => {
       console.log('WelcomeScreen: Animation complete');
       document.body.style.overflow = 'auto';
+      // Only mark as visited AFTER the animation completes
+      localStorage.setItem('hasVisitedBefore', 'true');
       setWelcomeComplete(true);
     }, 2500);
 

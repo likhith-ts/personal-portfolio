@@ -26,39 +26,35 @@ interface RenderControllerProps {
 export function RenderController({ children }: RenderControllerProps) {
     const pathname = usePathname();
     const [isWelcomeComplete, setWelcomeComplete] = useState(false);
-    const [shouldShowWelcome, setShouldShowWelcome] = useState(false); useEffect(() => {
+    const [shouldShowWelcome, setShouldShowWelcome] = useState(false);
+    const [mounted, setMounted] = useState(false);
+    // Mount detection
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
         // Check if we should show the welcome screen
-        if (typeof window === 'undefined') return; // Skip on server
+        if (!mounted || typeof window === 'undefined') {
+            return;
+        }
 
         const isHomePage = pathname === '/';
         const hasVisited = localStorage.getItem('hasVisitedBefore');
-        const lastLoadTime = sessionStorage.getItem('lastLoadTime');
-        const currentTime = Date.now();
 
-        let isInitialLoad = true;
-        if (lastLoadTime) {
-            isInitialLoad = false;
-        } else {
-            sessionStorage.setItem('lastLoadTime', currentTime.toString());
-        }
-
-        const shouldShow = isHomePage && !hasVisited && isInitialLoad;
-
-        console.log('RenderController Debug:', {
-            isHomePage,
-            hasVisited,
-            isInitialLoad,
-            shouldShow,
-            pathname
-        });
+        // Simplified logic: show welcome if on home page and hasn't visited before
+        const shouldShow = isHomePage && !hasVisited;
 
         setShouldShowWelcome(shouldShow);
 
         // If we shouldn't show welcome, mark it as complete immediately
         if (!shouldShow) {
             setWelcomeComplete(true);
+        } else {
+            // Don't mark as complete initially if we should show welcome
+            setWelcomeComplete(false);
         }
-    }, [pathname]);
+    }, [pathname, mounted]);
 
     return (
         <RenderContext.Provider value={{
