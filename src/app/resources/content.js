@@ -87,7 +87,7 @@ const about = {
   },
   calendar: {
     display: true,
-    link: "https://cal.com",
+    link: "https://cal.com/likhith-usurupati-28",
   },
   intro: {
     display: true,

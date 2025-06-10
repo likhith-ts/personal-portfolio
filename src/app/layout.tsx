@@ -4,7 +4,7 @@ import classNames from "classnames";
 
 import { Footer, Header, RouteGuard, /* DebugControls */ } from "@/components";
 import { baseURL, /* effects, */ style, font, home } from "@/app/resources";
-
+import { Analytics } from "@vercel/analytics/next"
 import { /* Background, */  Column, Flex, ThemeProvider, ToastProvider } from "@/once-ui/components";
 // import { opacity, SpacingToken } from "@/once-ui/types";
 import { Meta } from "@/once-ui/modules";
@@ -106,7 +106,10 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                     flex={1}
                   >
                     <Flex horizontal="center" fillWidth minHeight="0">
-                      <RouteGuard>{children}</RouteGuard>
+                      <RouteGuard>
+                        {children}
+                        <Analytics />
+                      </RouteGuard>
                     </Flex>
                   </Flex>
                   <Footer />
