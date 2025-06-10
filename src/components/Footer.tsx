@@ -33,6 +33,12 @@ export const Footer = () => {
             >
               Once UI
             </SmartLink>
+             {" "} & {" "}
+            <SmartLink
+              href="https://nextjs.org/"
+            >
+              Next.js
+            </SmartLink>
           </Text>
         </Text>
         <Flex gap="16">

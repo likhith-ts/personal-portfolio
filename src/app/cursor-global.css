@@ -1,0 +1,155 @@
+/* Global cursor overrides - Ultra aggressive approach */
+
+/* Force cursor none on absolutely everything */
+* {
+  cursor: none !important;
+}
+
+*::before,
+*::after {
+  cursor: none !important;
+}
+
+/* Root elements */
+html,
+body {
+  cursor: none !important;
+}
+
+/* All potentially interactive elements */
+a,
+button,
+input,
+textarea,
+select,
+option,
+label,
+[role="button"],
+[role="link"],
+[role="menuitem"],
+[tabindex],
+[onclick],
+[onmousedown],
+[onmouseup],
+[onmouseover],
+[onmouseout],
+[href],
+[data-href],
+.cursor-pointer,
+.clickable,
+.interactive {
+  cursor: none !important;
+}
+
+/* Media and embed elements */
+img,
+picture,
+video,
+audio,
+canvas,
+svg,
+iframe,
+embed,
+object,
+applet {
+  cursor: none !important;
+}
+
+/* Form elements */
+[contenteditable="true"],
+[contenteditable=""],
+[spellcheck],
+[autocomplete],
+[data-gramm] {
+  cursor: none !important;
+}
+
+/* Scrollbar elements */
+::-webkit-scrollbar,
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  cursor: none !important;
+}
+
+/* Selection and text elements */
+::selection {
+  cursor: none !important;
+}
+
+::-moz-selection {
+  cursor: none !important;
+}
+
+/* Next.js specific elements */
+[data-nextjs-debug],
+[data-nextjs-error],
+[data-nextjs-scroll-focus-boundary],
+[data-nextjs-router],
+[data-overlay],
+.nextjs-toast,
+.nextjs-portal {
+  cursor: none !important;
+}
+
+/* PDF and document viewers */
+iframe[src*=".pdf"],
+iframe[src*="resume"],
+iframe[src*="document"],
+iframe[src*="viewer"],
+embed[src*=".pdf"] {
+  cursor: none !important;
+}
+
+/* Modal and overlay elements */
+[role="dialog"],
+[role="alertdialog"],
+[aria-modal="true"],
+.modal,
+.overlay,
+.popup,
+.tooltip,
+.dropdown {
+  cursor: none !important;
+}
+
+/* Override any CSS cursor declarations */
+[style*="cursor:"],
+[style*="cursor "],
+.cursor-auto,
+.cursor-default,
+.cursor-pointer,
+.cursor-wait,
+.cursor-text,
+.cursor-move,
+.cursor-help,
+.cursor-crosshair,
+.cursor-grab,
+.cursor-grabbing,
+.cursor-not-allowed,
+.cursor-zoom-in,
+.cursor-zoom-out {
+  cursor: none !important;
+}
+
+/* Hover, focus, and active states */
+*:hover,
+*:focus,
+*:active,
+*:focus-visible,
+*:focus-within {
+  cursor: none !important;
+}
+
+/* Ensure high specificity overrides */
+html *,
+body * {
+  cursor: none !important;
+}
+
+/* Override any remaining system cursors with maximum specificity */
+html body *,
+html body *::before,
+html body *::after {
+  cursor: none !important;
+}

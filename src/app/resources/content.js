@@ -11,7 +11,7 @@ const person = {
   role: "AI Engineer | Full Stack Developer",
   avatar: "/images/avatar.jpg",
   email: "likhith.usurpati28@gmail.com",
-  location: "India/Bangalore", 
+  location: "India/Bangalore",
   timezone: "Asia/Kolkata", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
   languages: ["English", "Hindi", "Telugu"], // optional: Leave the array empty if you don't want to display languages
 };
@@ -88,15 +88,18 @@ const about = {
   calendar: {
     display: true,
     link: "https://cal.com/likhith-usurupati-28",
+  }, resume: {
+    display: true,
+    link: "/api/resume",
   },
   intro: {
     display: true,
     title: "Introduction",
     description: (
       <>
-        Likhith is a versatile, India-based entry-level AI/ML engineer and full-stack developer 
-        driven by a passion for mastering cutting-edge technology. 
-        His work bridges AI/ML, Web development, and cross-platform full-stack solutions with a relentless curiosity. 
+        Likhith is a versatile, India-based entry-level AI/ML engineer and full-stack developer
+        driven by a passion for mastering cutting-edge technology.
+        His work bridges AI/ML, Web development, and cross-platform full-stack solutions with a relentless curiosity.
         He thrives on building practical, scalable systems from the cloud to the edge.
       </>
     ),
@@ -111,7 +114,7 @@ const about = {
         role: "Machine Learning Intern",
         achievements: [
           <>
-            Developed a supervised learning model for predicting chocolate 
+            Developed a supervised learning model for predicting chocolate
             ratings using Kaggle's Churn Dataset.
           </>,
           <>
@@ -119,8 +122,8 @@ const about = {
             trends and clean data for optimal model performance.
           </>,
           <>
-            Implemented ANN & Logistic regression for prediction and 
-            compared performance with other regression models, achieved 
+            Implemented ANN & Logistic regression for prediction and
+            compared performance with other regression models, achieved
             97.5% model accuracy.
           </>,
         ],
@@ -159,12 +162,12 @@ const about = {
       {
         title: "Programming:",
         description: <>
-        <ul>
-          <br />
-          <li>Proficient in <b>Python</b> development with expertise in data science libraries & web frameworks(flask).</li>
-          <li>Expert in <b>Rust</b> & <b>C++</b> development with a focus on high-performance applications.</li>
-          <li>Other expertise: <b>JavaScript</b>, <b>TypeScript</b>, <b>SQL</b></li>
-        </ul>
+          <ul>
+            <br />
+            <li>Proficient in <b>Python</b> development with expertise in data science libraries & web frameworks(flask).</li>
+            <li>Expert in <b>Rust</b> & <b>C++</b> development with a focus on high-performance applications.</li>
+            <li>Other expertise: <b>JavaScript</b>, <b>TypeScript</b>, <b>SQL</b></li>
+          </ul>
         </>,
         // optional: leave the array empty if you don't want to display images
         images: [
@@ -196,24 +199,24 @@ const about = {
         ],
       },
       {
-        title:" Machine Learning:",
+        title: " Machine Learning:",
         description: <>Master in building state-of-art ML projects with <b>Scikit-learn</b>, <b>Pytorch</b> and <b>Tensorflow</b>.</>,
         images: [
 
         ],
       },
       {
-        title:"Artificial Intelligence",
+        title: "Artificial Intelligence",
         description: <>Expert in Integrating & Fine-tuning AI models, LLMs with <b>Hugging Face</b> & <b>Langchain</b>.</>,
         images: [
 
         ],
       },
-      { 
-        title:"Cloud/DevOps",
+      {
+        title: "Cloud/DevOps",
         description: <>Experience with <b>Google Cloud Platform</b> and <b>Colab</b>, basic knowledge of <b>AWS</b>, proficient in version control with <b>Git</b>, and familiar with containerization using <b>Docker</b>.</>,
         images: [
-          
+
         ],
       },
     ],
@@ -295,8 +298,8 @@ const others = {
   title: `Others – ${person.name}`,
   description: `Design and dev projects by ${person.name}`,
   achievements: [
-    "Built a personal portfolio website", 
-    "Contributed to open-source projects", 
+    "Built a personal portfolio website",
+    "Contributed to open-source projects",
     "Participated in hackathons",
     "Developed a machine learning model for predicting chocolate ratings",
 
@@ -321,22 +324,22 @@ const others = {
       image: "https://udemy-certificate.s3.amazonaws.com/image/UC-b86f74b7-9c63-45ff-abea-79eec763189c.jpg",
     },
   ],
-    contributions:[
-      {
-        title: "Melanoma Detection Project",
-        project: "Melanoma",
-        avatars: [
-          {src: "https://avatars.githubusercontent.com/u/181699041?v=4"},
-          {src: "/images/avatar.jpg"},
-        ],
-        owner: "jyothi-alt",
-        icon: "github",
-        link: "https://github.com/jyothi-alt/MELANOMA",
-        ownerLink: "https://github.com/jyothi-alt",
-        description: "A flask web app for skin cancer detection using deep learning. ",
-      },
-      
-    ],
+  contributions: [
+    {
+      title: "Melanoma Detection Project",
+      project: "Melanoma",
+      avatars: [
+        { src: "https://avatars.githubusercontent.com/u/181699041?v=4" },
+        { src: "/images/avatar.jpg" },
+      ],
+      owner: "jyothi-alt",
+      icon: "github",
+      link: "https://github.com/jyothi-alt/MELANOMA",
+      ownerLink: "https://github.com/jyothi-alt",
+      description: "A flask web app for skin cancer detection using deep learning. ",
+    },
+
+  ],
 };
 
 export { person, social, newsletter, home, about, blog, work, gallery, others };

@@ -502,6 +502,7 @@
       // #ff006e, // Pink
       // #8338ec, // Purple
       // #3a86ff, // Blue
+      // #ffd700  // Back to gold for seamless loop
       #06ffa5, // Cyan
       #20fdf0, // Teal
       #41fbe0, // Light cyan
@@ -511,7 +512,6 @@
       #c5f3a0, // Very light mint
       #e6f190, // Lightest mint
       #06ffa5, // Back to Cyan for seamless loop
-      // #ffd700  // Back to gold for seamless loop
     );
     background-size: 400% 400%; // Larger gradient size for smoother transitions
     border-radius: calc(var(--border-radius-xl) * 2); // Enhanced curved radius

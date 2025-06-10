@@ -1,0 +1,88 @@
+/* Global cursor control styles */
+.globalCursorOverride {
+  /* This class can be applied to the body or html to ensure global cursor control */
+  cursor: none !important;
+}
+
+.globalCursorOverride *,
+.globalCursorOverride *::before,
+.globalCursorOverride *::after {
+  cursor: none !important;
+}
+
+/* Specific overrides for problematic elements */
+.modalOverlay {
+  cursor: none !important;
+}
+
+.modalOverlay * {
+  cursor: none !important;
+}
+
+.modalContent {
+  cursor: none !important;
+}
+
+.modalContent * {
+  cursor: none !important;
+}
+
+.iframeContainer {
+  position: relative;
+  cursor: none !important;
+}
+
+.iframeContainer iframe {
+  cursor: none !important;
+}
+
+.iframeContainer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  cursor: none !important;
+  z-index: 1;
+}
+
+/* Override system cursors on interactive elements */
+.interactiveElement {
+  cursor: none !important;
+  transition: all 0.2s ease;
+}
+
+.interactiveElement:hover {
+  transform: translateY(-2px);
+}
+
+/* Force cursor override on images */
+.imageOverride {
+  cursor: none !important;
+}
+
+.imageOverride * {
+  cursor: none !important;
+}
+
+/* Next.js debug elements */
+.nextjsDebugOverride {
+  cursor: none !important;
+}
+
+.nextjsDebugOverride * {
+  cursor: none !important;
+}
+
+/* PDF and embed overrides */
+.embedOverride {
+  cursor: none !important;
+}
+
+.embedOverride iframe,
+.embedOverride embed,
+.embedOverride object {
+  cursor: none !important;
+}

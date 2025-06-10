@@ -223,7 +223,7 @@ export function SmoothCursor({
   const [cursorType, setCursorType] = useState<'default' | 'link' | 'button' | 'input' | 'interactive'>('default');
   const [isClicking, setIsClicking] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const [shouldShowCursor, setShouldShowCursor] = useState(false);
+  const [shouldShowCursor, setShouldShowCursor] = useState(true); // Force show for debugging
   const [isMouseInViewport, setIsMouseInViewport] = useState(true);
   const lastMousePos = useRef<Position>({ x: 0, y: 0 });
   const velocity = useRef<Position>({ x: 0, y: 0 });
@@ -245,6 +245,9 @@ export function SmoothCursor({
   });
 
   useEffect(() => {
+    // Debug: Log to confirm component is mounting
+    console.log('SmoothCursor mounting...', { enabled, disableOnTouch });
+
     // Detect touch device
     const detectTouchDevice = () => {
       return (
@@ -258,15 +261,179 @@ export function SmoothCursor({
 
     const touchDevice = detectTouchDevice();
     setIsTouchDevice(touchDevice);
+    console.log('Touch device detected:', touchDevice);
 
-    // Determine if cursor should be shown
+    // Always show cursor unless specifically disabled
     const shouldShow = enabled && !(disableOnTouch && touchDevice);
     setShouldShowCursor(shouldShow);
+    console.log('Should show cursor:', shouldShow);
 
     // Early return if cursor should not be shown
     if (!shouldShow) {
+      console.log('Cursor disabled, early return');
       return;
     }
+
+    // Apply global cursor override styles immediately
+    const applyGlobalCursorStyles = () => {
+      console.log('Applying global cursor styles...');
+      const existingStyle = document.getElementById('smooth-cursor-global-styles');
+      if (existingStyle) {
+        existingStyle.remove();
+      }
+
+      const style = document.createElement('style');
+      style.id = 'smooth-cursor-global-styles';
+      style.textContent = `
+        /* Ultra-aggressive cursor override */
+        *, *::before, *::after {
+          cursor: none !important;
+        }
+        
+        /* Root elements */
+        html, body {
+          cursor: none !important;
+        }
+        
+        /* All interactive elements */
+        a, button, input, textarea, select, [role="button"], [role="link"], 
+        [tabindex], [onclick], .cursor-pointer, [href], [role="menuitem"],
+        [onmousedown], [onmouseup], [onmouseover], [onmouseout] {
+          cursor: none !important;
+        }
+        
+        /* Media elements */
+        img, video, canvas, svg, picture {
+          cursor: none !important;
+        }
+        
+        /* Embed elements - most important for PDF viewers */
+        iframe, embed, object, applet {
+          cursor: none !important;
+        }
+        
+        /* Next.js specific elements */
+        [data-nextjs-debug], [data-nextjs-error], 
+        .nextjs-toast, .nextjs-portal, 
+        [data-nextjs-scroll-focus-boundary],
+        [data-nextjs-router], [data-overlay] {
+          cursor: none !important;
+        }
+        
+        /* Form elements */
+        [contenteditable="true"], [contenteditable=""], 
+        [spellcheck], [autocomplete] {
+          cursor: none !important;
+        }
+        
+        /* Scrollbar elements */
+        ::-webkit-scrollbar, ::-webkit-scrollbar-thumb,
+        ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner {
+          cursor: none !important;
+        }
+        
+        /* Modal and overlay elements */
+        [role="dialog"], [role="alertdialog"], [aria-modal="true"],
+        .modal, .overlay, .popup, .tooltip {
+          cursor: none !important;
+        }
+        
+        /* Override any CSS cursor declarations */
+        [style*="cursor:"], [style*="cursor "],
+        .cursor-auto, .cursor-default, .cursor-pointer, .cursor-wait,
+        .cursor-text, .cursor-move, .cursor-help, .cursor-crosshair {
+          cursor: none !important;
+        }
+        
+        /* PDF and document viewers */
+        iframe[src*=".pdf"], iframe[src*="resume"], 
+        iframe[src*="document"], iframe[src*="viewer"] {
+          cursor: none !important;
+        }
+        
+        /* Force override on hover states */
+        *:hover, *:focus, *:active {
+          cursor: none !important;
+        }
+        
+        /* Override any remaining system cursors with higher specificity */
+        html *, body * {
+          cursor: none !important;
+        }
+      `;
+      document.head.appendChild(style);
+      console.log('Global cursor styles applied');
+      return style;
+    };
+
+    const globalStyle = applyGlobalCursorStyles();
+
+    // Send message to iframes to hide their cursors
+    const sendCursorMessageToIframes = () => {
+      const iframes = document.querySelectorAll('iframe');
+      iframes.forEach(iframe => {
+        try {
+          iframe.contentWindow?.postMessage({
+            type: 'HIDE_CURSOR',
+            source: 'smooth-cursor'
+          }, '*');
+        } catch (e) {
+          // Cross-origin iframe, can't send message
+          console.log('Cannot send cursor message to cross-origin iframe');
+        }
+      });
+    };
+
+    // Listen for iframe load events and send cursor messages
+    const handleIframeLoad = (event: Event) => {
+      const iframe = event.target as HTMLIFrameElement;
+      try {
+        iframe.contentWindow?.postMessage({
+          type: 'HIDE_CURSOR',
+          source: 'smooth-cursor'
+        }, '*');
+      } catch (e) {
+        console.log('Cannot communicate with cross-origin iframe');
+      }
+    };
+
+    // Monitor for new iframes
+    const iframeObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const element = node as Element;
+            const iframes = element.tagName === 'IFRAME' ? [element] : element.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+              iframe.addEventListener('load', handleIframeLoad);
+              // Try to send message immediately
+              try {
+                (iframe as HTMLIFrameElement).contentWindow?.postMessage({
+                  type: 'HIDE_CURSOR',
+                  source: 'smooth-cursor'
+                }, '*');
+              } catch (e) {
+                // Ignore cross-origin errors
+              }
+            });
+          }
+        });
+      });
+    });
+
+    iframeObserver.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    // Initial iframe setup
+    setTimeout(() => {
+      sendCursorMessageToIframes();
+      const iframes = document.querySelectorAll('iframe');
+      iframes.forEach(iframe => {
+        iframe.addEventListener('load', handleIframeLoad);
+      });
+    }, 100);
 
     const updateVelocity = (currentPos: Position) => {
       const currentTime = Date.now();
@@ -286,30 +453,44 @@ export function SmoothCursor({
     // Function to determine cursor type based on element
     const getCursorType = (element: Element | null): 'default' | 'link' | 'button' | 'input' | 'interactive' => {
       if (!element) return 'default';
-      
+
       // Check for links
       if (element.matches('a, [href]') || element.closest('a, [href]')) {
         return 'link';
       }
-      
-      // Check for buttons
-      if (element.matches('button, [role="button"], .cursor-pointer') || 
-          element.closest('button, [role="button"], .cursor-pointer')) {
+
+      // Check for buttons (including Next.js debug buttons and custom components)
+      if (element.matches('button, [role="button"], .cursor-pointer, [data-nextjs-scroll-focus-boundary]') ||
+        element.closest('button, [role="button"], .cursor-pointer, [data-nextjs-scroll-focus-boundary]')) {
         return 'button';
       }
-      
+
       // Check for form inputs
-      if (element.matches('input, textarea, select, [contenteditable="true"]') || 
-          element.closest('input, textarea, select, [contenteditable="true"]')) {
+      if (element.matches('input, textarea, select, [contenteditable="true"]') ||
+        element.closest('input, textarea, select, [contenteditable="true"]')) {
         return 'input';
       }
-      
-      // Check for other interactive elements
+
+      // Check for images and media elements
+      if (element.matches('img, video, canvas, svg') ||
+        element.closest('img, video, canvas, svg')) {
+        return 'interactive';
+      }
+
+      // Check for iframes (PDF viewers, embeds, etc.)
+      if (element.matches('iframe, embed, object') ||
+        element.closest('iframe, embed, object')) {
+        return 'interactive';
+      }
+
+      // Check for other interactive elements including Next.js specific ones
       const interactiveSelectors = [
-        '[role="link"]', '[role="menuitem"]', '[tabindex]', 
-        '[onclick]', '[onmousedown]', '[onmouseup]'
+        '[role="link"]', '[role="menuitem"]', '[tabindex]',
+        '[onclick]', '[onmousedown]', '[onmouseup]',
+        '[data-nextjs-debug]', '[data-nextjs-error]',
+        '.nextjs-toast', '.nextjs-portal'
       ];
-      
+
       const isInteractive = interactiveSelectors.some(selector => {
         try {
           return element.matches(selector) || element.closest(selector);
@@ -317,7 +498,7 @@ export function SmoothCursor({
           return false;
         }
       });
-      
+
       return isInteractive ? 'interactive' : 'default';
     };
 
@@ -328,7 +509,7 @@ export function SmoothCursor({
       // Check cursor type based on element under cursor
       const elementUnderCursor = document.elementFromPoint(e.clientX, e.clientY);
       const newCursorType = getCursorType(elementUnderCursor);
-      
+
       setCursorType(newCursorType);
 
       const speed = Math.sqrt(
@@ -362,7 +543,7 @@ export function SmoothCursor({
       } else if (newCursorType !== 'default') {
         // Reset rotation for interactive elements
         rotation.set(0);
-        
+
         // Set different scales based on cursor type
         switch (newCursorType) {
           case 'link':
@@ -392,14 +573,49 @@ export function SmoothCursor({
       });
     };
 
-    // Set cursor to none globally and add CSS for interactive elements
+    // Set cursor to none globally and add CSS for all elements including iframes
     const style = document.createElement('style');
     style.textContent = `
-      * {
+      /* Global cursor override */
+      *, *::before, *::after {
         cursor: none !important;
       }
+      
+      /* Ensure all interactive elements use none cursor */
       a, button, input, textarea, select, [role="button"], [role="link"], 
       [tabindex], [onclick], .cursor-pointer, [href] {
+        cursor: none !important;
+      }
+      
+      /* Override iframe and embed cursors */
+      iframe, embed, object, video, canvas {
+        cursor: none !important;
+      }
+      
+      /* Override system cursors on images */
+      img {
+        cursor: none !important;
+      }
+      
+      /* Override Next.js debug and development cursors */
+      [data-nextjs-debug], [data-nextjs-error], 
+      .nextjs-toast, .nextjs-portal, 
+      [data-nextjs-scroll-focus-boundary] {
+        cursor: none !important;
+      }
+      
+      /* Ensure PDF viewers and other embeds respect cursor */
+      iframe[src*=".pdf"], iframe[src*="resume"] {
+        cursor: none !important;
+      }
+      
+      /* Override any remaining system cursors */
+      html, body {
+        cursor: none !important;
+      }
+      
+      /* Hide cursor on all scrollable elements */
+      ::-webkit-scrollbar {
         cursor: none !important;
       }
     `;
@@ -455,13 +671,13 @@ export function SmoothCursor({
     const handleDocumentMouseLeave = (e: MouseEvent) => {
       // Check if mouse is truly leaving the document
       const { clientX, clientY } = e;
-      const isLeavingDocument = 
-        clientX <= 0 || 
-        clientX >= window.innerWidth || 
-        clientY <= 0 || 
+      const isLeavingDocument =
+        clientX <= 0 ||
+        clientX >= window.innerWidth ||
+        clientY <= 0 ||
         clientY >= window.innerHeight ||
         !e.relatedTarget; // No related target means mouse left the document
-      
+
       if (isLeavingDocument) {
         setIsMouseInViewport(false);
       }
@@ -506,18 +722,18 @@ export function SmoothCursor({
 
     // Apply event listeners to document.documentElement (html tag) for better detection
     const htmlElement = document.documentElement;
-    
+
     // Primary mouse movement detection
     document.addEventListener("mousemove", handleMouseMove);
-    
+
     // Mouse leave/enter detection on html element
     htmlElement.addEventListener("mouseleave", handleDocumentMouseLeave);
     htmlElement.addEventListener("mouseenter", handleDocumentMouseEnter);
-    
+
     // Global mouse over/out as fallback
     document.addEventListener("mouseover", handleGlobalMouseOver);
     document.addEventListener("mouseout", handleGlobalMouseOut);
-    
+
     // Other event listeners
     document.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);
@@ -536,18 +752,33 @@ export function SmoothCursor({
       document.removeEventListener("touchstart", handleTouchStart);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("blur", handleWindowBlur);
-      
-      if (document.head.contains(style)) {
-        document.head.removeChild(style);
+
+      // Clean up global styles
+      const globalStyles = document.getElementById('smooth-cursor-global-styles');
+      if (globalStyles && document.head.contains(globalStyles)) {
+        document.head.removeChild(globalStyles);
       }
+
+      // Clean up iframe observer
+      iframeObserver.disconnect();
+
+      // Clean up iframe event listeners
+      const iframes = document.querySelectorAll('iframe');
+      iframes.forEach(iframe => {
+        iframe.removeEventListener('load', handleIframeLoad);
+      });
+
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, [cursorX, cursorY, rotation, scale, enabled, disableOnTouch, shouldShowCursor, isTouchDevice, cursorType]);
 
   // Don't render cursor if disabled or on touch devices (when disableOnTouch is true)
   if (!shouldShowCursor) {
+    console.log('Cursor not rendered - shouldShowCursor:', shouldShowCursor);
     return null;
   }
+
+  console.log('Rendering SmoothCursor component', { shouldShowCursor, isMouseInViewport, cursorType });
 
   // Get the appropriate cursor component
   const getCurrentCursor = () => {
@@ -575,14 +806,14 @@ export function SmoothCursor({
         translateY: "-50%",
         rotate: cursorType === 'default' ? rotation : 0,
         scale: scale,
-        zIndex: 100,
+        zIndex: 99999, // Increased z-index
         pointerEvents: "none",
         willChange: "transform",
-        opacity: isMouseInViewport ? 1 : 0,
+        opacity: isMouseInViewport && shouldShowCursor ? 1 : 0,
         transition: "opacity 0.2s ease-out",
       }}
       initial={{ scale: 0 }}
-      animate={{ 
+      animate={{
         scale: 1,
         filter: isClicking ? "brightness(1.2)" : "brightness(1)"
       }}

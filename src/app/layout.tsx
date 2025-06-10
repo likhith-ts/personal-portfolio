@@ -1,10 +1,11 @@
 import "@/once-ui/styles/index.scss";
 import "@/once-ui/tokens/index.scss";
+import "./cursor-global.css";
 import classNames from "classnames";
-
 import { Footer, Header, RouteGuard, /* DebugControls */ } from "@/components";
 import { baseURL, /* effects, */ style, font, home } from "@/app/resources";
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { /* Background, */  Column, Flex, ThemeProvider, ToastProvider } from "@/once-ui/components";
 // import { opacity, SpacingToken } from "@/once-ui/types";
 import { Meta } from "@/once-ui/modules";
@@ -56,6 +57,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           {/* Add preconnect for performance */}
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+          <script src="/iframe-cursor-override.js" />
           <script
             dangerouslySetInnerHTML={{
               __html: `
@@ -109,6 +111,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                       <RouteGuard>
                         {children}
                         <Analytics />
+                        <SpeedInsights />
                       </RouteGuard>
                     </Flex>
                   </Flex>
