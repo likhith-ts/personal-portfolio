@@ -119,7 +119,7 @@ export default function About() {
             vertical="center"
             marginBottom="32"
           >
-            <Row gap="m">
+            <Flex gap="m" mobileDirection="column">
               {about.calendar.display && (
                 <Flex
                   fitWidth
@@ -149,7 +149,7 @@ export default function About() {
               {about.resume.display && (
                <ResumeViewer className={styles.blockAlign} />
               )}
-            </Row>
+            </Flex>
             <Heading className={styles.textAlign} variant="display-strong-xl">
               {person.name}
             </Heading>

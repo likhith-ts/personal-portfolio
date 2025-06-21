@@ -46,7 +46,7 @@ export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({
     // If we have enough items (4+), Embla's built-in loop works fine
     if (contributions.length <= 3) {
       // For 1-3 items, create enough duplicates to fill the viewport and provide smooth scrolling
-      const duplicatesNeeded = Math.max(6, contributions.length * 3);
+      const duplicatesNeeded = Math.max(0, contributions.length * 1);
       const sets = Math.ceil(duplicatesNeeded / contributions.length);
       return Array(sets).fill(contributions).flat();
     }
