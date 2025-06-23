@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const action = searchParams.get('action'); // 'download' or 'view'
     
-    const filePath = path.join(process.cwd(), 'public', 'doc', 'likhith-resume-ai.pdf');
+    const filePath = path.join(process.cwd(), 'public', 'doc', 'Likhith-Resume-AI-DS.pdf');
     
     // Check if file exists
     if (!fs.existsSync(filePath)) {

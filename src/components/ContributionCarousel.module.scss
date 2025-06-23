@@ -6,7 +6,7 @@
   padding: 0 var(--static-space-32);
   background: transparent;
   max-width: 100%;
-  overflow: hidden;
+  overflow: visible;
   
   @media (max-width: 768px) {
     padding: 0 var(--static-space-16);
@@ -18,7 +18,7 @@
 }
 
 .carousel__viewport {
-  overflow: hidden;
+  overflow: visible;
   border-radius: var(--radius-xl);
   position: relative;
   width: 100%;
@@ -100,7 +100,7 @@
   // Netflix-style focus effect
   &:hover {
     opacity: 1;
-    transform: scale(1.08);
+    transform: scale(1.05);
     z-index: 20;
     transition-duration: 0.2s;
   }

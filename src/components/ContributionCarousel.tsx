@@ -319,7 +319,7 @@ export const ContributionCarousel: React.FC<ContributionCarouselProps> = ({
                     
                     {/* Project Badge */}
                     <div className={styles.contribution__project_badge}>
-                      <Icon name={contribution.icon || "heart"} size="xs" />
+                      <Icon name={contribution.icon || "heart"} size="l" />
                       <Text variant="label-strong-xs" className={styles.contribution__project_name}>
                         {contribution.project}
                       </Text>

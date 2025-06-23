@@ -314,7 +314,7 @@ const others = {
     {
       url: "https://www.udemy.com/certificate/UC-c25adfb3-e41a-426b-98cb-439f5cd92173/",
       name: "Complete Python Bootcamp: from Zero to Hero in Python",
-      issuer: "Udemy & by Jose Portilla",
+      issuer: "Udemy by Jose Portilla",
       image: "https://udemy-certificate.s3.amazonaws.com/image/UC-c25adfb3-e41a-426b-98cb-439f5cd92173.jpg",
     },
     {
@@ -322,6 +322,12 @@ const others = {
       name: "Flutter & Dart - The Complete Guide",
       issuer: "Udemy & Academind by maximilian schwarzmüller",
       image: "https://udemy-certificate.s3.amazonaws.com/image/UC-b86f74b7-9c63-45ff-abea-79eec763189c.jpg",
+    },
+    {
+      url: "https://www.udemy.com/certificate/UC-0e0175aa-1b18-4536-9941-8d9fbe890cf5/",
+      name: "Python for Data Science and Machine Learning Bootcamp",
+      issuer: "Udemy by Jose Portilla",
+      image: "https://udemy-certificate.s3.amazonaws.com/image/UC-0e0175aa-1b18-4536-9941-8d9fbe890cf5.jpg",
     },
   ],
   contributions: [
@@ -338,7 +344,6 @@ const others = {
       ownerLink: "https://github.com/jyothi-alt",
       description: "A flask web app for skin cancer detection using deep learning. ",
     },
-
   ],
 };
 

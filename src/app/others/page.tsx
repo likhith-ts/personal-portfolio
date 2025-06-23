@@ -32,7 +32,8 @@ export default function page() {
                             <Text>Achievements</Text>
                             <hr className={styles.section__divider} />
                         </Heading>
-                    </div>                    <div className={styles.achievements__marquee}>
+                    </div>                    
+                    <div className={styles.achievements__marquee}>
                         <div className={styles.marquee__container}>
                             <div className={styles.marquee__track}>
                                 {others.achievements.map((achievement, index) => (
@@ -85,8 +86,8 @@ export default function page() {
                             <Text>Certifications</Text>
                             <hr className={styles.section__divider} />
                         </Heading>
-                    </div>
-                    <CertificationGrid
+                    </div>                    
+                    <CertificationGrid 
                         certifications={others.certifications}
                         baseURL={baseURL}
                     />
