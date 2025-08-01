@@ -5,7 +5,8 @@ import { home, about, person, newsletter } from "@/app/resources/content";
 import { Mailchimp } from "@/components";
 import { Posts } from "@/components/blog/Posts";
 import { Meta, Schema } from "@/once-ui/modules";
-import HeroNeuralNetwork from "@/components/NeuralNetworkHero";
+import { HeroBackground } from "@/components/HeroBackground";
+import { BackdropSafeRevealFx } from "@/components/BackdropSafeRevealFx";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -20,19 +21,9 @@ export default function Home() {
   return (
     <>
       {/* Neural Network Hero Background */}
-      <div id="hero-background"
-        style={{
-          position: "absolute",
-          top: "-5%",
-          left: 0,
-          width: "100%",
-          height: "100%",
-          zIndex: -1,
-          opacity: 0.8,
-        }}
-      >
-        <HeroNeuralNetwork glowIntensity={1} />
-      </div>
+      <HeroBackground />
+
+      {/*Hero page content */}
       <Column maxWidth="m" gap="xl" horizontal="center">
         <Schema
           as="webPage"
@@ -49,43 +40,78 @@ export default function Home() {
         <Column fillWidth paddingY="24" gap="m">
           <Column maxWidth="l">
             {home.featured.display && (
-              <RevealFx fillWidth horizontal="start" paddingTop="16" paddingBottom="32" paddingLeft="12">
-                <Badge background="brand-alpha-weak" paddingX="12" paddingY="4" onBackground="neutral-strong" textVariant="label-default-s" arrow={true}
+              <RevealFx fillWidth horizontal="center" paddingTop="16" paddingBottom="16" paddingLeft="12">
+                <Badge background="brand-medium" paddingX="12" paddingY="4" onBackground="neutral-strong" textVariant="label-default-s" arrow={true}
                   href={home.featured.href}>
                   <Row paddingY="2">{home.featured.title}</Row>
                 </Badge>
               </RevealFx>
             )}
-            <RevealFx translateY="4" fillWidth horizontal="start" paddingBottom="16">
-              <Heading wrap="balance" variant="display-strong-l"> 
-                {home.headline}
-              </Heading>
-            </RevealFx>
-            <RevealFx translateY="8" delay={0.2} fillWidth horizontal="start" paddingBottom="32">
-              <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
-                {home.subline}
-              </Text>
-            </RevealFx>
-            <RevealFx paddingTop="12" delay={0.4} horizontal="start" paddingLeft="12">
-              <Button
-                id="about"
-                data-border="rounded"
-                href={about.path}
-                variant="secondary"
-                size="m"
-                arrowIcon
-              >
-                <Flex gap="8" vertical="center">
-                  {about.avatar.display && (
-                    <Avatar
-                      style={{ marginLeft: "-0.75rem", marginRight: "0.25rem" }}
-                      src={person.avatar}
-                      size="m" />
-                  )}
-                  {about.title}
-                </Flex>
-              </Button>
-            </RevealFx>
+            {/* Glassmorphism container - outside RevealFx to avoid filter conflicts */}
+            <BackdropSafeRevealFx
+              horizontal="start"
+              translateY="4">
+            <div
+              className="hero-glassmorphism"
+              style={{
+                position: "relative",
+                backdropFilter: "blur(2px)",
+                backgroundColor: "rgba(9, 137, 85, 0.1)",
+                borderRadius: "24px",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                padding: "32px",
+                overflow: "hidden",
+                zIndex: 1,
+              }}
+            >
+              <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
+                <Heading align="center" wrap="pretty" variant="display-strong-l">
+                  <div
+                    style={{
+                      // Remove backdrop-filter from here since it conflicts with RevealFx
+                      // backdropFilter: "blur(5px)",
+                      backgroundColor: "rgba(9, 137, 85, 0.2)",
+                      borderRadius: "32px",
+                      width: "fit-content",
+                      border: "1px solid rgba(78, 212, 101, 0.4)",
+                      boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                      padding: "12px",
+                      overflow: "hidden",
+                      zIndex: 3,
+                    }}
+                  >
+                    {home.headline}
+                  </div>
+                </Heading>
+              </RevealFx>
+              <RevealFx translateY="8" delay={0.2} fillWidth horizontal="start" paddingBottom="24">
+                <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
+                  {home.subline}
+                </Text>
+              </RevealFx>
+              <RevealFx delay={0.4} horizontal="start">
+                <Button
+                  id="about"
+                  data-border="rounded"
+                  href={about.path}
+                  variant="secondary"
+                  size="m"
+                  arrowIcon
+                >
+                  <Flex gap="8" vertical="center">
+                    {about.avatar.display && (
+                      <Avatar
+                        style={{ marginLeft: "-0.75rem", marginRight: "0.25rem" }}
+                        src={person.avatar}
+                        size="m" />
+                    )}
+                    {about.title}
+                  </Flex>
+                </Button>
+              </RevealFx>
+            </div>
+            </BackdropSafeRevealFx>
           </Column>
         </Column>
         <RevealFx translateY="16" delay={0.6}>

@@ -39,7 +39,7 @@ const Text = <T extends ElementType = "span">({
   className,
   ...props
 }: TypeProps<T>) => {
-  const Component = as || "span";
+  const Component = as || "span" as ElementType;
 
   if (variant && (size || weight)) {
     console.warn("When 'variant' is set, 'size' and 'weight' are ignored.");
@@ -94,18 +94,19 @@ const Text = <T extends ElementType = "span">({
     generateClassName("my", marginY),
   );
 
-  return (
-    <Component
-      className={combinedClasses}
-      style={{
+  return React.createElement(
+    Component,
+    {
+      className: combinedClasses,
+      style: {
         textAlign: align,
-        textWrap: wrap,
+        whiteSpace: wrap === 'nowrap' ? 'nowrap' : undefined,
+        overflowWrap: wrap === 'wrap' ? 'break-word' : undefined,
         ...style,
-      }}
-      {...props}
-    >
-      {children}
-    </Component>
+      },
+      ...props
+    },
+    children
   );
 };
 

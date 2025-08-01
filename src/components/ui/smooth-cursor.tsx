@@ -246,7 +246,7 @@ export function SmoothCursor({
 
   useEffect(() => {
     // Debug: Log to confirm component is mounting
-    console.log('SmoothCursor mounting...', { enabled, disableOnTouch });
+    // console.log('SmoothCursor mounting...', { enabled, disableOnTouch });
 
     // Detect touch device
     const detectTouchDevice = () => {
@@ -261,12 +261,12 @@ export function SmoothCursor({
 
     const touchDevice = detectTouchDevice();
     setIsTouchDevice(touchDevice);
-    console.log('Touch device detected:', touchDevice);
+    // console.log('Touch device detected:', touchDevice);
 
     // Always show cursor unless specifically disabled
     const shouldShow = enabled && !(disableOnTouch && touchDevice);
     setShouldShowCursor(shouldShow);
-    console.log('Should show cursor:', shouldShow);
+    // console.log('Should show cursor:', shouldShow);
 
     // Early return if cursor should not be shown
     if (!shouldShow) {
@@ -276,7 +276,7 @@ export function SmoothCursor({
 
     // Apply global cursor override styles immediately
     const applyGlobalCursorStyles = () => {
-      console.log('Applying global cursor styles...');
+      // console.log('Applying global cursor styles...');
       const existingStyle = document.getElementById('smooth-cursor-global-styles');
       if (existingStyle) {
         existingStyle.remove();
@@ -362,7 +362,7 @@ export function SmoothCursor({
         }
       `;
       document.head.appendChild(style);
-      console.log('Global cursor styles applied');
+      // console.log('Global cursor styles applied');
       return style;
     };
 
@@ -379,7 +379,7 @@ export function SmoothCursor({
           }, '*');
         } catch (e) {
           // Cross-origin iframe, can't send message
-          console.log('Cannot send cursor message to cross-origin iframe');
+          // console.log('Cannot send cursor message to cross-origin iframe');
         }
       });
     };
@@ -393,7 +393,7 @@ export function SmoothCursor({
           source: 'smooth-cursor'
         }, '*');
       } catch (e) {
-        console.log('Cannot communicate with cross-origin iframe');
+        // console.log('Cannot communicate with cross-origin iframe');
       }
     };
 
@@ -778,7 +778,7 @@ export function SmoothCursor({
     return null;
   }
 
-  console.log('Rendering SmoothCursor component', { shouldShowCursor, isMouseInViewport, cursorType });
+  // console.log('Rendering SmoothCursor component', { shouldShowCursor, isMouseInViewport, cursorType });
 
   // Get the appropriate cursor component
   const getCurrentCursor = () => {

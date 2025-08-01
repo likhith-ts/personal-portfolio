@@ -375,11 +375,11 @@ const NeuralNetworkVisualizer = React.memo<NeuralNetworkVisualizerProps>(
         const startTime = performance.now()
 
         // Throttle to target FPS
-        const targetFrameTime = 1000 / currentSpeed.fps
-        if (timestamp - lastFrameTimeRef.current < targetFrameTime) {
-          animationFrameRef.current = requestAnimationFrame(animate)
-          return
-        }
+        // const targetFrameTime = 1000 / currentSpeed.fps
+        // if (timestamp - lastFrameTimeRef.current < targetFrameTime) {
+        //   animationFrameRef.current = requestAnimationFrame(animate)
+        //   return
+        // }
 
         const { nodes, connections } = networkStructure
         const particles = particlePoolRef.current.getActiveParticles()

@@ -66,7 +66,7 @@ const home = {
   },
   subline: (
     <>
-      I'm Likhith, an independent AI engineer building end-to-end ML pipelines, GenAI systems,
+      Hey! I'm Likhith, an independent AI engineer building end-to-end ML pipelines, GenAI systems,
       and agentic architectures — blending scalable RAG, cross-platform web development, and full-stack intelligence for next-gen applications.
       {/* <Logo icon={false} style={{ display: "inline-flex", top: "0.25em", marginLeft: "-0.25em" }}/> */}
     </>

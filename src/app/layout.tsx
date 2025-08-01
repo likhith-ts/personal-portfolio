@@ -96,7 +96,10 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                   {/* DebugControls for testing welcome screen */}
                   {/* uncomment below line to use */}
                   {/* <DebugControls /> */}
+
+                  {/* background effects */}
                   <BackgroundEffects />
+                  
                   <Flex fillWidth minHeight="16" hide="s" />
                   <Header />
                   <Flex
