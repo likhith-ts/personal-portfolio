@@ -90,7 +90,7 @@ export default function Home() {
                   {home.subline}
                 </Text>
               </RevealFx>
-              <RevealFx delay={0.4} horizontal="start">
+              <RevealFx delay={0.4} horizontal="center">
                 <Button
                   id="about"
                   data-border="rounded"
