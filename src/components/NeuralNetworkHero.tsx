@@ -74,8 +74,11 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
     width: initialWidth || 400,
     height: initialHeight || 400
   })
+
+  // console.log('🚀 HeroNeuralNetwork initialized with:', { initialWidth, initialHeight })
   const [nodes, setNodes] = useState<Node[]>([])
   const [connections, setConnections] = useState<Connection[]>([])
+  const [lastDimensions, setLastDimensions] = useState({ width: 0, height: 0 }) // Track last used dimensions
   // const [signals, setSignals] = useState<Signal[]>([])
   const [isInitialized, setIsInitialized] = useState(false)
   const [isFormationComplete, setIsFormationComplete] = useState(false)
@@ -83,6 +86,7 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
   const nodeRefs = useRef<Map<string, SVGCircleElement>>(new Map())
   const connectionRefs = useRef<Map<string, SVGLineElement>>(new Map())
   const signalRefs = useRef<Map<string, SVGCircleElement>>(new Map())
+  const signalPoolRef = useRef<SVGCircleElement[]>([]) // Pre-created signal pool
 
   // Theme detection
   useEffect(() => {
@@ -133,6 +137,30 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
     activeNodeCenter: "#06b6d4" // sky blue for active nodes
   }
 
+  // Pre-create signal pool on component mount to avoid DOM creation during animation
+  useEffect(() => {
+    if (!svgRef.current || connections.length === 0) return
+
+    const signalsGroup = svgRef.current.querySelector(".signals")
+    if (!signalsGroup) return
+
+    // Clear existing signals
+    signalPoolRef.current.forEach(signal => signal.remove())
+    signalPoolRef.current = []
+
+    // Create optimized signal pool
+    const maxSignals = Math.min(100, Math.max(50, connections.length * 0.2)) // Reduced signal count
+    for (let i = 0; i < maxSignals; i++) {
+      const signal = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+      signal.setAttribute("r", "3") // Smaller radius for better performance
+      signal.setAttribute("fill", colors.particle)
+      signal.setAttribute("opacity", "0")
+      signal.style.willChange = "transform, opacity" // Optimize for animations
+      signalsGroup.appendChild(signal)
+      signalPoolRef.current.push(signal)
+    }
+  }, [connections.length, colors.particle]) // Recreate when connections or colors change
+
   // Generate labels for layers
   const getLayerLabel = (index: number) => {
     if (index === 0) return "Input"
@@ -170,9 +198,10 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
         const rect = containerRef.current.getBoundingClientRect()
         const newDimensions = {
           width: rect.width,
-          height: rect.height,
+          // Use initialHeight if provided, otherwise fall back to measured height
+          height: initialHeight || rect.height,
         }
-        // console.log('📐 Dimensions updated:', newDimensions)
+        // console.log('📐 HeroNeuralNetwork dimensions updated:', newDimensions, 'initialHeight:', initialHeight)
         setDimensions(newDimensions)
       }
     }
@@ -180,20 +209,36 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
     updateDimensions()
     window.addEventListener("resize", updateDimensions)
     return () => window.removeEventListener("resize", updateDimensions)
-  }, [])
+  }, [initialHeight]) // Add initialHeight as dependency
 
   // Generate nodes and connections
   useEffect(() => {
     if (dimensions.width === 0 || dimensions.height === 0) return
 
-    // Prevent double generation by checking if already initialized with same dimensions
-    // const currentDimKey = `${dimensions.width}x${dimensions.height}`
-    if (nodes.length > 0) {
-      // console.log('� Skipping duplicate network generation for:', currentDimKey)
+    // Check if dimensions have actually changed
+    const dimensionsChanged = lastDimensions.width !== dimensions.width || lastDimensions.height !== dimensions.height
+
+    // Only skip regeneration if nodes exist AND dimensions haven't changed
+    if (nodes.length > 0 && !dimensionsChanged) {
+      // console.log('🔄 Skipping duplicate network generation - same dimensions:', dimensions)
       return
     }
 
-    // console.log('�🔧 Generating network with dimensions:', dimensions)
+    // Clear existing state for regeneration
+    if (dimensionsChanged && nodes.length > 0) {
+      // console.log('🆕 Regenerating network due to dimension change:', {
+      //   old: lastDimensions,
+      //   new: dimensions
+      // })
+      setIsInitialized(false)
+      setIsFormationComplete(false)
+      // Clear the refs
+      nodeRefs.current.clear()
+      connectionRefs.current.clear()
+      signalRefs.current.clear()
+    }
+
+    // console.log('🔧 Generating network with dimensions:', dimensions)
 
     const newNodes: Node[] = []
     const newConnections: Connection[] = []
@@ -257,8 +302,9 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
 
     setNodes(newNodes)
     setConnections(newConnections)
+    setLastDimensions({ width: dimensions.width, height: dimensions.height }) // Update last used dimensions
     setIsInitialized(true)
-  }, [dimensions])
+  }, [dimensions, networkLayers]) // Add networkLayers as dependency too
 
   // Initialize GSAP animations for network formation
   useEffect(() => {
@@ -282,7 +328,7 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
     nodes.forEach((node) => {
       const nodeEl = nodeRefs.current.get(node.id)
       if (!nodeEl) {
-        console.warn(`❌ Node element not found for ${node.id}`)
+        // console.warn(`❌ Node element not found for ${node.id}`)
         return
       }
 
@@ -323,7 +369,7 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
       layerConns.forEach((connection, index) => {
         const connEl = connectionRefs.current.get(connection.id)
         if (!connEl) {
-          console.warn(`❌ Connection element not found: ${connection.id}`)
+          // console.warn(`❌ Connection element not found: ${connection.id}`)
           return
         }
         const connectionDelay = delay + index * 0.002
@@ -345,47 +391,13 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
     }
   }, [isInitialized, nodes, connections, isDarkMode])
 
-  // Create wave propagation animation
-  const createWavePropagation = useCallback(() => {
-    if (!isFormationComplete || !svgRef.current) return
-
-    // console.log('🌊 Creating wave propagation animation')
-
-    // Clear previous wave timeline
-    if (waveTimelineRef.current) {
-      waveTimelineRef.current.kill()
-    }
-
-    const wl = gsap.timeline({
-      repeat: -1,
-      repeatDelay: 3 / animationSpeed,
-      timeScale: animationSpeed,
-    })
-
-    // Pre-create signal pools to avoid DOM creation during animation
-    const signalPool: SVGCircleElement[] = []
-    const maxSignals = Math.min(150, connections.length * 0.3) // Scale with connection count
-
-    for (let i = 0; i < maxSignals; i++) {
-      const signal = document.createElementNS("http://www.w3.org/2000/svg", "circle")
-      signal.setAttribute("r", "4")
-      signal.setAttribute("fill", colors.particle)
-      signal.setAttribute("filter", "url(#glow)")
-      signal.setAttribute("opacity", "0")
-      svgRef.current?.querySelector(".signals")?.appendChild(signal)
-      signalPool.push(signal)
-    }
-
-    let signalIndex = 0
-
+  // Function to randomly select input nodes for each cycle
+  const getRandomActiveInputs = (): Node[] => {
     const inputNodes = nodes.filter(n => n.layer === 0)
-
-    // Randomly select 2-4 input nodes (non-consecutive, random selection)
-    const numActiveInputs = Math.min(inputNodes.length, Math.floor(Math.random() * 3) + 2) // 2-4 nodes
+    const numActiveInputs = Math.min(inputNodes.length, Math.floor(Math.random() * inputNodes.length-1) + 1)
     const activeInputs: Node[] = []
     const usedIndices = new Set<number>()
 
-    // Randomly pick non-consecutive nodes
     while (activeInputs.length < numActiveInputs && usedIndices.size < inputNodes.length) {
       const randomIndex = Math.floor(Math.random() * inputNodes.length)
       if (!usedIndices.has(randomIndex)) {
@@ -393,146 +405,168 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
         activeInputs.push(inputNodes[randomIndex])
       }
     }
+    return activeInputs
+  }
 
-    console.log('🔌 Active input nodes:', activeInputs.map(n => n.id))
+  // Create wave propagation animation
+  const createWavePropagation = useCallback(() => {
+    if (!isFormationComplete || !svgRef.current || signalPoolRef.current.length === 0) return
 
-    if (activeInputs.length === 0) return
+    // Clear previous wave timeline
+    if (waveTimelineRef.current) {
+      waveTimelineRef.current.kill()
+    }
 
-    // Create forward propagation wave with optimized approach
-    activeInputs.forEach((inputNode, waveIndex) => {
-      // Small stagger delay (0.1s) instead of 0.8s to make them fire almost simultaneously
-      const delay = waveIndex * 0
+    // Use pre-created signal pool
+    const signalPool = signalPoolRef.current
 
-      // Pre-calculate activation patterns to reduce runtime computation
-      const activationPlan: Array<{ layer: number, nodeIds: string[], delay: number }> = []
-
-      for (let layer = 0; layer < networkLayers.length; layer++) {
-        const layerDelay = delay + layer * 0.4
-        let nodesToActivate: string[]
-
-        if (layer === 0) {
-          nodesToActivate = [inputNode.id]
-        } else {
-          // Use a more predictable activation pattern
-          const layerNodes = nodes.filter(n => n.layer === layer)
-          const activationCount = Math.max(1, Math.floor(layerNodes.length * 0.4))
-          nodesToActivate = layerNodes
-            .sort(() => 0.5 - Math.random())
-            .slice(0, activationCount)
-            .map(n => n.id)
+    const createSingleWave = () => {
+      const wl = gsap.timeline({
+        onComplete: () => {
+          // After this wave completes, start the next one with fresh randomization
+          gsap.delayedCall(3 / animationSpeed, createSingleWave)
         }
+      })
 
-        activationPlan.push({
-          layer,
-          nodeIds: nodesToActivate,
-          delay: layerDelay
-        })
-      }
+      let signalIndex = 0
+      const activeInputs = getRandomActiveInputs() // Fresh selection each time!
+      // console.log('🌊 Creating wave cycle with active inputs:', activeInputs.map(n => n.id))
+      if (activeInputs.length === 0) return
 
-      // Execute activation plan
-      activationPlan.forEach(({ layer, nodeIds, delay: layerDelay }) => {
-        nodeIds.forEach((nodeId, nodeIndex) => {
-          const nodeEl = nodeRefs.current.get(nodeId)
-          if (!nodeEl) {
-            console.warn(`⚠️ Node element not found for activation: ${nodeId}`)
-            return
+      // Reset all input nodes to their default state at the start of each cycle
+      const inputNodes = nodes.filter(n => n.layer === 0)
+      inputNodes.forEach(node => {
+        const nodeEl = nodeRefs.current.get(node.id)
+        if (nodeEl) {
+          wl.set(nodeEl, {
+            r: 8,
+            fill: isDarkMode ? "url(#nodeGradient)" : "url(#lightNodeGradient)",
+          }, 0) // Set at the beginning of the timeline
+        }
+      })
+
+      // Create forward propagation wave with performance optimizations
+      activeInputs.forEach((inputNode, waveIndex) => {
+        const delay = waveIndex * 0
+
+        // Pre-calculate activation patterns to reduce runtime computation
+        const activationPlan: Array<{ layer: number, nodeIds: string[], delay: number }> = []
+
+        for (let layer = 0; layer < networkLayers.length; layer++) {
+          const layerDelay = delay + layer * 0.4
+          let nodesToActivate: string[]
+
+          if (layer === 0) {
+            nodesToActivate = [inputNode.id]
+          } else {
+            // Reduced activation count for better performance
+            const layerNodes = nodes.filter(n => n.layer === layer)
+            const activationCount = Math.max(1, Math.floor(layerNodes.length * 0.3)) // Reduced from 0.4
+            nodesToActivate = layerNodes
+              .sort(() => 0.5 - Math.random())
+              .slice(0, activationCount)
+              .map(n => n.id)
           }
+          // console.log(`🌊 Wave ${waveIndex + 1} - Layer ${layer} activating nodes:`, nodesToActivate)
+          activationPlan.push({
+            layer,
+            nodeIds: nodesToActivate,
+            delay: layerDelay
+          })
+        }
+        // console.log('🌊 Wave cycle activation plan:', activationPlan)
 
-          const nodeDelay = layerDelay + nodeIndex * 0.03
-          // const node = nodes.find(n => n.id === nodeId)
+        // Execute activation plan with performance optimizations
+        activationPlan.forEach(({ layer, nodeIds, delay: layerDelay }) => {
+          nodeIds.forEach((nodeId, nodeIndex) => {
+            const nodeEl = nodeRefs.current.get(nodeId)
+            if (!nodeEl) return
 
-          // Optimized node activation - batch properties
-          wl.to(nodeEl, {
-            r: 12,
-            fill: colors.activeNodeCenter,
-            filter: "url(#strongGlow)",
-            duration: 0.25,
-            ease: "power2.out",
-          }, nodeDelay)
-            .to(nodeEl, {
-              r: 8,
-              fill: isDarkMode ? "url(#nodeGradient)" : "url(#lightNodeGradient)",
-              filter: "none",
-              duration: 0.35,
-              ease: "power2.in",
-            }, nodeDelay + 0.25)
+            const nodeDelay = layerDelay + nodeIndex * 0.03
 
-          // Activate connections - limited to reduce computation
-          if (layer < networkLayers.length - 1) {
-            const outgoingConnections = connections
-              .filter(conn => conn.fromNode === nodeId)
-              .slice(0, 8) // Limit connections to improve performance
+            // Optimized node activation - use CSS transforms instead of filters when possible
+            wl.to(nodeEl, {
+              r: 12,
+              fill: colors.activeNodeCenter,
+              duration: 0.2, // Shorter duration for snappier feel
+              ease: "power2.out",
+            }, nodeDelay)
+              .to(nodeEl, {
+                r: 8,
+                fill: isDarkMode ? "url(#nodeGradient)" : "url(#lightNodeGradient)",
+                duration: 0.3,
+                ease: "power2.in",
+              }, nodeDelay + 0.2) // Back to absolute timing for single wave
 
+            // Optimize connections - reduce count and simplify animations
+            if (layer < networkLayers.length - 1) {
+              const outgoingConnections = connections
+                .filter(conn => conn.fromNode === nodeId)
+                .slice(0, 4) // Reduced from 8 to 4 for better performance
 
-            outgoingConnections.forEach((conn, connIndex) => {
-              const connEl = connectionRefs.current.get(conn.id)
-              if (!connEl) {
-                console.warn(`⚠️ Connection element not found: ${conn.id}`)
-                return
-              }
+              outgoingConnections.forEach((conn, connIndex) => {
+                const connEl = connectionRefs.current.get(conn.id)
+                if (!connEl) return
 
-              const connDelay = nodeDelay + 0.1 + connIndex * 0.008
+                const connDelay = nodeDelay + 0.1 + connIndex * 0.01 // Slightly slower stagger
 
-              // Batch connection properties
-              wl.to(connEl, {
-                stroke: colors.signal,
-                strokeWidth: 2,
-                opacity: 0.9,
-                duration: 0.15,
-                ease: "power2.out",
-              }, connDelay)
-                .to(connEl, {
-                  stroke: colors.connection,
-                  strokeWidth: 1,
-                  opacity: isDarkMode ? 0.3 : 0.5,
-                  duration: 0.25,
-                  ease: "power2.in",
-                }, connDelay + 0.15)
+                // Simplified connection animation
+                wl.to(connEl, {
+                  stroke: colors.signal,
+                  strokeWidth: 2,
+                  opacity: 0.8, // Slightly lower opacity
+                  duration: 0.1, // Faster transition
+                  ease: "none", // Remove easing for better performance
+                }, connDelay)
+                  .to(connEl, {
+                    stroke: colors.connection,
+                    strokeWidth: 1,
+                    opacity: isDarkMode ? 0.3 : 0.5,
+                    duration: 0.2,
+                    ease: "none",
+                  }, connDelay + 0.1)
 
-              // Use signal pool instead of creating new elements
-              if (signalIndex < signalPool.length) {
-                const signal = signalPool[signalIndex++]
-                const fromNode = nodes.find(n => n.id === conn.fromNode)
-                const toNode = nodes.find(n => n.id === conn.toNode)
+                // Optimized signal animation
+                if (signalIndex < signalPool.length) {
+                  const signal = signalPool[signalIndex++]
+                  const fromNode = nodes.find(n => n.id === conn.fromNode)
+                  const toNode = nodes.find(n => n.id === conn.toNode)
 
-                if (fromNode && toNode) {
-
-                  // Reset and animate signal
-                  gsap.set(signal, {
-                    cx: fromNode.targetX,
-                    cy: fromNode.targetY,
-                    opacity: 0,
-                    scale: 1
-                  })
-
-                  wl.to(signal, {
-                    cx: toNode.targetX,
-                    cy: toNode.targetY,
-                    opacity: 0.8,
-                    scale: 1.2,
-                    duration: 0.3,
-                    ease: "power1.inOut",
-                  }, connDelay)
-                    .to(signal, {
+                  if (fromNode && toNode) {
+                    // Use GSAP's set for instant positioning
+                    gsap.set(signal, {
+                      attr: { cx: fromNode.targetX, cy: fromNode.targetY },
                       opacity: 0,
-                      scale: 0.8,
-                      duration: 0.1,
-                    }, connDelay + 0.3)
+                      scale: 1
+                    })
+
+                    // Simplified signal animation - remove scale changes
+                    wl.to(signal, {
+                      attr: { cx: toNode.targetX, cy: toNode.targetY },
+                      opacity: 0.6, // Lower opacity for better performance
+                      duration: 0.25, // Faster movement
+                      ease: "none", // Remove easing
+                    }, connDelay)
+                      .to(signal, {
+                        opacity: 0,
+                        duration: 0.05, // Very fast fade out
+                      }, connDelay + 0.25)
+                  }
                 }
-              }
-            })
-          }
+              })
+            }
+          })
         })
       })
-    })
 
-    // Reset signal index for next cycle
-    wl.call(() => {
-      signalIndex = 0
-      // console.log('🔄 Wave cycle complete, resetting signal index')
-    }, [], activeInputs.length * 0.8 + networkLayers.length * 0.4 + 1)
+      return wl
+    }
 
-    waveTimelineRef.current = wl
+    // Start the first wave
+    const firstWave = createSingleWave()
+    if (firstWave) {
+      waveTimelineRef.current = firstWave
+    }
     // console.log('✅ Wave propagation timeline created')
   }, [isFormationComplete, nodes, connections, colors, glowIntensity, isDarkMode, networkLayers, animationSpeed])
 
@@ -650,14 +684,18 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
                 stroke={colors.connection}
                 strokeWidth={1}
                 opacity={0}
+                style={{ willChange: "stroke, stroke-width, opacity" }} // Optimize for animations
               />
             )
           })}
         </g>
+
+        {/* Render signals - empty group that gets populated by signal pool */}
+        <g className="signals"></g>
+
         {/* Render nodes */}
         <g className="nodes">
           {nodes.map((node) => {
-            // console.log(`📏 Label ${node.id} position:`, { x: node.x, y: node.y, width: dimensions.width })
             return (
               <circle
                 key={node.id}
@@ -672,10 +710,10 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
                 strokeWidth={!isDarkMode ? 1.5 : 0}
                 strokeOpacity={!isDarkMode ? 0.8 : 0}
                 opacity={0}
+                style={{ willChange: "r, fill, opacity" }} // Optimize for animations
               />
             )
-          }
-          )}
+          })}
         </g>
 
         {/* Layer labels */}

@@ -100,8 +100,7 @@ const Text = <T extends ElementType = "span">({
       className: combinedClasses,
       style: {
         textAlign: align,
-        whiteSpace: wrap === 'nowrap' ? 'nowrap' : undefined,
-        overflowWrap: wrap === 'wrap' ? 'break-word' : undefined,
+        textWrap: wrap,
         ...style,
       },
       ...props

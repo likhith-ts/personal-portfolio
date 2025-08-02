@@ -7,6 +7,7 @@ import { Posts } from "@/components/blog/Posts";
 import { Meta, Schema } from "@/once-ui/modules";
 import { HeroBackground } from "@/components/HeroBackground";
 import { BackdropSafeRevealFx } from "@/components/BackdropSafeRevealFx";
+import { ResponsiveText } from "@/components/ResponsiveText";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -70,7 +71,7 @@ export default function Home() {
                   <div
                     style={{
                       // Remove backdrop-filter from here since it conflicts with RevealFx
-                      // backdropFilter: "blur(5px)",
+                      backdropFilter: "blur(5px)",
                       backgroundColor: "rgba(9, 137, 85, 0.2)",
                       borderRadius: "32px",
                       width: "fit-content",
@@ -85,17 +86,21 @@ export default function Home() {
                   </div>
                 </Heading>
               </RevealFx>
-              <RevealFx translateY="8" delay={0.2} fillWidth horizontal="start" paddingBottom="24">
-                <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
+              <RevealFx translateY="8" delay={0.2} fillWidth horizontal="center" paddingBottom="24">
+                {/* <Text align="justify" paddingX="24" wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
                   {home.subline}
-                </Text>
+                </Text> */}
+                <ResponsiveText 
+                    desktopText={home.subline} 
+                    mobileText="Hey there, I'm Likhith, an AI engineer and developer" 
+                  />
               </RevealFx>
               <RevealFx delay={0.4} horizontal="center">
                 <Button
                   id="about"
                   data-border="rounded"
                   href={about.path}
-                  variant="secondary"
+                  variant="brand-alpha"
                   size="m"
                   arrowIcon
                 >

@@ -9,7 +9,7 @@ import styles from "./Button.module.scss";
 import { IconName } from "../icons";
 
 interface CommonProps {
-  variant?: "primary" | "secondary" | "tertiary" | "danger";
+  variant?: "primary" | "secondary" | "tertiary" | "danger" | "brand-alpha";
   size?: "s" | "m" | "l";
   radius?:
     | "none"

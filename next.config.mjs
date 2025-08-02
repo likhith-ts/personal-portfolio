@@ -9,9 +9,9 @@ const withMDX = mdx({
 const nextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   transpilePackages: ["next-mdx-remote"],
-  turbopack: {
-    // ...
-  },
+  // turbopack: {
+  //   // ...
+  // },
   sassOptions: {
     compiler: "modern",
     silenceDeprecations: ["legacy-js-api"],
@@ -23,10 +23,10 @@ const nextConfig = {
       new URL('https://udemy-certificate.s3.amazonaws.com/image/'),
     ],
   },
-  experimental: {
-    // webVitals: true
-  },
-  swcMinify: false,
+  // experimental: {
+  //   // webVitals: true
+  // },
+  // swcMinify: false,
   
 };
 

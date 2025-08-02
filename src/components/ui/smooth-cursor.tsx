@@ -269,10 +269,10 @@ export function SmoothCursor({
     // console.log('Should show cursor:', shouldShow);
 
     // Early return if cursor should not be shown
-    if (!shouldShow) {
-      console.log('Cursor disabled, early return');
-      return;
-    }
+    // if (!shouldShow) {
+    //   console.log('Cursor disabled, early return');
+    //   return;
+    // }
 
     // Apply global cursor override styles immediately
     const applyGlobalCursorStyles = () => {
@@ -773,10 +773,10 @@ export function SmoothCursor({
   }, [cursorX, cursorY, rotation, scale, enabled, disableOnTouch, shouldShowCursor, isTouchDevice, cursorType]);
 
   // Don't render cursor if disabled or on touch devices (when disableOnTouch is true)
-  if (!shouldShowCursor) {
-    console.log('Cursor not rendered - shouldShowCursor:', shouldShowCursor);
-    return null;
-  }
+  // if (!shouldShowCursor) {
+  //   console.log('Cursor not rendered - shouldShowCursor:', shouldShowCursor);
+  //   return null;
+  // }
 
   // console.log('Rendering SmoothCursor component', { shouldShowCursor, isMouseInViewport, cursorType });
 
