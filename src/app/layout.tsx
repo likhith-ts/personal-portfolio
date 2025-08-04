@@ -59,7 +59,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           {/* Add preconnect for performance */}
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-          <script src="/iframe-cursor-override.js" />
+          <script src="/iframe-cursor-override.js" async />
           <script
             dangerouslySetInnerHTML={{
               __html: `

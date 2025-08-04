@@ -92,7 +92,7 @@ export function WelcomeLoadingScreen() {
             alignItems: 'center'
           }}
         >
-          {person.firstName}'s
+          {person.firstName}&apos;s
         </Text>
         <Text as="span" className={styles.welcomePart}>portfolio</Text>
         <Text as="span" style={{ display: 'inline-flex', alignItems: 'center', height: '1em' }}>

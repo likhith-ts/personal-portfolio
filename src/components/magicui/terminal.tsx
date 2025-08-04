@@ -110,7 +110,7 @@ interface TypingAnimationProps {
     delay?: number;
     duration?: number;
     className?: string;
-    as?: React.ElementType;
+    as?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
 }
 
 export function TypingAnimation({

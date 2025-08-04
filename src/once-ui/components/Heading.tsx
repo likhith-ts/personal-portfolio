@@ -102,7 +102,7 @@ const Heading = <T extends ElementType = "h1">({
         textWrap: wrap,
         ...style,
       }}
-      {...props}
+      {...(props as any)}
     >
       {children}
     </Component>

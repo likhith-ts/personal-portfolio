@@ -253,11 +253,11 @@ The script is loading...`,
             return (
                 <span>
                     {leadingSpace}
-                    <span style={{ color: '#22d3ee' }}>"{key}"</span>
+                    <span style={{ color: '#22d3ee' }}>&quot;{key}&quot;</span>
                     {afterKey}
                     <span style={{ color: '#a855f7' }}>:</span>
                     {afterColon}
-                    <span style={{ color: '#fbbf24' }}>"{value}"</span>
+                    <span style={{ color: '#fbbf24' }}>&quot;{value}&quot;</span>
                     {hasComma && <span style={{ color: '#6b7280' }}>,</span>}
                 </span>
             );
@@ -373,7 +373,7 @@ The script is loading...`,
                                             alignItems: 'center'
                                         }}
                                     >
-                                        {person.firstName}'s
+                                        {person.firstName}&apos;s
                                     </Text>
                                     <Text as="span" className={styles.welcomePart}>portfolio</Text>
                                     <Text as="span" style={{ display: 'inline-flex', alignItems: 'center', height: '1em' }}>

@@ -232,7 +232,7 @@ The script is loading...`,
                         <Terminal className="w-full max-w-4xl">
                             <div className="space-y-1">
                                 <div className="text-green-400 mb-4">
-                                    Welcome to {person.firstName}'s Portfolio Terminal v2.0.0
+                                    Welcome to {person.firstName}&apos;s Portfolio Terminal v2.0.0
                                 </div>
                                 {terminalLines.map((line, index) => (
                                     <div key={index} className={`${line.type === 'command'
@@ -349,7 +349,7 @@ The script is loading...`,
                                             alignItems: 'center'
                                         }}
                                     >
-                                        {person.firstName}'s
+                                        {person.firstName}&apos;s
                                     </Text>
                                     <Text as="span" className={styles.welcomePart}>portfolio</Text>
                                     <Text as="span" style={{ display: 'inline-flex', alignItems: 'center', height: '1em' }}>

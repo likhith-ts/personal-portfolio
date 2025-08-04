@@ -4,13 +4,10 @@ import "swiper/swiper.min.css";
 import "swiper/components/navigation/navigation.min.css";
 import "swiper/components/pagination/pagination.min.css";
 // import Swiper core and required modules
-import SwiperCore, {
+import {
   Pagination,Navigation
 } from 'swiper/core';
 import React from "react";
-
-// install Swiper modules
-SwiperCore.use([Pagination,Navigation]);
 
 export function SwiperComponent({ children }: { children: React.ReactNode }) {
   return (

@@ -18,7 +18,7 @@ const person = {
 
 const newsletter = {
   display: true,
-  title: <>Subscribe to {person.firstName}'s Newsletter</>,
+  title: <>Subscribe to {person.firstName}&apos;s Newsletter</>,
   description: (
     <>
       I occasionally write about design, technology, and share thoughts on the intersection of
@@ -74,7 +74,7 @@ const home = {
     desktop: {
       content: (
         <>
-          Hey! I'm Likhith, an independent AI engineer building end-to-end ML pipelines, GenAI systems,
+          Hey! I&apos;m Likhith, an independent AI engineer building end-to-end ML pipelines, GenAI systems,
           and agentic architectures — blending scalable RAG, cross-platform web development, and full-stack intelligence for next-gen applications.
           {/* <Logo icon={false} style={{ display: "inline-flex", top: "0.25em", marginLeft: "-0.25em" }}/> */}
         </>
@@ -83,7 +83,7 @@ const home = {
     mobile: {
       content: (
         <>
-          Hey, I'm Likhith Usurupati<br /> AI Engineer | Developer
+          Hey, I&apos;m Likhith Usurupati<br /> AI Engineer | Developer
         </>
       ),
     },

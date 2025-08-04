@@ -28,6 +28,7 @@ interface ComponentProps
   compact?: boolean;
   itemsAlignment?: "start" | "center" | "end";
   minColumnWidth?: number;
+  as?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
 }
 
 const Grid = forwardRef<HTMLDivElement, ComponentProps>(
