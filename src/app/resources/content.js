@@ -41,6 +41,11 @@ const social = [
     link: "https://www.linkedin.com/in/likhith-usurupati28",
   },
   {
+    name: "Hugging Face",
+    icon: "huggingFace",
+    link: "https://huggingface.co/likhith-u28",
+  },
+  {
     name: "LeetCode",
     icon: "leetcode",
     link: "https://leetcode.com/u/likhith_usurupati/",
@@ -59,18 +64,30 @@ const home = {
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
   headline: <>Building Scalable AI-Powered Applications Across the Stack</>,
+  mobileHeadline: <>Building Scalable AI-Powered Applications Across the Stack</>,
   featured: {
     display: true,
     title: <>Recent project: <strong className="ml-4">Credit Card</strong></>,
     href: "work/credit-card",
   },
-  subline: (
-    <>
-      Hey! I'm Likhith, an independent AI engineer building end-to-end ML pipelines, GenAI systems,
-      and agentic architectures — blending scalable RAG, cross-platform web development, and full-stack intelligence for next-gen applications.
-      {/* <Logo icon={false} style={{ display: "inline-flex", top: "0.25em", marginLeft: "-0.25em" }}/> */}
-    </>
-  ),
+  subline: {
+    desktop: {
+      content: (
+        <>
+          Hey! I'm Likhith, an independent AI engineer building end-to-end ML pipelines, GenAI systems,
+          and agentic architectures — blending scalable RAG, cross-platform web development, and full-stack intelligence for next-gen applications.
+          {/* <Logo icon={false} style={{ display: "inline-flex", top: "0.25em", marginLeft: "-0.25em" }}/> */}
+        </>
+      ),
+    },
+    mobile: {
+      content: (
+        <>
+          Hey, I'm Likhith Usurupati<br /> AI Engineer | Developer
+        </>
+      ),
+    },
+  },
 };
 
 const about = {
@@ -97,7 +114,7 @@ const about = {
     title: "Introduction",
     description: (
       <>
-        Likhith is a versatile, India-based entry-level AI/ML engineer and full-stack developer
+        Likhith is a versatile, Indian-origin entry-level AI/ML engineer and full-stack developer
         driven by a passion for mastering cutting-edge technology.
         His work bridges AI/ML, Web development, and cross-platform full-stack solutions with a relentless curiosity.
         He thrives on building practical, scalable systems from the cloud to the edge.
@@ -113,28 +130,24 @@ const about = {
         timeframe: "2022 - 2023",
         role: "Machine Learning Intern",
         achievements: [
-          <>
-            Developed a supervised learning model for predicting chocolate
-            ratings using Kaggle's Churn Dataset.
-          </>,
-          <>
-            Performed extensive exploratory data analysis (EDA) to identify
-            trends and clean data for optimal model performance.
-          </>,
-          <>
-            Implemented ANN & Logistic regression for prediction and
-            compared performance with other regression models, achieved
-            97.5% model accuracy.
-          </>,
+          <>Developed supervised learning model for chocolate ratings prediction using Kaggle dataset.</>,
+          <>Performed EDA to identify trends and optimize data for model performance.</>,
+          <>Implemented ANN & Logistic regression achieving 97.5% accuracy.</>,
         ],
         images: [
           // optional: leave the array empty if you don't want to display images
-          // {
-          //   src: "/images/projects/project-01/cover-01.jpg",
-          //   alt: "Once UI Project",
-          //   width: 16,
-          //   height: 9,
-          // },
+          {
+            src: "https://media.licdn.com/dms/image/v2/C4D0BAQF_7Io9xhvorw/company-logo_200_200/company-logo_200_200/0/1672586158209/ai_can_co_in_logo?e=2147483647&v=beta&t=9bNh1qpSXxiNZ-ypQDAiNrRGOpFEG7acKALfQcRfgRY",
+            alt: "Once UI Project",
+            width: 16,
+            height: 9,
+          },
+          {
+            src: "/images/certificates/AIcan.png",
+            alt: "Once UI Project",
+            width: 16,
+            height: 9,
+          },
         ],
       },
     ],
@@ -144,14 +157,26 @@ const about = {
     title: "Education",
     institutions: [
       {
-        name: "SRM University",
-        description: <>B.Tech CSE with spl. in Big Data Analytics. </>,
-        year: "2020 - 2024 | CGPA: 9.17",
+        title: "BTech Computer Science and Engineering",
+        description: <>Specialization in Big Data Analytics.</>,
+        institute: "SRM University",
+        // description: <>B.Tech CSE with spl. in Big Data Analytics. </>,
+        timeframe: "2020 - 2024",
+        score: "CGPA: 9.17",
       },
       {
-        name: "Sunbeam CBSE School",
-        description: <>Higher Secondary with PCM and CS.</>,
-        year: "2018 - 2020 | Score: 88.2%",
+        title: "Class XII",
+        institute: "Sunbeam CBSE School",
+        description: <>CBSE | Physics, Chemistry, Mathematics, Computer Science.</>,
+        timeframe: "2020",
+        score: "Score: 88.2%",
+      },
+      {
+        title: "Class X",
+        institute: "R.K Model School",
+        description: <>Board of Secondary Education, Andhra Pradesh (BSEAP).</>,
+        timeframe: "2018",
+        score: "GPA: 9.3",
       },
     ],
   },
@@ -173,12 +198,6 @@ const about = {
         images: [
           // {
           //   src: "/images/projects/project-01/cover-02.jpg",
-          //   alt: "Project image",
-          //   width: 16,
-          //   height: 9,
-          // },
-          // {
-          //   src: "/images/projects/project-01/cover-03.jpg",
           //   alt: "Project image",
           //   width: 16,
           //   height: 9,
@@ -234,9 +253,9 @@ const blog = {
 
 const work = {
   path: "/work",
-  label: "Projects",
+  label: "Works",
   title: `Projects – ${person.name}`,
-  description: `Design and dev projects by ${person.name}`,
+  description: `Projects and Research work by ${person.name}`,
   // Create new project pages by adding a new .mdx file to app/blog/posts
   // All projects will be listed on the /home and /work routes
 };
@@ -297,54 +316,95 @@ const others = {
   label: "",
   title: `Others – ${person.name}`,
   description: `Design and dev projects by ${person.name}`,
-  achievements: [
-    "Built a personal portfolio website",
-    "Contributed to open-source projects",
-    "Participated in hackathons",
-    "Developed a machine learning model for predicting chocolate ratings",
-
-  ],
-  certifications: [
-    {
-      url: "https://www.hackerrank.com/certificates/iframe/8af49cac48c1",
-      name: "Hackerrank Basic Python",
-      issuer: "Hackerrank",
-      image: "/images/certificates/hackerrank-basic-python.png",
-    },
-    {
-      url: "https://www.udemy.com/certificate/UC-c25adfb3-e41a-426b-98cb-439f5cd92173/",
-      name: "Complete Python Bootcamp: from Zero to Hero in Python",
-      issuer: "Udemy by Jose Portilla",
-      image: "https://udemy-certificate.s3.amazonaws.com/image/UC-c25adfb3-e41a-426b-98cb-439f5cd92173.jpg",
-    },
-    {
-      url: "https://www.udemy.com/certificate/UC-b86f74b7-9c63-45ff-abea-79eec763189c/",
-      name: "Flutter & Dart - The Complete Guide",
-      issuer: "Udemy & Academind by maximilian schwarzmüller",
-      image: "https://udemy-certificate.s3.amazonaws.com/image/UC-b86f74b7-9c63-45ff-abea-79eec763189c.jpg",
-    },
-    {
-      url: "https://www.udemy.com/certificate/UC-0e0175aa-1b18-4536-9941-8d9fbe890cf5/",
-      name: "Python for Data Science and Machine Learning Bootcamp",
-      issuer: "Udemy by Jose Portilla",
-      image: "https://udemy-certificate.s3.amazonaws.com/image/UC-0e0175aa-1b18-4536-9941-8d9fbe890cf5.jpg",
-    },
-  ],
-  contributions: [
-    {
-      title: "Melanoma Detection Project",
-      project: "Melanoma",
-      avatars: [
-        { src: "https://avatars.githubusercontent.com/u/181699041?v=4" },
-        { src: "/images/avatar.jpg" },
-      ],
-      owner: "jyothi-alt",
-      icon: "github",
-      link: "https://github.com/jyothi-alt/MELANOMA",
-      ownerLink: "https://github.com/jyothi-alt",
-      description: "A flask web app for skin cancer detection using deep learning. ",
-    },
-  ],
+  tableOfContent: {
+    display: true,
+    subItems: false,
+  },
+  achievements: {
+    display: true,
+    title: "Achievements",
+    items: [
+      "Built a personal portfolio website",
+      "Contributed to open-source projects",
+      "Participated in hackathons",
+      "Developed a machine learning model for predicting chocolate ratings",
+    ],
+  },
+  certifications: {
+    display: true,
+    title: "Certifications",
+    items: [
+      {
+        url: "https://www.hackerrank.com/certificates/iframe/8af49cac48c1",
+        name: "Hackerrank Basic Python",
+        issuer: "Hackerrank",
+        image: "/images/certificates/hackerrank-basic-python.png",
+      },
+      {
+        url: "https://www.udemy.com/certificate/UC-c25adfb3-e41a-426b-98cb-439f5cd92173/",
+        name: "Complete Python Bootcamp: from Zero to Hero in Python",
+        issuer: "Udemy by Jose Portilla",
+        image: "https://udemy-certificate.s3.amazonaws.com/image/UC-c25adfb3-e41a-426b-98cb-439f5cd92173.jpg",
+      },
+      {
+        url: "https://www.udemy.com/certificate/UC-b86f74b7-9c63-45ff-abea-79eec763189c/",
+        name: "Flutter & Dart - The Complete Guide",
+        issuer: "Udemy & Academind by maximilian schwarzmüller",
+        image: "https://udemy-certificate.s3.amazonaws.com/image/UC-b86f74b7-9c63-45ff-abea-79eec763189c.jpg",
+      },
+      {
+        url: "https://www.udemy.com/certificate/UC-0e0175aa-1b18-4536-9941-8d9fbe890cf5/",
+        name: "Python for Data Science and Machine Learning Bootcamp",
+        issuer: "Udemy by Jose Portilla",
+        image: "https://udemy-certificate.s3.amazonaws.com/image/UC-0e0175aa-1b18-4536-9941-8d9fbe890cf5.jpg",
+      },
+    ],
+  },
+  contributions: {
+    display: true,
+    title: "Contributions",
+    items: [
+      {
+        title: "Melanoma Detection Project",
+        project: "Melanoma",
+        avatars: [
+          { src: "https://avatars.githubusercontent.com/u/181699041?v=4" },
+          { src: "/images/avatar.jpg" },
+        ],
+        owner: "jyothi-alt",
+        icon: "github",
+        link: "https://github.com/jyothi-alt/MELANOMA",
+        ownerLink: "https://github.com/jyothi-alt",
+        description: "A flask web app for skin cancer detection using deep learning. ",
+      },
+      {
+        title: "Melanoma Detection Project",
+        project: "Melanoma",
+        avatars: [
+          { src: "https://avatars.githubusercontent.com/u/181699041?v=4" },
+          { src: "/images/avatar.jpg" },
+        ],
+        owner: "jyothi-alt",
+        icon: "github",
+        link: "https://github.com/jyothi-alt/MELANOMA",
+        ownerLink: "https://github.com/jyothi-alt",
+        description: "A flask web app for skin cancer detection using deep learning. ",
+      },
+      {
+        title: "Melanoma Detection Project",
+        project: "Melanoma",
+        avatars: [
+          { src: "https://avatars.githubusercontent.com/u/181699041?v=4" },
+          { src: "/images/avatar.jpg" },
+        ],
+        owner: "jyothi-alt",
+        icon: "github",
+        link: "https://github.com/jyothi-alt/MELANOMA",
+        ownerLink: "https://github.com/jyothi-alt",
+        description: "A flask web app for skin cancer detection using deep learning. ",
+      },
+    ],
+  }
 };
 
 export { person, social, newsletter, home, about, blog, work, gallery, others };

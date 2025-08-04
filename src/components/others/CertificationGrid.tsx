@@ -1,9 +1,10 @@
 "use client";
 
 import React from 'react';
-import { Card, Column, Text, SmartImage, Grid } from '@/once-ui/components';
+import { Card, Column, Text, SmartImage, Grid, Row, Icon } from '@/once-ui/components';
 import { useFloating, autoUpdate, offset, flip, shift } from '@floating-ui/react';
-import styles from '../app/others/Others.module.scss';
+import styles from '../../app/others/Others.module.scss';
+import Link from 'next/link';
 
 interface CertificationItem {
     url?: string;
@@ -75,8 +76,10 @@ export const CertificationGrid: React.FC<CertificationGridProps> = ({
     return (
         <>
             <Grid
-                columns={certifications.length === 1 ? 1 :
-                    certifications.length === 2 ? 2 : 3}
+                columns={
+                    certifications.length === 1 ? 1 :
+                    certifications.length === 2 ? 2 : 3
+                }
                 tabletColumns={certifications.length === 1 ? 1 : 2}
                 mobileColumns={1}
                 gap="24"
@@ -90,7 +93,7 @@ export const CertificationGrid: React.FC<CertificationGridProps> = ({
                     return (
                         <Card
                             key={`cert-${index}`}
-                            href={cert.url || undefined}
+                            // href={cert.url || undefined}
                             direction="column"
                             fillWidth
                             padding="l"
@@ -98,38 +101,50 @@ export const CertificationGrid: React.FC<CertificationGridProps> = ({
                             radius="xl"
                             border="neutral-alpha-medium"
                             className={styles.certification__card}
-                        >                            <div className={styles.certification__image_container}>
-                                <div className={styles.certification__image}>                                    <SmartImage
-                                    isLoading={cert.image ? false : true}
-                                    src={cert.image || `${baseURL}/og?title=${encodeURIComponent(cert.name)}`}
-                                    alt={cert.name}
-                                    aspectRatio="4/3"
-                                    radius="xl-8"
-                                    objectFit="fill"
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        borderRadius: '24px',
-                                        overflow: 'hidden'
-                                    }}
-                                />
+                        >
+                            <div className={styles.certification__image_container}>
+                                <div className={styles.certification__image}>
+                                    <SmartImage
+                                        isLoading={cert.image ? false : true}
+                                        src={cert.image || `${baseURL}/og?title=${encodeURIComponent(cert.name)}`}
+                                        alt={cert.name}
+                                        aspectRatio="4/3"
+                                        radius="xl-8"
+                                        objectFit="fill"
+                                        enlarge
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            borderRadius: '24px',
+                                            overflow: 'hidden'
+                                        }}
+                                    />
                                 </div>
                             </div>
                             <Column gap="s" fillWidth className={styles.certification__content}>
                                 <div className={styles.certification__title_wrapper}>
-                                    <Text
-                                        variant="heading-strong-m"
-                                        align="center"
-                                        className={styles.certification__title}
-                                        onMouseEnter={(e) => {
-                                            if (titleData.isTruncated) {
-                                                showTooltip(cert.name, e.currentTarget as HTMLElement);
-                                            }
-                                        }}
-                                        onMouseLeave={hideTooltip}
-                                    >
-                                        🏆 {titleData.truncated}
-                                    </Text>
+                                    {/* <Row gap='0' align="justify"> */}
+                                        <Text
+                                            variant="heading-strong-m"
+                                            align="center"
+                                            wrap="balance"
+                                            className={styles.certification__title}
+                                            onMouseEnter={(e) => {
+                                                if (titleData.isTruncated) {
+                                                    showTooltip(cert.name, e.currentTarget as HTMLElement);
+                                                }
+                                            }}
+                                            onMouseLeave={hideTooltip}
+                                        >
+                                            {/* <Icon
+                                                align="center"
+                                                center
+                                                size="m"
+                                                name="certificate"
+                                            /> */}
+                                            {titleData.truncated}
+                                        </Text>
+                                    {/* </Row> */}
                                 </div>
                                 <div className={styles.certification__issuer_wrapper}>
                                     <Text
@@ -144,7 +159,9 @@ export const CertificationGrid: React.FC<CertificationGridProps> = ({
                                         }}
                                         onMouseLeave={hideTooltip}
                                     >
-                                        {issuerData.truncated}
+                                        <Link href={cert.url ||'#'} target="_blank" rel="noopener noreferrer">
+                                            {issuerData.truncated}
+                                        </Link>
                                     </Text>
                                 </div>
                             </Column>

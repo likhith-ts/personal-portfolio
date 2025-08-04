@@ -4,7 +4,7 @@ export { Mailchimp } from "@/components/Mailchimp";
 export { ProjectCard } from "@/components/ProjectCard";
 export { ContributionCard } from "@/components/ContributionCard";
 export { ContributionCarousel } from "@/components/ContributionCarousel";
-export { CertificationGrid } from "@/components/CertificationGrid";
+export { CertificationGrid } from "@/components/others/CertificationGrid";
 export { HeadingLink } from "@/components/HeadingLink";
 export { RouteGuard } from "@/components/RouteGuard";
 export { RenderController } from "@/components/RenderController";

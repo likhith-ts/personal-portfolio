@@ -15,6 +15,8 @@ import {
 } from "@/once-ui/components";
 import { baseURL } from "@/app/resources";
 import TableOfContents from "@/components/about/TableOfContents";
+import Timeline from "@/components/about/Timeline";
+import { transformToTimelineEntries } from "@/components/about/timelineUtils";
 import styles from "@/components/about/about.module.scss";
 import { person, about, social } from "@/app/resources/content";
 import React from "react";
@@ -32,6 +34,9 @@ export async function generateMetadata() {
 }
 
 export default function About() {
+  // Transform work and studies data into timeline entries
+  const timelineEntries = transformToTimelineEntries(about)
+
   const structure = [
     {
       title: about.intro.title,
@@ -39,19 +44,14 @@ export default function About() {
       items: [],
     },
     {
-      title: about.work.title,
-      display: about.work.display,
-      items: about.work.experiences.map((experience) => experience.company),
-    },
-    {
-      title: about.studies.title,
-      display: about.studies.display,
-      items: about.studies.institutions.map((institution) => institution.name),
+      title: "Experience", // Combined section title
+      display: about.work.display || about.studies.display,
+      items: [], // No sub-items needed since we use Timeline component
     },
     {
       title: about.technical.title,
       display: about.technical.display,
-      items: about.technical.skills.map((skill) => skill.title),
+      items: about.technical.skills.map((skill, index) => `skill-${skill.title}-${index}`),
     },
   ];
   return (
@@ -81,7 +81,7 @@ export default function About() {
           <TableOfContents structure={structure} about={about} />
         </Column>
       )}
-      <Flex fillWidth mobileDirection="column" horizontal="center">
+      <Flex fillWidth align="justify" mobileDirection="column" horizontal="center">
         {about.avatar.display && (
           <Column
             className={styles.avatar}
@@ -117,7 +117,7 @@ export default function About() {
             fillWidth
             minHeight="160"
             vertical="center"
-            marginBottom="32"
+            marginBottom="16"
           >
             <Flex gap="m" mobileDirection="column">
               {about.calendar.display && (
@@ -143,11 +143,11 @@ export default function About() {
                     variant="secondary"
                     icon="chevronRight"
                   />
-              
+
                 </Flex>
               )}
               {about.resume.display && (
-               <ResumeViewer className={styles.blockAlign} />
+                <ResumeViewer className={styles.blockAlign} />
               )}
             </Flex>
             <Heading className={styles.textAlign} variant="display-strong-xl">
@@ -169,30 +169,28 @@ export default function About() {
             </Text>
             {social.length > 0 && (
               <Flex className={styles.blockAlign} paddingTop="20" paddingBottom="8" gap="8" wrap horizontal="center" fitWidth data-border="rounded">
-                {social.map(
-                  (item) =>
-                    item.link && (
-                      <React.Fragment key={item.name}>
-                        <Button
-                          className="s-flex-hide"
-                          key={item.name}
-                          href={item.link}
-                          prefixIcon={item.icon}
-                          label={item.name}
-                          size="s"
-                          variant="secondary"
-                        />
-                        <IconButton
-                          className="s-flex-show"
-                          size="l"
-                          key={`${item.name}-icon`}
-                          href={item.link}
-                          icon={item.icon}
-                          variant="secondary"
-                        />
-                      </React.Fragment>
-                    ),
-                )}
+                {social.map((item) => {
+                  if (!item.link) return null;
+                  return (
+                    <React.Fragment key={`social-${item.name}`}>
+                      <Button
+                        className="s-flex-hide"
+                        href={item.link}
+                        prefixIcon={item.icon}
+                        label={item.name}
+                        size="s"
+                        variant="secondary"
+                      />
+                      <IconButton
+                        className="s-flex-show"
+                        size="l"
+                        href={item.link}
+                        icon={item.icon}
+                        variant="secondary"
+                      />
+                    </React.Fragment>
+                  );
+                })}
               </Flex>
             )}
           </Column>
@@ -203,89 +201,15 @@ export default function About() {
             </Column>
           )}
 
-          {about.work.display && (
+          {/* Combined Experience Timeline */}
+          {(about.work.display || about.studies.display) && (
             <>
-              <Heading as="h2" id={about.work.title} variant="display-strong-s" marginBottom="m">
-                <Icon name="work" size="l" />
-                <Text> {about.work.title}</Text>
+              <Heading as="h2" id="Experience" variant="display-strong-s" marginBottom="m">
+                <Icon name="calendar" size="l" />
+                <Text> Experience</Text>
               </Heading>
-              <Column fillWidth gap="l" marginBottom="48">
-                {about.work.experiences.map((experience, index) => (
-                  <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
-                    <Flex fillWidth horizontal="space-between" vertical="end" marginBottom="4">
-                      <Text id={experience.company} variant="heading-strong-l">
-                        {experience.company}
-                      </Text>
-                      <Text variant="heading-default-xs" onBackground="neutral-weak">
-                        {experience.timeframe}
-                      </Text>
-                    </Flex>
-                    <Text variant="body-default-s" onBackground="brand-weak" marginBottom="m">
-                      {experience.role}
-                    </Text>
-                    <Column as="ul" gap="16">
-                      {experience.achievements.map((achievement: JSX.Element, index: number) => (
-                        <Text
-                          as="li"
-                          variant="body-default-m"
-                          key={`${experience.company}-${index}`}
-                        >
-                          {achievement}
-                        </Text>
-                      ))}
-                    </Column>
-                    {experience.images.length > 0 && (
-                      <Flex fillWidth paddingTop="m" paddingLeft="40" wrap>
-                        {experience.images.map((image, index) => (
-                          <Flex
-                            key={index}
-                            border="neutral-medium"
-                            radius="m"
-                            //@ts-ignore
-                            minWidth={image.width}
-                            //@ts-ignore
-                            height={image.height}
-                          >
-                            <SmartImage
-                              enlarge
-                              radius="m"
-                              //@ts-ignore
-                              sizes={image.width.toString()}
-                              //@ts-ignore
-                              alt={image.alt}
-                              //@ts-ignore
-                              src={image.src}
-                            />
-                          </Flex>
-                        ))}
-                      </Flex>
-                    )}
-                  </Column>
-                ))}
-              </Column>
-            </>
-          )}
-
-          {about.studies.display && (
-            <>
-              <Heading as="h2" id={about.studies.title} variant="display-strong-s" marginBottom="m">
-              <Icon name="academicCap" size="l" />
-               <Text> {about.studies.title}</Text>
-              </Heading>
-              <Column fillWidth gap="l" marginBottom="48">
-                {about.studies.institutions.map((institution, index) => (
-                  <Column key={`${institution.name}-${index}`} fillWidth gap="4">
-                    <Text id={institution.name} variant="heading-strong-l">
-                      {institution.name}
-                    </Text>
-                    <Text variant="heading-default-xs" onBackground="neutral-weak">
-                      {institution.description}
-                    </Text>
-                    <Text variant="heading-default-xs" onBackground="neutral-weak">
-                      {institution.year}
-                    </Text>
-                  </Column>
-                ))}
+              <Column marginBottom="48">
+                <Timeline entries={timelineEntries} />
               </Column>
             </>
           )}
@@ -303,16 +227,16 @@ export default function About() {
               </Heading>
               <Column fillWidth gap="l">
                 {about.technical.skills.map((skill, index) => (
-                  <Column key={`${skill}-${index}`} fillWidth gap="4">
+                  <Column key={`skill-${index}-${skill.title}`} fillWidth gap="4">
                     <Text variant="heading-strong-l">{skill.title}</Text>
-                    <Text variant="body-default-m" onBackground="neutral-weak">
+                    <Text variant="body-default-m" onBackground="neutral-medium">
                       {skill.description}
                     </Text>
                     {skill.images && skill.images.length > 0 && (
                       <Flex fillWidth paddingTop="m" gap="12" wrap>
-                        {skill.images.map((image, index) => (
+                        {skill.images.map((image, imgIndex) => (
                           <Flex
-                            key={index}
+                            key={`skill-${index}-image-${imgIndex}`}
                             border="neutral-medium"
                             radius="m"
                             //@ts-ignore

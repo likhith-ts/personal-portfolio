@@ -56,13 +56,14 @@ export default function Home() {
               className="hero-glassmorphism"
               style={{
                 position: "relative",
-                backdropFilter: "blur(2px)",
+                backdropFilter: "blur(3px)",
                 backgroundColor: "rgba(9, 137, 85, 0.1)",
                 borderRadius: "24px",
                 border: "1px solid rgba(255, 255, 255, 0.12)",
                 boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
                 padding: "32px",
                 overflow: "hidden",
+                width: "100%",
                 zIndex: 1,
               }}
             >
@@ -82,18 +83,25 @@ export default function Home() {
                       zIndex: 3,
                     }}
                   >
-                    {home.headline}
+                    {/* {home.headline} */}
+                    <ResponsiveText
+                      desktopText={home.headline}
+                      mobileText={<>Welcome!</>}
+                    />
                   </div>
                 </Heading>
               </RevealFx>
               <RevealFx translateY="8" delay={0.2} fillWidth horizontal="center" paddingBottom="24">
-                {/* <Text align="justify" paddingX="24" wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
-                  {home.subline}
-                </Text> */}
-                <ResponsiveText 
-                    desktopText={home.subline} 
-                    mobileText="Hey there, I'm Likhith, an AI engineer and developer" 
-                  />
+                <Column>
+                  <Text align="justify" paddingX="24" wrap="pretty" onBackground="neutral-medium" variant="heading-default-xl">
+                    {/* {home.subline} */}
+                  <ResponsiveText
+                      desktopText={home.subline.desktop.content}
+                      mobileText={home.subline.mobile.content}
+                      // mobileText="22 – Software Engineering Artificial Intelligence"
+                    />
+                  </Text>
+                </Column>
               </RevealFx>
               <RevealFx delay={0.4} horizontal="center">
                 <Button

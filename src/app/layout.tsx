@@ -1,8 +1,8 @@
 import "@/once-ui/styles/index.scss";
 import "@/once-ui/tokens/index.scss";
-import "./cursor-global.css";
+// import "./cursor-global.css";
 import classNames from "classnames";
-import { Footer, Header, RouteGuard, /* DebugControls */ } from "@/components";
+import { Footer, Header, RouteGuard } from "@/components";
 import { baseURL, /* effects, */ style, font, home } from "@/app/resources";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
@@ -14,6 +14,8 @@ import { WelcomeLoadingScreen } from "@/components/SimpleEnhancedWelcomeScreen";
 import { RenderController } from "@/components/RenderController";
 import { MainContentWrapper } from "@/components/MainContentWrapper";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
+import { DebugProvider } from "@/components/DebugProvider";
+import { ConditionalDebugControls } from "@/components/ConditionalDebugControls";
 // import './globals.css';
 
 export async function generateMetadata() {
@@ -81,47 +83,48 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         </head>
         <ThemeProvider>
           <ToastProvider>
-            <RenderController>
-              <WelcomeLoadingScreen />
-              <Column
-                suppressHydrationWarning
-                style={{ minHeight: "100vh" }}
-                as="body"
-                fillWidth
-                margin="0"
-                padding="0"
-              >
-                <SmoothCursor />
-                <MainContentWrapper>
-                  {/* DebugControls for testing welcome screen */}
-                  {/* uncomment below line to use */}
-                  {/* <DebugControls /> */}
+            <DebugProvider>
+              <RenderController>
+                <WelcomeLoadingScreen />
+                <Column
+                  suppressHydrationWarning
+                  style={{ minHeight: "100vh" }}
+                  as="body"
+                  fillWidth
+                  margin="0"
+                  padding="0"
+                >
+                  <SmoothCursor />
+                  <MainContentWrapper>
+                    {/* DebugControls for testing welcome screen */}
+                    <ConditionalDebugControls />
 
-                  {/* background effects */}
-                  <BackgroundEffects />
-                  
-                  <Flex fillWidth minHeight="16" hide="s" />
-                  <Header />
-                  <Flex
-                    zIndex={0}
-                    fillWidth
-                    paddingY="l"
-                    paddingX="l"
-                    horizontal="center"
-                    flex={1}
-                  >
-                    <Flex horizontal="center" fillWidth minHeight="0">
-                      <RouteGuard>
-                        {children}
-                        <Analytics />
-                        <SpeedInsights />
-                      </RouteGuard>
+                    {/* background effects */}
+                    <BackgroundEffects />
+
+                    <Flex fillWidth minHeight="16" hide="s" />
+                    <Header />
+                    <Flex
+                      zIndex={0}
+                      fillWidth
+                      paddingY="l"
+                      paddingX="l"
+                      horizontal="center"
+                      flex={1}
+                    >
+                      <Flex horizontal="center" fillWidth minHeight="0">
+                        <RouteGuard>
+                          {children}
+                          <Analytics />
+                          <SpeedInsights />
+                        </RouteGuard>
+                      </Flex>
                     </Flex>
-                  </Flex>
-                  <Footer />
-                </MainContentWrapper>
-              </Column>
-            </RenderController>
+                    <Footer />
+                  </MainContentWrapper>
+                </Column>
+              </RenderController>
+            </DebugProvider>
           </ToastProvider>
         </ThemeProvider>
       </Flex>

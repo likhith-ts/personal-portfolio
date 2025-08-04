@@ -62,7 +62,7 @@ export const HeroBackground = () => {
   let top= '-4.5%';
   // Don't render on mobile
   if (isMobile) {
-    networkLayers = [5, 10, 10, 10, 5];
+    networkLayers = [5, 8, 8, 5];
     top = '-5%';
     // return (
     //   <div className="absolute inset-0 z-0"

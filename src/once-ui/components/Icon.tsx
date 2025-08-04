@@ -84,6 +84,7 @@ const Icon = forwardRef<HTMLDivElement, IconProps>(
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
         {...rest}
+        center
       >
         <IconComponent />
         {tooltip && isTooltipVisible && (

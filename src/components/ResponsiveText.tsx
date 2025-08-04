@@ -10,7 +10,7 @@ interface ResponsiveTextProps {
 
 export const ResponsiveText = ({ desktopText, mobileText }: ResponsiveTextProps) => {
   return (
-    <Text align="justify" paddingX="24" wrap="balance" onBackground="neutral-medium" variant="heading-default-xl">
+    <>
       <span className="desktop-text">{desktopText}</span>
       <span className="mobile-text">{mobileText}</span>
       <style jsx>{`
@@ -20,15 +20,16 @@ export const ResponsiveText = ({ desktopText, mobileText }: ResponsiveTextProps)
           .desktop-text { display: none; }
           .mobile-text { 
             display: inherit; 
-            font-size: 1.2rem; /* Adjust as needed for mobile */
-            line-height: 1.5; /* Adjust for better readability */
+            // font-size: 1.2rem; /* Adjust as needed for mobile */
+            // line-height: 1.5; /* Adjust for better readability */
             /* align everything to center */
             text-align: center !important;
             align-items: center !important;
             justify-content: center !important;
+            // color: var(--once-ui-text-color); /* Use your theme's text color */
           }
         }
       `}</style>
-    </Text>
+    </>
   );
 }

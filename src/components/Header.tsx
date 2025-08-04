@@ -100,14 +100,14 @@ export const Header = () => {
                 <>
                   <ToggleButton
                     className="s-flex-hide"
-                    prefixIcon="grid"
+                    prefixIcon="document"
                     href="/work"
                     label={work.label}
                     selected={pathname.startsWith("/work")}
                   />
                   <ToggleButton
                     className="s-flex-show"
-                    prefixIcon="grid"
+                    prefixIcon="document"
                     href="/work"
                     selected={pathname.startsWith("/work")}
                   />
@@ -149,7 +149,7 @@ export const Header = () => {
               )}
               {routes["/others"] && (
                 <>
-                  <Line background="neutral-alpha-medium" vert maxHeight="24" />
+                  {/* <Line background="neutral-alpha-medium" vert maxHeight="24" /> */}
                   <ToggleButton
                   className="s-flex-hide"
                   prefixIcon="others"
@@ -181,6 +181,7 @@ export const Header = () => {
                   className="s-flex-show"
                   prefixIcon="others"
                   href="/others"
+                  label={others.label}
                   selected={pathname.startsWith("/others")}
                   />
                 </>

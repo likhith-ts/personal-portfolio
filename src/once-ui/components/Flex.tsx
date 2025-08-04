@@ -13,6 +13,7 @@ import {
   StyleProps,
 } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import React from "react";
 
 interface ComponentProps
   extends FlexProps,
@@ -309,10 +310,10 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
       ...style,
     };
 
-    return (
-      <Component ref={ref} className={classes} style={combinedStyle} {...rest}>
-        {children}
-      </Component>
+    return React.createElement(
+      Component,
+      { ref, className: classes, style: combinedStyle, ...rest },
+      children
     );
   },
 );

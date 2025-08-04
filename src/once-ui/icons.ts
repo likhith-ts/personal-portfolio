@@ -43,7 +43,7 @@ import {
 import { FaDiscord, FaGithub, FaLinkedin, FaX } from "react-icons/fa6";
 import { BiSolidLike, BiLinkExternal } from "react-icons/bi";
 import { IoIosChatboxes } from "react-icons/io";
-import { SiLeetcode } from "react-icons/si";
+import { SiLeetcode, SiHuggingface } from "react-icons/si";
 import { GiAchievement } from "react-icons/gi";
 import { MdWork } from "react-icons/md";
 import { FaTools, FaFileDownload } from "react-icons/fa";
@@ -90,6 +90,7 @@ export const iconLibrary: Record<string, IconType> = {
   like:BiSolidLike,
   chat: IoIosChatboxes,
   leetcode: SiLeetcode,
+  huggingFace: SiHuggingface,
   certificate: PiCertificate,
   others: PiDotsNine ,
   academicCap: HiAcademicCap,

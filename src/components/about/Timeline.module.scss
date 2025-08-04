@@ -1,0 +1,189 @@
+.timeline {
+  position: relative;
+}
+
+.timelineItem {
+  position: relative;
+  
+  /* Fix for SmartImage enlarge z-index issues */
+  &:has([data-enlarged="true"]) {
+    z-index: 9999;
+    position: relative;
+  }
+  
+  /* Alternative fix - when any image inside is being hovered/enlarged */
+  &:has(img:hover),
+  &:has([role="dialog"]),
+  &:has(.enlarged) {
+    z-index: 9999;
+  }
+}
+
+.timelineLine {
+  position: relative;
+  min-width: 40px;
+//   padding-right: var(--static-space-16);
+}
+
+.timelineDot {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  border: 2px solid var(--brand-medium);
+  background: var(--background-default);
+  color: var(--brand-medium);
+  transition: all 0.2s ease;
+  
+  /* Force perfect centering - override any component styles */
+  > * {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Target the SVG directly for absolute centering */
+  svg {
+    position: relative;
+    display: block;
+    margin: 0;
+  }
+}
+
+.timelineDot.academic {
+  border-color: var(--accent-medium);
+  color: var(--accent-medium);
+}
+
+.timelineDot.professional {
+  border-color: var(--brand-medium);
+  color: var(--brand-medium);
+}
+
+.timelineDot:hover {
+  scale: 1.1;
+  box-shadow: 0 4px 12px var(--brand-alpha-medium);
+}
+
+.timelineDot.academic:hover {
+  box-shadow: 0 4px 12px var(--accent-alpha-medium);
+}
+
+.timelineConnector {
+  position: absolute;
+  top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: calc(100% + var(--static-space-12));
+  background: linear-gradient(
+    to bottom,
+    var(--neutral-alpha-medium) 0%,
+    var(--neutral-alpha-weak) 50%,
+    var(--neutral-alpha-medium) 100%
+  );
+  z-index: 1;
+}
+
+.timelineContent {
+  padding-bottom: var(--static-space-2);
+  flex: 1;
+}
+
+.timeframe {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Title hover effects */
+.timelineTitle {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  
+  &:hover {
+    transform: scale(1.05);
+    color: var(--brand-strong);
+    text-shadow: 0 0 8px var(--brand-alpha-medium), 0 0 16px var(--brand-alpha-weak);
+    filter: drop-shadow(0 0 4px var(--brand-alpha-medium));
+  }
+}
+
+.timelineTitle.academic:hover {
+  color: var(--accent-strong);
+  text-shadow: 0 0 8px var(--accent-alpha-medium), 0 0 16px var(--accent-alpha-weak);
+  filter: drop-shadow(0 0 4px var(--accent-alpha-medium));
+}
+
+/* Image container z-index fix */
+.imageContainer {
+  position: relative;
+  
+  /* When SmartImage is enlarged, ensure parent timeline item gets higher z-index */
+  &:hover {
+    z-index: inherit;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .timelineLine {
+    min-width: 32px;
+    // padding-right: var(--static-space-12);
+  }
+  
+  .timelineDot {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .timelineConnector {
+    top: 28px;
+    height: calc(100% + var(--static-space-12));
+  }
+  
+  .timeframe {
+    margin-top: var(--static-space-4);
+    align-self: flex-start;
+
+    @media screen and (max-width: 480px) {
+      // margin-top: var(--static-space-8);
+      margin-top: auto;
+    }
+  }
+  
+  /* Stack timeframe below title/content on mobile instead of side-by-side */
+  .timelineContent {
+    .timelineHeader {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--static-space-8);
+    }
+  }
+}
+
+/* Animation for entries */
+.timelineItem {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.timelineItem:nth-child(1) { animation-delay: 0.1s; }
+.timelineItem:nth-child(2) { animation-delay: 0.2s; }
+.timelineItem:nth-child(3) { animation-delay: 0.3s; }
+.timelineItem:nth-child(4) { animation-delay: 0.4s; }
+.timelineItem:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
