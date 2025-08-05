@@ -6,7 +6,6 @@ import { baseURL } from '../resources';
 import { Badge, Column, Flex, Row, Heading, Text, RevealFx, Icon } from '@/once-ui/components';
 import { ContributionCarousel, CertificationGrid, ContributionCard } from '@/components';
 import styles from './Others.module.scss';
-
 export async function generateMetadata() {
     return Meta.generate({
         title: others.title,
@@ -18,7 +17,8 @@ export async function generateMetadata() {
 }
 
 export default function page() {
-
+    // Define the structure for the Table of Contents
+    // This can be customized based on the sections you want to include
     const structure = [
         {
             title: "Achievements",
@@ -38,7 +38,7 @@ export default function page() {
     ];
     return (
         <Column maxWidth="m">
-        <div className={styles.page}>
+            <div className={styles.page}>
                 <Schema
                     as="webPage"
                     baseURL={baseURL}
@@ -64,7 +64,8 @@ export default function page() {
                         <TableOfContents structure={structure} about={others} />
                     </Column>
                 )}
-                <Flex className={styles.otherContainer} fillWidth direction="column" mobileDirection="column" horizontal="center">
+                <Flex className={styles.otherContainer} 
+                fillWidth direction="column" mobileDirection="column" horizontal="center">
                     {/* Achievements Section */}
                     <RevealFx delay={0.2} translateY={0.5}>
                         <section className={`${styles.section} ${styles.achievements}`} id={others.achievements.title}>
@@ -174,8 +175,8 @@ export default function page() {
                         </section>
                     </RevealFx>
                 </Flex>
-        </div>
-            </Column>
+            </div>
+        </Column>
     );
 }
 

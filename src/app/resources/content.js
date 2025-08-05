@@ -358,6 +358,18 @@ const others = {
         issuer: "Udemy by Jose Portilla",
         image: "https://udemy-certificate.s3.amazonaws.com/image/UC-0e0175aa-1b18-4536-9941-8d9fbe890cf5.jpg",
       },
+      {
+        url: "https://drive.google.com/drive/folders/1uBtCyG_LileYJAz4KZ1vJAHhRNGAdWnd",
+        name: "AI Internship Certificate",
+        issuer: "AIcan Automate Pvt. Ltd. & TeachNook",
+        image: "/images/certificates/AIcan.png",
+      },
+      {
+        url: "https://certificate.iirs.gov.in/checkstatus.php?uid=814a9a125df52b50187a4f941ae1d7d8&enm=20231131754916",
+        name: "Geodata Processing using Python",
+        issuer: "ISRO & IIRS, Dehradun",
+        image: "/images/certificates/geodata.jpg",
+      },
     ],
   },
   contributions: {

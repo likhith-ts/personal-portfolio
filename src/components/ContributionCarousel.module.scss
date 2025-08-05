@@ -3,184 +3,92 @@
   width: 100%;
   margin: 0 auto;
   position: relative;
-  padding: 0 var(--static-space-32);
   background: transparent;
-  max-width: 100%;
-  overflow: visible;
+  max-width: 1200px;
   
   @media (max-width: 768px) {
-    padding: 0 var(--static-space-16);
+    max-width: 100%;
+  }
+}
+
+.carousel__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--static-space-24);
+  position: relative;
+  width: 100%;
+  
+  @media (min-width: 1025px) {
+    gap: var(--static-space-32); // Larger gap for desktop
+  }
+  
+  @media (max-width: 768px) {
+    gap: var(--static-space-16);
   }
 
   @media (max-width: 480px) {
-    padding: 0 var(--static-space-8);
+    gap: var(--static-space-12);
   }
 }
 
 .carousel__viewport {
-  overflow: visible;
+  overflow: hidden;
   border-radius: var(--radius-xl);
   position: relative;
-  width: 100%;
+  width: 25rem; // Increased base width
   cursor: grab;
-  
+  margin: 0;
+  justify-content: center;
+  align-items: center;
+
+  // position: relative; 
+
   &:active {
     cursor: grabbing;
   }
-  
-  // Subtle gradient masks for smooth edges
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 40px;
-    z-index: 10;
-    pointer-events: none;
-  }
-  
-  &::before {
-    left: 0;
-    background: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.1) 0%,
-      transparent 100%
-    );
-  }
-  
-  &::after {
-    right: 0;
-    background: linear-gradient(
-      to left,
-      rgba(0, 0, 0, 0.1) 0%,
-      transparent 100%
-    );
-  }
 
-  @media (max-width: 768px) {
-    &::before,
-    &::after {
-      width: 20px;
-    }
-  }
+  // @media (min-width: 769px) and (max-width: 1024px) {
+  //   width: 480px; // Tablet size
+  // }
+
+  // @media (min-width: 1025px) {
+  //   width: 550px; // Desktop size
+  // }
+
+  // @media (max-width: 768px) {
+  //   width: 450px;
+  // }
+
+  // @media (max-width: 600px) {
+  //   width: 400px; // Additional breakpoint for smaller tablets
+  // }
+
+  // @media (max-width: 480px) {
+  //   width: 350px;
+  // }
 }
 
 .carousel__container {
   display: flex;
-  gap: var(--static-space-16);
   touch-action: pan-x pinch-zoom;
-  align-items: stretch;
   backface-visibility: hidden;
-  transform-style: preserve-3d;
-  
-  @media (max-width: 768px) {
-    gap: var(--static-space-12);
-  }
-  
-  @media (max-width: 480px) {
-    gap: var(--static-space-8);
-  }
+  width: 100%; // Ensure full width
 }
 
 .carousel__slide {
-  flex: 0 0 auto;
-  width: 300px;
+  flex: 0 0 100%; // Each slide takes full container width
   min-width: 0;
   display: flex;
   justify-content: center;
-  align-items: stretch;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  opacity: 0.6;
-  transform: scale(0.85);
+  align-items: center;
   position: relative;
-  backface-visibility: hidden;
-  will-change: transform, opacity;
-
-  // Netflix-style focus effect
-  &:hover {
-    opacity: 1;
-    transform: scale(1.05);
-    z-index: 20;
-    transition-duration: 0.2s;
-  }
-  
-  // Active slide styling
-  &--active {
-    opacity: 1;
-    transform: scale(1);
-    z-index: 15;
-  }
-  
-  // In view slide styling
-  &--in-view {
-    opacity: 0.8;
-    transform: scale(0.95);
-  }  // Active slide takes precedence over in-view
-  &--active.carousel__slide--in-view {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  @media (min-width: 768px) {
-    width: 320px;
-  }
-
-  @media (min-width: 1024px) {
-    width: 340px;
-  }
-
-  @media (min-width: 1200px) {
-    width: 360px;
-  }
-    @media (max-width: 768px) {
-    width: 280px;
-    transform: scale(0.9);
-    
-    &:hover {
-      transform: scale(1.02);
-    }
-      &--active {
-      transform: scale(1);
-    }
-    
-    &--in-view {
-      transform: scale(0.95);
-    }
-    
-    &--active.carousel__slide--in-view {
-      transform: scale(1);
-    }
-  }
-
-  @media (max-width: 480px) {
-    width: calc(100vw - 60px);
-    max-width: 280px;
-    transform: scale(0.95);
-    
-    &:hover {
-      transform: scale(1);
-    }
-    
-    &--active {
-      transform: scale(1);
-    }
-    
-    &--in-view {
-      transform: scale(0.98);
-    }
-    
-    &--active.carousel__slide--in-view {
-      transform: scale(1);
-    }
-  }
 }
 
 .contribution__card {
-  width: 100%;
-  max-width: 400px;
-  min-height: 460px; // Increased for uniform sizing
-  height: 460px; // Fixed height for consistency
+  width: 25rem; // Base width to match viewport
+  min-height: 460px;
+  height: 460px;
   display: flex;
   flex-direction: column;
   background: rgba(255, 255, 255, 0.05);
@@ -191,24 +99,42 @@
     0 4px 16px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  margin: 0 auto;
+  margin: 0;
   position: relative;
   overflow: hidden;
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
-  transform: translateZ(0); // Force hardware acceleration
+  transform: translateZ(0);
   will-change: transform, background-color, border-color, box-shadow;
 
+  @media (min-width: 769px) and (max-width: 1024px) {
+    width: 480px;
+    min-height: 480px;
+    height: 480px;
+  }
+
+  @media (min-width: 1025px) {
+    width: 550px;
+    min-height: 500px;
+    height: 500px;
+  }
+
   @media (max-width: 768px) {
+    width: 450px;
     min-height: 420px;
     height: 420px;
-    max-width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    width: 400px; // Additional breakpoint for smaller tablets
+    min-height: 400px;
+    height: 400px;
   }
 
   @media (max-width: 480px) {
+    width: 350px;
     min-height: 380px;
     height: 380px;
-    max-width: 100%;
   }
 
   &::before {
@@ -500,16 +426,16 @@
   flex-direction: column;
   align-items: center;
   margin-top: var(--static-space-32);
-  gap: var(--static-space-24);
+  gap: 0; // Remove gap since we only have dots now
 
   @media (max-width: 767px) {
-    gap: var(--static-space-20);
+    gap: 0;
     margin-top: var(--static-space-24);
   }
 }
 
 .carousel__buttons {
-  display: flex;
+  display: none; // Hide the old button container
   gap: var(--static-space-16);
   align-items: center;
 }
@@ -561,13 +487,31 @@
   }
 }
 
+// Side navigation buttons
+.carousel__button_left,
+.carousel__button_right {
+  flex-shrink: 0;
+  width: var(--static-space-56);
+  height: var(--static-space-56);
+
+  @media (min-width: 1025px) {
+    width: var(--static-space-64); // Larger buttons for desktop
+    height: var(--static-space-64);
+  }
+
+  @media (max-width: 480px) {
+    width: var(--static-space-40);
+    height: var(--static-space-40);
+  }
+}
+
 .carousel__dots {
   display: flex;
-  gap: var(--static-space-12);
+  gap: 12px;
   align-items: center;
-  padding: var(--static-space-12) var(--static-space-16);
+  padding: 12px 16px;
   background: rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-full);
+  border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
@@ -577,54 +521,93 @@
 }
 
 .carousel__dot {
-  width: var(--static-space-40);
-  height: var(--static-space-40);
+  width: 40px;
+  height: 40px;
   border: none;
   background: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-full);
+  border-radius: 50%;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  
   &::after {
     content: '';
-    width: var(--static-space-8);
-    height: var(--static-space-8);
-    border-radius: var(--radius-full);
-    background: rgba(255, 255, 255, 0.3);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  &:hover::after {
-    background: rgba(255, 255, 255, 0.6);
-    transform: scale(1.5);
-  }
-
-  &--selected {
-    background: rgba(255, 255, 255, 0.15);
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
     
     &::after {
       background: rgba(255, 255, 255, 0.8);
-      transform: scale(1.8);
-      width: var(--static-space-16);
-      border-radius: var(--radius-s);
+      transform: scale(1.5);
+    }
+  }
+
+  &--selected {
+    background: var(--brand-alpha-medium);
+    
+    &::after {
+      background: var(--function-brand-800);
+      // Remove transform scale and width changes - keep original size
     }
   }
 
   @media (max-width: 480px) {
-    width: var(--static-space-32);
-    height: var(--static-space-32);
+    width: 32px;
+    height: 32px;
 
     &::after {
-      width: var(--static-space-6);
-      height: var(--static-space-6);
+      width: 6px;
+      height: 6px;
     }
     
     &--selected::after {
-      width: var(--static-space-12);
+      width: 6px; // Keep mobile dots same size when selected
+    }
+  }
+}
+
+// Light mode overrides - using data-theme selector
+[data-theme="light"] .carousel__dots {
+  background: rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+[data-theme="light"] .carousel__dot {
+  &::after {
+    background: rgba(0, 0, 0, 0.7) !important;
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.1) !important;
+    
+    &::after {
+      background: rgba(0, 0, 0, 0.9) !important;
+    }
+  }
+
+  &--selected {
+    background: var(--function-brand-800) !important;
+    
+    &::after {
+      background: var(--function-brand-300) !important;
+      // Keep original size in light mode too
+      width: 10px !important;
+      height: 10px !important;
     }
   }
 }
@@ -663,35 +646,5 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-// Responsive adjustments
-@media (max-width: 480px) {
-  .carousel {
-    padding: 0 var(--static-space-4);
-  }
-  
-  .carousel__container {
-    gap: var(--static-space-12);
-    margin-left: calc(var(--static-space-12) * -1);
-  }
-
-  .carousel__slide {
-    padding-left: var(--static-space-12);
-    flex: 0 0 85%;
-  }
-
-  .contribution__card {
-    max-width: 300px;
-    min-height: 360px;
-  }
-  
-  .contribution__header {
-    padding: var(--static-space-16) var(--static-space-16) var(--static-space-12);
-  }
-  
-  .contribution__contributors,
-  .contribution__body,
-  .contribution__footer {
-    padding: var(--static-space-16);
-  }
-}
+// Note: Responsive adjustments are now handled within individual component styles above
 
