@@ -96,7 +96,7 @@ export const EnhancedContributionCard: React.FC<EnhancedContributionCardProps> =
                     {/* Project Badge */}
                     <div className={styles.contribution__project_badge}>
                         <Icon name={contribution.icon || "heart"} size="l" />
-                        <Text variant="label-strong-xs" className={styles.contribution__project_name}>
+                        <Text variant="label-strong-xs" paddingX="8" className={styles.contribution__project_name}>
                             {contribution.project}
                         </Text>
                     </div>
@@ -158,22 +158,27 @@ export const EnhancedContributionCard: React.FC<EnhancedContributionCardProps> =
                     href={contribution.link}
                     variant="secondary"
                     size="s"
-                    fillWidth
+                    id={contribution.project + "main"}
+                    // fillWidth
+                    arrowIcon
+                    prefixIcon='externalLink'
                     className={styles.contribution__main_button}
                     aria-label={`View ${contribution.project} contribution`}
                 >
                     <Flex gap="xs" vertical="center">
-                        <Icon name="externalLink" size="xs" />
-                        <Text variant="label-strong-s">View Contribution</Text>
+                        {/* <Icon name="externalLink" size="xs" /> */}
+                        <Text variant="label-strong-s">View</Text>
                     </Flex>
                 </Button>
 
                 <Button
+                    id={contribution.project + "owner"}
                     href={contribution.link}
                     variant="tertiary"
                     size="s"
                     className={styles.contribution__owner_button}
                     aria-label={`View ${contribution.owner}'s profile`}
+                    arrowIcon
                 >
                     <Flex gap="xs" vertical="center">
                         <Avatar size="xs" src={contribution.avatars[0]?.src} />

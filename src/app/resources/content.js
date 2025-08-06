@@ -377,30 +377,16 @@ const others = {
     title: "Contributions",
     items: [
       {
-        title: "Melanoma Detection Project",
-        project: "Melanoma",
+        title: "AI ppt presentation generator",
+        project: "ai_ppt_framework",
         avatars: [
-          { src: "https://avatars.githubusercontent.com/u/181699041?v=4" },
           { src: "/images/avatar.jpg" },
         ],
-        owner: "jyothi-alt",
+        owner: "likhith-ts",
         icon: "github",
-        link: "https://github.com/jyothi-alt/MELANOMA",
-        ownerLink: "https://github.com/jyothi-alt",
-        description: "A flask web app for skin cancer detection using deep learning. ",
-      },
-      {
-        title: "Melanoma Detection Project",
-        project: "Melanoma",
-        avatars: [
-          { src: "https://avatars.githubusercontent.com/u/181699041?v=4" },
-          { src: "/images/avatar.jpg" },
-        ],
-        owner: "jyothi-alt",
-        icon: "github",
-        link: "https://github.com/jyothi-alt/MELANOMA",
-        ownerLink: "https://github.com/jyothi-alt",
-        description: "A flask web app for skin cancer detection using deep learning. ",
+        link: "https://github.com/likhith-ts/ai_ppt_framework",
+        ownerLink: "https://github.com/likhith-ts",
+        description: "A Streamlit app that generates a PowerPoint presentation from a given zip file using AI.",
       },
       {
         title: "Melanoma Detection Project",
