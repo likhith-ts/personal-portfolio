@@ -50,7 +50,7 @@ export default function Home() {
             )}
             {/* Glassmorphism container - outside RevealFx to avoid filter conflicts */}
             <BackdropSafeRevealFx
-              horizontal="start"
+              horizontal="center"
               translateY="4">
             <div
               className="hero-glassmorphism"
@@ -61,7 +61,7 @@ export default function Home() {
                 borderRadius: "24px",
                 border: "1px solid rgba(255, 255, 255, 0.12)",
                 boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-                padding: "32px",
+                padding: "1.5rem",
                 overflow: "hidden",
                 width: "100%",
                 zIndex: 1,
@@ -87,13 +87,14 @@ export default function Home() {
                     <ResponsiveText
                       desktopText={home.headline}
                       mobileText={<>Welcome!</>}
+                      mobileFontSize="inherit"
                     />
                   </div>
                 </Heading>
               </RevealFx>
               <RevealFx translateY="8" delay={0.2} fillWidth horizontal="center" paddingBottom="24">
                 <Column>
-                  <Text align="justify" paddingX="24" wrap="pretty" onBackground="neutral-medium" variant="heading-default-xl">
+                  <Text align="justify" paddingX="s" wrap="pretty" onBackground="neutral-medium" variant="heading-default-xl">
                     {/* {home.subline} */}
                   <ResponsiveText
                       desktopText={home.subline.desktop.content}

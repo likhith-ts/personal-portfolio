@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 // import HeroNeuralNetwork from './NeuralNetworkHero';
-import WireframeTerrainComponent from './wireframe-terrain';
+// import WireframeTerrainComponent from './wireframe-terrain';
 import dynamic from 'next/dynamic';
 const HeroNeuralNetwork = dynamic(() => import('@/components/NeuralNetworkHero'), {
   ssr: false
@@ -16,7 +16,7 @@ export const HeroBackground = () => {
   // Initial check for mobile
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth < 768);
     };
 
     checkScreenSize();
@@ -62,7 +62,7 @@ export const HeroBackground = () => {
   let top= '-4.5%';
   // Don't render on mobile
   if (isMobile) {
-    networkLayers = [5, 8, 8, 5];
+    networkLayers = [3, 5, 5, 3];
     top = '-5%';
     // return (
     //   <div className="absolute inset-0 z-0"

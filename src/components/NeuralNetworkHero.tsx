@@ -747,11 +747,16 @@ const HeroNeuralNetwork: React.FC<HeroNeuralNetworkProps> = ({
                   y={100}
                   textAnchor="middle"
                   fill={isDarkMode ? "rgba(255, 255, 255, 0.7)" : "rgba(0, 0, 0, 0.8)"}
-                  fontSize="12"
+                  fontSize={dimensions.width <= 375 ? "8" : "12"}
                   fontFamily="monospace"
-                  fontWeight="400"
+                  fontWeight="600"
                 >
-                  {getLayerLabel(index)}({layerSize})
+                  {dimensions.width <= 320 ? 
+                    (index === 0 ? "In" : index === networkLayers.length - 1 ? "Out" : `H${index}`) :
+                    dimensions.width <= 375 ?
+                    (index === 0 ? "Input" : index === networkLayers.length - 1 ? "Output" : `H${index}`) :
+                    getLayerLabel(index)
+                  }({layerSize})
                 </text>
               </svg>
             )
