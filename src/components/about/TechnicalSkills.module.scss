@@ -1,0 +1,122 @@
+.technicalSkills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--static-space-16);
+  width: 100%;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: var(--static-space-12);
+  }
+}
+
+.skillCard {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  &.expanded {
+    .chevron {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.skillHeader {
+  transition: all 0.2s ease-in-out;
+  align-items: center !important;
+  display: flex !important;
+  text-align: left;
+  text-wrap: balance;
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.chevron {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--neutral-medium);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &.rotated {
+    transform: rotate(180deg);
+  }
+}
+
+.expandableContent {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &.show {
+    max-height: 800px; // Increased to accommodate more skills
+  }
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background-color: var(--neutral-border-weak);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--brand-background-strong);
+  border-radius: 3px;
+  position: relative;
+  width: 0%;
+  
+  // Remove the continuous shimmer animation that was making it look like loading
+  // Only show a subtle highlight on hover
+  &:hover::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+    animation: shimmer 1s ease-in-out;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .skillCard {
+    &:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+  }
+  
+  .progressBar {
+    background-color: var(--neutral-border-weak);
+  }
+  
+  .progressFill {
+    background: var(--brand-background-strong);
+  }
+}

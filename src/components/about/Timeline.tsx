@@ -107,12 +107,12 @@ const Timeline: React.FC<TimelineProps> = ({ entries, className = "" }) => {
                                     <Row>
                                         {entry.institute && (
                                             <React.Fragment key={`${entry.id}-institute`}>
-                                                <Text variant="body-default-s" onBackground="brand-weak">
-                                                    {entry.institute}
+                                                <Text variant="body-default-s" align="left" onBackground="brand-weak">
+                                                    {entry.institute}&nbsp;|&nbsp;
                                                 </Text>
-                                                <Text variant="body-default-s" onBackground="brand-weak">
+                                                {/* <Text variant="body-default-s" align="left" onBackground="brand-weak">
                                                     &ensp;|&ensp;
-                                                </Text>
+                                                </Text> */}
                                             </React.Fragment>
                                         )}
                                         {entry.subtitle && (

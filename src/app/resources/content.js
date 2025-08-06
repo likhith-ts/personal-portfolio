@@ -166,8 +166,8 @@ const about = {
       },
       {
         title: "Class XII",
-        institute: "Sunbeam CBSE School",
-        description: <>CBSE | Physics, Chemistry, Mathematics, Computer Science.</>,
+        institute: "Sunbeam School of Excellence",
+        description: <>CBSE | Physics, Chemistry, Mathematics, Computer Science (C++, MySQL).</>,
         timeframe: "2020",
         score: "Score: 88.2%",
       },
@@ -182,61 +182,88 @@ const about = {
   },
   technical: {
     display: true, // set to false to hide this section
-    title: "Technical skills",
+    title: "Technical Skills",
     skills: [
       {
-        title: "Programming:",
-        description: <>
-          <ul>
-            <br />
-            <li>Proficient in <b>Python</b> development with expertise in data science libraries & web frameworks(flask).</li>
-            <li>Expert in <b>Rust</b> & <b>C++</b> development with a focus on high-performance applications.</li>
-            <li>Other expertise: <b>JavaScript</b>, <b>TypeScript</b>, <b>SQL</b></li>
-          </ul>
-        </>,
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          // {
-          //   src: "/images/projects/project-01/cover-02.jpg",
-          //   alt: "Project image",
-          //   width: 16,
-          //   height: 9,
-          // },
-        ],
+        title: "Programming Languages",
+        icon: "code",
+        experience: "3+ years",
+        description: {
+          subtitle: "Proficient in Python, Rust, C++",
+          skills: [
+            {skill: "Python", xp: 95},
+            {skill: "C/C++", xp: 90},
+            {skill: "JavaScript", xp: 85},
+            {skill: "TypeScript", xp: 75},
+            {skill: "Rust", xp: 70},
+            {skill: "SQL", xp: 80},
+            {skill: "Bash", xp: 60},
+            {skill: "HTML", xp: 75},
+            {skill: "CSS", xp: 70},
+          ],
+        }
       },
       {
-        title: "Full Stack Development:",
-        description: <>Proficient in building next gen web & cross platform apps with <b>React</b>, <b>Next.js</b>, <b>MERN</b> and <b>Flutter</b>.</>,
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          // {
-          //   src: "/images/projects/project-01/cover-04.jpg",
-          //   alt: "Project image",
-          //   width: 16,
-          //   height: 9,
-          // },
-        ],
+        title: "Web Development",
+        icon: "web",
+        experience: "2+ years",
+        description: {
+          subtitle: "Proficient in React, Next.js, MERN, Flutter",
+          skills: [
+            {skill: "React", xp: 90},
+            {skill: "Next.js", xp: 85},
+            {skill: "MERN Stack", xp: 80},
+            {skill: "Flutter", xp: 75},
+          ],
+        }
       },
       {
-        title: " Machine Learning:",
-        description: <>Master in building state-of-art ML projects with <b>Scikit-learn</b>, <b>Pytorch</b> and <b>Tensorflow</b>.</>,
-        images: [
-
-        ],
-      },
-      {
-        title: "Artificial Intelligence",
-        description: <>Expert in Integrating & Fine-tuning AI models, LLMs with <b>Hugging Face</b> & <b>Langchain</b>.</>,
-        images: [
-
-        ],
+        title: "Data Science & AI/ML",
+        icon: "data-science",
+        experience: "2+ years",
+        description: {
+          subtitle: "Expert in Hugging Face, Langchain",
+          skills: [
+            // generative ai, natural language processing, machine learning, deep learning
+            {skill: "Natural Language Processing", xp: 85},
+            {skill: "Machine Learning", xp: 90},
+            {skill: "Computer Vision", xp: 75},
+            {skill: "Data Analytics", xp: 80},
+            {skill: "Generative AI", xp: 80},
+          ],
+        }
       },
       {
         title: "Cloud/DevOps",
-        description: <>Experience with <b>Google Cloud Platform</b> and <b>Colab</b>, basic knowledge of <b>AWS</b>, proficient in version control with <b>Git</b>, and familiar with containerization using <b>Docker</b>.</>,
-        images: [
-
-        ],
+        icon: "cloud",
+        experience: "1+ years",
+        description: {
+          subtitle: "Experience with GCP, Colab, AWS, Git, Docker",
+          skills: [
+            {skill: "GCP", xp: 80},
+            {skill: "Colab", xp: 75},
+            {skill: "AWS", xp: 70},
+            {skill: "Git", xp: 85},
+            {skill: "Docker", xp: 70},
+          ],
+        }
+      },
+      {
+        title: "Frameworks & Libraries",
+        icon: "tools",
+        experience: "2+ years",
+        description: {
+          subtitle: "Expert in Scikit-learn, Pytorch, Tensorflow",
+          skills: [
+            {skill: "Scikit-learn", xp: 90},
+            {skill: "Pytorch", xp: 85},
+            {skill: "Tensorflow", xp: 80},
+            {skill: "Hugging Face", xp: 90},
+            {skill: "Langchain", xp: 85},
+            {skill: "Streamlit", xp: 80},
+            {skill: "Pandas", xp: 90},
+          ],
+        }
       },
     ],
   },
@@ -385,6 +412,7 @@ const others = {
         owner: "likhith-ts",
         icon: "github",
         link: "https://github.com/likhith-ts/ai_ppt_framework",
+        repoLink: "https://github.com/likhith-ts/ai_ppt_framework",
         ownerLink: "https://github.com/likhith-ts",
         description: "A Streamlit app that generates a PowerPoint presentation from a given zip file using AI.",
       },
@@ -398,6 +426,7 @@ const others = {
         owner: "jyothi-alt",
         icon: "github",
         link: "https://github.com/jyothi-alt/MELANOMA",
+        repoLink: "https://github.com/jyothi-alt/MELANOMA",
         ownerLink: "https://github.com/jyothi-alt",
         description: "A flask web app for skin cancer detection using deep learning. ",
       },

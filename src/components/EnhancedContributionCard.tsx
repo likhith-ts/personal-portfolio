@@ -2,13 +2,15 @@
 
 import React from 'react';
 import { Card, Flex, Text, Button, Icon, Avatar } from '@/once-ui/components';
+import Link from 'next/link';
 
 export interface ContributionItem {
     title: string;
     description: string;
     project: string;
     owner: string;
-    link: string;
+    link: string | null;
+    repoLink?: string | null; // Optional, if the contribution has a repository link
     icon?: string;
     avatars: { src: string }[];
 }
@@ -97,7 +99,9 @@ export const EnhancedContributionCard: React.FC<EnhancedContributionCardProps> =
                     <div className={styles.contribution__project_badge}>
                         <Icon name={contribution.icon || "heart"} size="l" />
                         <Text variant="label-strong-xs" paddingX="8" className={styles.contribution__project_name}>
-                            {contribution.project}
+                            <Link href={contribution.repoLink} target="_blank" rel="noopener noreferrer">
+                                {contribution.project}
+                            </Link>
                         </Text>
                     </div>
                 </div>

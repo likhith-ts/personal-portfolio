@@ -22,6 +22,7 @@ import { person, about, social } from "@/app/resources/content";
 import React from "react";
 import { Meta, Schema } from "@/once-ui/modules";
 import ResumeViewer from "@/components/ResumeViewer";
+import TechnicalSkills from "@/components/about/TechnicalSkills";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -226,40 +227,8 @@ export default function About() {
                 <Text> {about.technical.title}</Text>
               </Heading>
               <Column fillWidth gap="l">
-                {about.technical.skills.map((skill, index) => (
-                  <Column key={`skill-${index}-${skill.title}`} fillWidth gap="4">
-                    <Text variant="heading-strong-l">{skill.title}</Text>
-                    <Text variant="body-default-m" onBackground="neutral-medium">
-                      {skill.description}
-                    </Text>
-                    {skill.images && skill.images.length > 0 && (
-                      <Flex fillWidth paddingTop="m" gap="12" wrap>
-                        {skill.images.map((image, imgIndex) => (
-                          <Flex
-                            key={`skill-${index}-image-${imgIndex}`}
-                            border="neutral-medium"
-                            radius="m"
-                            //@ts-ignore
-                            minWidth={image.width}
-                            //@ts-ignore
-                            height={image.height}
-                          >
-                            <SmartImage
-                              enlarge
-                              radius="m"
-                              //@ts-ignore
-                              sizes={image.width.toString()}
-                              //@ts-ignore
-                              alt={image.alt}
-                              //@ts-ignore
-                              src={image.src}
-                            />
-                          </Flex>
-                        ))}
-                      </Flex>
-                    )}
-                  </Column>
-                ))}
+                {/* Technical Skills component */}
+                <TechnicalSkills skills={about.technical.skills} />
               </Column>
             </>
           )}

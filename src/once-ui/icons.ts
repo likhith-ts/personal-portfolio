@@ -45,7 +45,7 @@ import { BiSolidLike, BiLinkExternal } from "react-icons/bi";
 import { IoIosChatboxes } from "react-icons/io";
 import { SiLeetcode, SiHuggingface } from "react-icons/si";
 import { GiAchievement } from "react-icons/gi";
-import { MdWork } from "react-icons/md";
+import { MdWork, MdCode, MdWeb, MdCloud, MdBiotech } from "react-icons/md";
 import { FaTools, FaFileDownload } from "react-icons/fa";
 import { MdFileDownload } from "react-icons/md";
 import { ImNewTab } from "react-icons/im";
@@ -97,6 +97,11 @@ export const iconLibrary: Record<string, IconType> = {
   achievement: GiAchievement,
   work: MdWork,
   tool: FaTools,
+  tools: FaTools,
+  code: MdCode,
+  web: MdWeb,
+  cloud: MdCloud,
+  "data-science": MdBiotech,
   fileDownload: FaFileDownload,
   downloadBtn: MdFileDownload,
   newTab: ImNewTab,
