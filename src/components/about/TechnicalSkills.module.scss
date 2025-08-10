@@ -59,7 +59,16 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
+  @media (width > 765px) {
+    padding-left: 2.8rem;
+    padding-right: 1rem;
+  }
+  @media (width > 1024px) {
+    padding-left: 3.5rem;
+    padding-right: 1rem;
+  }
+
   &.show {
     max-height: 800px; // Increased to accommodate more skills
   }
@@ -108,7 +117,7 @@
 @media (prefers-color-scheme: dark) {
   .skillCard {
     &:hover {
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 24px var(--brand-background-strong);
     }
   }
   

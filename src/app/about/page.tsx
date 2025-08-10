@@ -23,6 +23,8 @@ import React from "react";
 import { Meta, Schema } from "@/once-ui/modules";
 import ResumeViewer from "@/components/ResumeViewer";
 import TechnicalSkills from "@/components/about/TechnicalSkills";
+import Toolset from "@/components/about/Toolset";
+import SoftSkills from "@/components/about/SoftSkills";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -53,6 +55,16 @@ export default function About() {
       title: about.technical.title,
       display: about.technical.display,
       items: about.technical.skills.map((skill, index) => `skill-${skill.title}-${index}`),
+    },
+    {
+      title: about.toolset.title,
+      display: about.toolset.display,
+      items: [], // Placeholder for future toolset items
+    },
+    {
+      title: about.softskills.title,
+      display: about.softskills.display,
+      items: [], // Placeholder for future soft skills items
     },
   ];
   return (
@@ -206,8 +218,10 @@ export default function About() {
           {(about.work.display || about.studies.display) && (
             <>
               <Heading as="h2" id="Experience" variant="display-strong-s" marginBottom="m">
-                <Icon name="calendar" size="l" />
-                <Text> Experience</Text>
+                <Row gap="8" fillWidth vertical="center">
+                  <Icon name="calendar" size="xl" />
+                  <Text> Experience</Text>
+                </Row>
               </Heading>
               <Column marginBottom="48">
                 <Timeline entries={timelineEntries} />
@@ -223,15 +237,58 @@ export default function About() {
                 variant="display-strong-s"
                 marginBottom="m"
               >
-                <Icon name="tool" size="l" />
-                <Text> {about.technical.title}</Text>
+                <Row gap="8" fillWidth vertical="center">
+                  <Icon name="tool" size="l" />
+                  <Text> {about.technical.title}</Text>
+                </Row>
               </Heading>
-              <Column fillWidth gap="l">
+              <Column fillWidth gap="l" marginBottom="48">
                 {/* Technical Skills component */}
                 <TechnicalSkills skills={about.technical.skills} />
               </Column>
             </>
           )}
+
+          {/* Toolset */}
+          {about.toolset.display && (
+            <>
+              <Heading
+                as="h2"
+                id={about.toolset.title}
+                variant="display-strong-s"
+                marginBottom="m"
+              >
+                <Row gap="8" fillWidth vertical="center">
+                  <Icon center align="center" name="laptopCode" size="xl" />
+                  <Text> {about.toolset.title}</Text>
+                </Row>
+              </Heading>
+              <Column fillWidth gap="l" marginBottom="48">
+                <Toolset tools={about.toolset.items} />
+              </Column>
+            </>
+          )}
+
+          {/* Soft Skills */}
+          {about.softskills.display && (
+            <>
+              <Heading
+                as="h2"
+                id={about.softskills.title}
+                variant="display-strong-s"
+                marginBottom="m"
+              >
+                <Row gap="8" fillWidth vertical="center">
+                  <Icon name="heart" size="xl" />
+                  <Text> {about.softskills.title}</Text>
+                </Row>
+              </Heading>
+              <Column fillWidth gap="l" marginBottom="48">
+                <SoftSkills skills={about.softskills.items} />
+              </Column>
+            </>
+          )}
+
         </Column>
       </Flex>
     </Column>

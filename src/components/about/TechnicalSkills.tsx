@@ -40,17 +40,18 @@ const SkillCard: React.FC<{
                 fillWidth
                 // background="neutral-weak"
                 background="transparent"
-                // border="neutral-medium"
+                border="neutral-medium"
                 radius="l"
-                padding="l"
+                padding="m"
                 gap="s"
+                onClick={onToggle}
             >
                 <Flex
                     fillWidth
                     horizontal="space-between"
                     vertical="center"
                     className={styles.skillHeader}
-                    onClick={onToggle}
+                    // onClick={onToggle}
                     style={{ cursor: "pointer", minHeight: "fit-content" }}
                 >
                     <Flex gap="m" vertical="center" style={{ alignItems: "center" }}>
@@ -64,7 +65,7 @@ const SkillCard: React.FC<{
                     </Flex>
                     <Icon
                         name="chevronDown"
-                        size="s"
+                        size="l"
                         className={`${styles.chevron} ${isExpanded ? styles.rotated : ""}`}
                         onBackground="neutral-medium"
                     />
@@ -72,9 +73,10 @@ const SkillCard: React.FC<{
 
                 <div className={`${styles.expandableContent} ${isExpanded ? styles.show : ""}`}>
                     <Column gap="s">
-                        <Text variant="body-default-m" onBackground="neutral-medium">
+                        <Text variant="body-default-m" onBackground="brand-medium">
                             {category.description.subtitle}
-                        </Text>                        <Column gap="12">
+                        </Text>                        
+                        <Column gap="12">
                             {category.description.skills
                                 .sort((a, b) => b.xp - a.xp) // Sort by XP in descending order
                                 .map((skillItem, index) => {
